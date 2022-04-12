@@ -24,6 +24,21 @@ function(include_driver_ifdef feature_toggle directory module)
   endif()
 endfunction()
 
+function(include_codec_ifdef feature_toggle codec)
+  if(${${feature_toggle}})
+    list(APPEND CMAKE_MODULE_PATH
+        ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/${codec}
+    )
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/port)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/port/${codec})
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/${codec})
+    include(component_${codec}_adapter)
+    include(driver_${codec})
+    # Pass the value to parent scope
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
+  endif()
+endfunction()
+
 message("Load components for ${MCUX_DEVICE}:")
 
 #specific operation to shared drivers
@@ -95,6 +110,8 @@ include_driver_ifdef(CONFIG_DMA_MCUX_EDMA		dmamux		driver_dmamux)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_RNGA		rnga		driver_rnga)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_TRNG		trng		driver_trng)
 include_driver_ifdef(CONFIG_ETH_MCUX			enet		driver_enet)
+include_driver_ifdef(CONFIG_HAS_MCUX_I2S		sai		driver_sai)
+include_driver_ifdef(CONFIG_HAS_MCUX_II2C		ii2c		driver_ii2c)
 include_driver_ifdef(CONFIG_HAS_MCUX_SMC		smc		driver_smc)
 include_driver_ifdef(CONFIG_I2C_MCUX			i2c		driver_i2c)
 include_driver_ifdef(CONFIG_I2C_MCUX_LPI2C		lpi2c		driver_lpi2c)
@@ -117,7 +134,6 @@ include_driver_ifdef(CONFIG_DISPLAY_MCUX_ELCDIF		elcdif		driver_elcdif)
 include_driver_ifdef(CONFIG_ETH_MCUX			enet		driver_enet)
 include_driver_ifdef(CONFIG_GPIO_MCUX_IGPIO		igpio		driver_igpio)
 include_driver_ifdef(CONFIG_I2C_MCUX_LPI2C		lpi2c		driver_lpi2c)
-include_driver_ifdef(CONFIG_I2S_MCUX_SAI		sai		driver_sai)
 include_driver_ifdef(CONFIG_MEMC_MCUX_FLEXSPI		flexspi		driver_flexspi)
 include_driver_ifdef(CONFIG_PWM_MCUX			pwm		driver_pwm)
 include_driver_ifdef(CONFIG_SPI_MCUX_LPSPI		lpspi		driver_lpspi)
@@ -271,3 +287,30 @@ if(CONFIG_ETH_MCUX)
   zephyr_library_sources(mcux-sdk/components/phy/mdio/enet/fsl_enet_mdio.c)
 endif()
 
+if(CONFIG_COMPONENT_I2C)
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/i2c
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/i2c)
+endif()
+
+if(CONFIG_CODEC)
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec)
+  include(driver_codec)
+  include(component_codec_adapters)
+endif()
+
+if(CONFIG_CODEC_I2C)
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/i2c
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/codec/i2c)
+endif()
+
+include_codec_ifdef(CONFIG_CODEC_PCM512X	pcm512x)
+include_codec_ifdef(CONFIG_CODEC_PCM186X	pcm186x)
+include_codec_ifdef(CONFIG_CODEC_WM8960 	wm8960)
+include_codec_ifdef(CONFIG_CODEC_WM8524 	wm8524)
