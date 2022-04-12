@@ -33,6 +33,8 @@ function(include_driver_ifdef feature_toggle directory module)
     )
     zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/${directory})
     include(${module})
+    # Pass the value to parent scope
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
   endif()
 endfunction()
 
