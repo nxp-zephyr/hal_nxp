@@ -153,7 +153,8 @@ include_driver_ifdef(CONFIG_DMA_MCUX_EDMA_V3		dma3		driver_dma3)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_RNGA		rnga		driver_rnga)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_TRNG		trng		driver_trng)
 include_driver_ifdef(CONFIG_ENTROPY_MCUX_CAAM		caam		driver_caam)
-include_driver_ifdef(CONFIG_ETH_NXP_ENET		enet		driver_enet)
+include_driver_ifdef(CONFIG_HAS_MCUX_ENET		enet		driver_enet)
+include_driver_ifdef(CONFIG_HAS_MCUX_ENET_QOS		enet_qos	driver_enet_qos)
 include_driver_ifdef(CONFIG_HAS_MCUX_I2S		sai		driver_sai)
 include_driver_ifdef(CONFIG_HAS_MCUX_II2C		ii2c		driver_ii2c)
 include_driver_ifdef(CONFIG_HAS_MCUX_SMC		smc		driver_smc)
@@ -212,6 +213,7 @@ include_driver_ifdef(CONFIG_QDEC_MCUX			enc		driver_enc)
 include_driver_ifdef(CONFIG_CRYPTO_MCUX_DCP			dcp		driver_dcp)
 include_driver_ifdef(CONFIG_DMA_MCUX_SMARTDMA		smartdma	driver_lpc_smartdma)
 include_driver_ifdef(CONFIG_DAC_MCUX_LPDAC			dac_1		driver_dac_1)
+include_driver_ifdef(CONFIG_ARMV8A_CACHE_HAL_DRIVER	cache/armv8-a	driver_cache_armv8a)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
@@ -357,3 +359,35 @@ include_codec_ifdef(CONFIG_CODEC_PCM512X	pcm512x)
 include_codec_ifdef(CONFIG_CODEC_PCM186X	pcm186x)
 include_codec_ifdef(CONFIG_CODEC_WM8960 	wm8960)
 include_codec_ifdef(CONFIG_CODEC_WM8524 	wm8524)
+
+if(CONFIG_PHY_RTL8211F)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/device/phyrtl8211f
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/device/phyrtl8211f)
+  include(driver_phy-device-rtl8211f)
+endif()
+
+if(CONFIG_MDIO_ENET)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet)
+  include(driver_mdio-common)
+  include(driver_mdio-enet)
+endif()
+
+if(CONFIG_MDIO_ENET_QOS)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet_qos
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/mdio/enet_qos)
+  include(driver_mdio-common)
+  include(driver_mdio-enet-qos)
+endif()
