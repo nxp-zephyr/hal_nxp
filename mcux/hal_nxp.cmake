@@ -29,6 +29,10 @@ if(CONFIG_FLASH_MCUX_FLEXSPI_XIP)
   zephyr_code_relocate(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flexspi/fsl_flexspi.c ${CONFIG_FLASH_MCUX_FLEXSPI_XIP_MEM}_TEXT)
 endif()
 
+if(CONFIG_ETH_MCUX_RELOCATE_CODE)
+  zephyr_code_relocate(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/enet/fsl_enet.c ITCM_TEXT)
+endif()
+
 if(NOT CONFIG_ASSERT OR CONFIG_FORCE_NO_ASSERT)
   zephyr_compile_definitions(NDEBUG) # squelch fsl_flexcan.c warning
 endif()
