@@ -179,7 +179,7 @@ include_driver_ifdef(CONFIG_MCUX_SDIF			sdif		driver_sdif)
 include_driver_ifdef(CONFIG_ADC_MCUX_ETC		adc_etc		driver_adc_etc)
 include_driver_ifdef(CONFIG_MCUX_XBARA			xbara		driver_xbara)
 include_driver_ifdef(CONFIG_QDEC_MCUX			enc		driver_enc)
-include_driver_ifdef(CONFIG_ARMV8A_CACHE_HAL_DRIVER	cache/armv8-a	driver_cache_armv8a)
+include_driver_ifdef(CONFIG_CPU_CORTEX_A		cache/armv8-a	driver_cache_armv8a)
 
 if ((${MCUX_DEVICE} MATCHES "MIMXRT1[0-9][0-9][0-9]") AND (NOT (CONFIG_SOC_MIMXRT1166_CM4 OR CONFIG_SOC_MIMXRT1176_CM4)))
   include_driver_ifdef(CONFIG_HAS_MCUX_CACHE		cache/armv7-m7	driver_cache_armv7_m7)
