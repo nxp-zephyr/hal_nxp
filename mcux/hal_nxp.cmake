@@ -362,6 +362,16 @@ include_codec_ifdef(CONFIG_CODEC_PCM186X	pcm186x)
 include_codec_ifdef(CONFIG_CODEC_WM8960 	wm8960)
 include_codec_ifdef(CONFIG_CODEC_WM8524 	wm8524)
 
+if(CONFIG_PHY_AR8031)
+  list(APPEND CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy
+    ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/device/phyar8031
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy/device/phyar8031)
+  include(driver_phy-device-ar8031)
+endif()
+
 if(CONFIG_PHY_RTL8211F)
   list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/phy
