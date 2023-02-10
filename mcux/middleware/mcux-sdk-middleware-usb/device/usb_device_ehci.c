@@ -73,11 +73,11 @@ USB_CONTROLLER_DATA static uint8_t qh_buffer[(USB_DEVICE_CONFIG_EHCI - 1) * 2048
 
 /* Apply for DTD buffer, 32-byte alignment */
 USB_RAM_ADDRESS_ALIGNMENT(32)
-USB_CONTROLLER_DATA static usb_device_ehci_dtd_struct_t s_UsbDeviceEhciDtd[USB_DEVICE_CONFIG_EHCI]
+USB_CONTROLLER_DATA usb_device_ehci_dtd_struct_t s_UsbDeviceEhciDtd[USB_DEVICE_CONFIG_EHCI]
                                                                           [USB_DEVICE_CONFIG_EHCI_MAX_DTD];
 
 /* Apply for ehci device state structure */
-static usb_device_ehci_state_struct_t g_UsbDeviceEhciState[USB_DEVICE_CONFIG_EHCI];
+usb_device_ehci_state_struct_t g_UsbDeviceEhciState[USB_DEVICE_CONFIG_EHCI];
 
 /* Apply for whether the corresponding g_UsbDeviceEhciState is used or not, if used, it is set to 1, if not used, it is
  * set to 0 */
@@ -147,6 +147,9 @@ static void USB_DeviceEhciSetDefaultState(usb_device_ehci_state_struct_t *ehciSt
     usb_device_ehci_dtd_struct_t *p;
 
     /* Initialize the dtd free queue */
+    if (((uint32_t)ehciState->dtd) == 0x0) {
+        __asm__ volatile ("bkpt");
+    }
     ehciState->dtdFree = ehciState->dtd;
     p                  = ehciState->dtdFree;
     for (uint32_t i = 1U; i < USB_DEVICE_CONFIG_EHCI_MAX_DTD; i++)
@@ -154,7 +157,7 @@ static void USB_DeviceEhciSetDefaultState(usb_device_ehci_state_struct_t *ehciSt
         p->nextDtdPointer = (uint32_t)&ehciState->dtd[i];
         p                 = (usb_device_ehci_dtd_struct_t *)p->nextDtdPointer;
     }
-    p->nextDtdPointer   = 0U;
+    p->nextDtdPointer   = 0xDEADBEEF;
     ehciState->dtdCount = USB_DEVICE_CONFIG_EHCI_MAX_DTD;
 
     /* Not use interrupt threshold. */
@@ -559,6 +562,9 @@ static void USB_DeviceEhciCancelControlPipe(usb_device_ehci_state_struct_t *ehci
         currentDtd->dtdTokenUnion.dtdToken = 0U;
         /* Add the dtd to the free dtd queue. */
         currentDtd->nextDtdPointer = (uint32_t)ehciState->dtdFree;
+        if (((uint32_t)currentDtd->nextDtdPointer) == 0x0) {
+            __asm__ volatile ("bkpt");
+        }
         ehciState->dtdFree         = currentDtd;
         ehciState->dtdCount++;
 
@@ -762,6 +768,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                         /* Clear the token field of the dtd */
                         currentDtd->dtdTokenUnion.dtdToken = 0U;
                         currentDtd->nextDtdPointer         = (uint32_t)ehciState->dtdFree;
+                        if (((uint32_t)currentDtd->nextDtdPointer) == 0x0) {
+                            __asm__ volatile ("bkpt");
+                        }
                         ehciState->dtdFree                 = currentDtd;
                         ehciState->dtdCount++;
                         /* Get the next in-used dtd */
@@ -790,6 +799,9 @@ static void USB_DeviceEhciInterruptTokenDone(usb_device_ehci_state_struct_t *ehc
                                 {
                                     /* Prime next dtd and prime the transfer */
                                     ehciState->qh[index].nextDtdPointer         = (uint32_t)currentDtd;
+                                    if (((uint32_t)currentDtd) == 0x0) {
+                                        __asm__ volatile ("bkpt");
+                                    }
                                     ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
                                     ehciState->registerBase->EPPRIME            = primeBit;
                                 }
@@ -1030,7 +1042,6 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         OSA_EXIT_CRITICAL();
         return kStatus_USB_Busy;
     }
-
     do
     {
         /* The transfer length need to not more than USB_DEVICE_ECHI_DTD_TOTAL_BYTES for each dtd. */
@@ -1044,8 +1055,12 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         }
         length -= sendLength;
 
+
         /* Get a free dtd */
         dtd = ehciState->dtdFree;
+        if (((uint32_t)dtd->nextDtdPointer) == 0x0) {
+            __asm__ volatile ("bkpt");
+        }
 
         ehciState->dtdFree = (usb_device_ehci_dtd_struct_t *)dtd->nextDtdPointer;
         ehciState->dtdCount--;
@@ -1090,6 +1105,9 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
         /* Add dtd to the in-used dtd queue */
         if (NULL != (ehciState->dtdTail[index]))
         {
+            if (((uint32_t)dtd) == 0x0) {
+                __asm__ volatile ("bkpt");
+            }
             ehciState->dtdTail[index]->nextDtdPointer = (uint32_t)dtd;
             ehciState->dtdTail[index]                 = dtd;
         }
@@ -1151,6 +1169,9 @@ static usb_status_t USB_DeviceEhciTransfer(usb_device_ehci_state_struct_t *ehciS
     /* When the endpoint is not primed if qhIdle is zero, it means the QH is empty. */
     if ((0U != qhIdle) || (0U == (epStatus & primeBit)))
     {
+        if (((uint32_t)dtdHard) == 0x0) {
+            __asm__ volatile ("bkpt");
+        }
         ehciState->qh[index].nextDtdPointer         = (uint32_t)dtdHard;
         ehciState->qh[index].dtdTokenUnion.dtdToken = 0U;
         /*make sure dtd is linked to dqh*/
@@ -1663,6 +1684,9 @@ usb_status_t USB_DeviceEhciCancel(usb_device_controller_handle ehciHandle, uint8
             currentDtd->dtdTokenUnion.dtdToken = 0U;
             /* Save the dtd to the free queue. */
             currentDtd->nextDtdPointer = (uint32_t)ehciState->dtdFree;
+            if (((uint32_t)currentDtd->nextDtdPointer) == 0x0) {
+                __asm__ volatile ("bkpt");
+            }
             ehciState->dtdFree         = currentDtd;
             ehciState->dtdCount++;
         }
