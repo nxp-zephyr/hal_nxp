@@ -246,6 +246,11 @@ typedef struct _flexspi_config
     bool enableSckBDiffOpt; /*!< Enable/disable SCKB pad use as SCKA differential clock
                              output, when enable, Port B flash access is not available. */
 #endif
+#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF) && FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF
+    bool rxSampleClockDiff; /*!< Sample Clock source or source_b selection for Flash Reading. */
+#endif
+    bool enableSckBDiffOpt;      /*!< Enable/disable SCKB pad use as SCKA differential clock
+                                  output, when enable, Port B flash access is not available. */
     bool enableSameConfigForAll; /*!< Enable/disable same configuration for all connected devices
                                   when enabled, same configuration in FLASHA1CRx is applied to all. */
     uint16_t seqTimeoutCycle;    /*!< Timeout wait cycle for command sequence execution,

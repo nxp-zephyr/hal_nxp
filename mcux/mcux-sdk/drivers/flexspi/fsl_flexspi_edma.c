@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2021-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -44,6 +43,7 @@ static flexspi_edma_private_handle_t s_edmaPrivateHandle[ARRAY_SIZE(s_flexspiBas
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
+static void FLEXSPI_EDMAMemset(void *src, uint8_t value, size_t length);
 
 /*!
  * @brief FLEXSPI EDMA transfer finished callback function.
@@ -59,6 +59,22 @@ static void FLEXSPI_TransferEDMACallback(edma_handle_t *handle, void *param, boo
 /*******************************************************************************
  * Code
  ******************************************************************************/
+/* To avoid compiler opitimizing this API into memset() in library. */
+#if defined(__ICCARM__)
+#pragma optimize = none
+#endif /* defined(__ICCARM__) */
+static void FLEXSPI_EDMAMemset(void *src, uint8_t value, size_t length)
+{
+    assert(src != NULL);
+    uint8_t *p = src;
+
+    for (uint32_t i = 0U; i < length; i++)
+    {
+        *p = value;
+        p++;
+    }
+}
+
 static uint8_t FLEXSPI_CalculatePower(uint8_t value)
 {
     uint8_t power = 0;
@@ -119,7 +135,7 @@ void FLEXSPI_TransferCreateHandleEDMA(FLEXSPI_Type *base,
     s_edmaPrivateHandle[instance].base   = base;
     s_edmaPrivateHandle[instance].handle = handle;
 
-    (void)memset(handle, 0, sizeof(*handle));
+    (void)FLEXSPI_EDMAMemset(handle, 0, sizeof(*handle));
 
     handle->state       = kFLEXSPI_Idle;
     handle->txDmaHandle = txDmaHandle;
