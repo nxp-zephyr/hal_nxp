@@ -292,7 +292,10 @@ static inline void DCIC_DisableRegion(DCIC_Type *base, uint8_t regionIdx)
 {
     assert(regionIdx < DCIC_REGION_COUNT);
 
-    base->REGION[regionIdx].DCICRC &= ~DCIC_DCICRC_ROI_EN_MASK;
+    if (regionIdx < DCIC_REGION_COUNT)
+    {
+        base->REGION[regionIdx].DCICRC &= ~DCIC_DCICRC_ROI_EN_MASK;
+    }
 }
 
 /*!
@@ -306,7 +309,10 @@ static inline void DCIC_SetRegionRefCrc(DCIC_Type *base, uint8_t regionIdx, uint
 {
     assert(regionIdx < DCIC_REGION_COUNT);
 
-    base->REGION[regionIdx].DCICRRS = crc;
+    if (regionIdx < DCIC_REGION_COUNT)
+    {
+        base->REGION[regionIdx].DCICRRS = crc;
+    }
 }
 
 /*!
@@ -318,9 +324,16 @@ static inline void DCIC_SetRegionRefCrc(DCIC_Type *base, uint8_t regionIdx, uint
  */
 static inline uint32_t DCIC_GetRegionCalculatedCrc(DCIC_Type *base, uint8_t regionIdx)
 {
+    uint32_t localdcicrcs = 0U;
+
     assert(regionIdx < DCIC_REGION_COUNT);
 
-    return base->REGION[regionIdx].DCICRCS;
+    if (regionIdx < DCIC_REGION_COUNT)
+    {
+        localdcicrcs = base->REGION[regionIdx].DCICRCS;
+    }
+
+    return localdcicrcs;
 }
 
 /* @} */
