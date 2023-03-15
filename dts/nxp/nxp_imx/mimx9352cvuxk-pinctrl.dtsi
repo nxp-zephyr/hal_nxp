@@ -21,6 +21,12 @@
 /* temporary file created by maunal as MCUXpresso Config Tools still can't support imx93 */
 
 &iomuxc {
+	/omit-if-no-ref/ iomuxc_uart1_rxd_uart_rx_uart1_rx: IOMUXC_UART1_RXD_UART_RX_UART1_RX {
+		pinmux = <0x443C0180 0 0x0 0 0x443c0330>;
+	};
+	/omit-if-no-ref/ iomuxc_uart1_txd_uart_tx_uart1_tx: IOMUXC_UART1_TXD_UART_TX_UART1_TX {
+		pinmux = <0x443C0184 0 0x0 0 0x443c0334>;
+	};
 	/omit-if-no-ref/ iomuxc_uart2_rxd_uart_rx_uart2_rx: IOMUXC_UART2_RXD_UART_RX_UART2_RX {
 		pinmux = <0x443C0188 0 0x0 0 0x443c0338>;
 	};
