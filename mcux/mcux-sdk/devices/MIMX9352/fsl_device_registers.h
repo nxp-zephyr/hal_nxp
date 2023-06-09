@@ -1,8 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
- * All rights reserved.
- *
+ * Copyright 2016-2023 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -15,7 +13,8 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMX9352AVTXM_ca55) || defined(CPU_MIMX9352CVUXK_ca55) || defined(CPU_MIMX9352DVUXM_ca55))
+#if (defined(CPU_MIMX9352AVTXM_ca55) || defined(CPU_MIMX9352CVUXM_ca55) || defined(CPU_MIMX9352DVUXM_ca55) || \
+    defined(CPU_MIMX9352XVUXM_ca55) || defined(CPU_MIMX9352AVTXM_ca55) || defined(CPU_MIMX9352CVUXK_ca55) || defined(CPU_MIMX9352DVUXM_ca55))
 
 #define MIMX9352_ca55_SERIES
 
@@ -24,7 +23,8 @@
 /* CPU specific feature definitions */
 #include "MIMX9352_ca55_features.h"
 
-#elif (defined(CPU_MIMX9352CVUXK_cm33) || defined(CPU_MIMX9352DVUXM_cm33))
+#elif (defined(CPU_MIMX9352AVTXM_cm33) || defined(CPU_MIMX9352CVUXM_cm33) || defined(CPU_MIMX9352DVUXM_cm33) || \
+    defined(CPU_MIMX9352XVUXM_cm33) || defined(CPU_MIMX9352CVUXK_cm33) || defined(CPU_MIMX9352DVUXM_cm33))
 
 #define MIMX9352_cm33_SERIES
 
