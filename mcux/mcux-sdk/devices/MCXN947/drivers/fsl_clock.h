@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, NXP
+ * Copyright 2022-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -21,8 +21,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.0.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief CLOCK driver version 1.0.1. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 0, 1))
 /*@}*/
 
 /*! @brief Configure whether driver controls clock
@@ -291,6 +291,11 @@
 #define LPCMP_CLOCKS                          \
     {                                         \
         kCLOCK_None, kCLOCK_Cmp2, kCLOCK_None \
+    }
+/*! @brief Clock ip name array for SINC */
+#define SINC_CLOCKS                           \
+    {                                         \
+       kCLOCK_Sinc                            \
     }
 /*! @brief Clock gate name used for CLOCK_EnableClock/CLOCK_DisableClock. */
 /*------------------------------------------------------------------------------
@@ -605,7 +610,8 @@ typedef enum _clock_ip_name
 /*! @brief Clock name used to get clock frequency. */
 typedef enum _clock_name
 {
-    kCLOCK_CoreSysClk,  /*!< Core/system clock  (aka MAIN_CLK)                       */
+    kCLOCK_MainClk,     /*!< Main clock                                              */
+    kCLOCK_CoreSysClk,  /*!< Core/system clock                                       */
     kCLOCK_BusClk,      /*!< Bus clock (AHB clock)                                   */
     kCLOCK_SystickClk0, /*!< Systick clock0                                          */
     kCLOCK_SystickClk1, /*!< Systick clock1                                          */
@@ -987,15 +993,15 @@ typedef enum _clock_attach_id
     kCLK_1M_to_I3C0FCLKS = MUX_A(CM_I3C0FCLKSSEL, 0), /*!< Attach CLK_1M to I3C0FCLKS. */
     kNONE_to_I3C0FCLKS   = MUX_A(CM_I3C0FCLKSSEL, 7), /*!< Attach NONE to I3C0FCLKS. */
 
-    kFRO12M_to_MICFILF    = MUX_A(CM_MICFILFCLKSEL, 0),  /*!< Attach FRO_12M to MICFILF. */
-    kPLL0_to_MICFILF      = MUX_A(CM_MICFILFCLKSEL, 1),  /*!< Attach PLL0 to MICFILF. */
-    kCLK_IN_to_MICFILF    = MUX_A(CM_MICFILFCLKSEL, 2),  /*!< Attach Clk_in to MICFILF. */
-    kFRO_HF_to_MICFILF    = MUX_A(CM_MICFILFCLKSEL, 3),  /*!< Attach FRO_HF to MICFILF. */
-    kPLL1_CLK0_to_MICFILF = MUX_A(CM_MICFILFCLKSEL, 4),  /*!< Attach PLL1_clk0 to MICFILF. */
-    kSAI0_MCLK_to_MICFILF = MUX_A(CM_MICFILFCLKSEL, 5),  /*!< Attach SAI0_MCLK to MICFILF. */
-    kUSB_PLL_to_MICFILF   = MUX_A(CM_MICFILFCLKSEL, 6),  /*!< Attach USB PLL to MICFILF. */
-    kSAI1_MCLK_to_MICFILF = MUX_A(CM_MICFILFCLKSEL, 8),  /*!< Attach SAI1_MCLK to MICFILF. */
-    kNONE_to_MICFILF      = MUX_A(CM_MICFILFCLKSEL, 15), /*!< Attach NONE to MICFILF. */
+    kFRO12M_to_MICFILF       = MUX_A(CM_MICFILFCLKSEL, 0),  /*!< Attach FRO_12M to MICFILF. */
+    kPLL0_to_MICFILF         = MUX_A(CM_MICFILFCLKSEL, 1),  /*!< Attach PLL0 to MICFILF. */
+    kCLK_IN_to_MICFILF       = MUX_A(CM_MICFILFCLKSEL, 2),  /*!< Attach Clk_in to MICFILF. */
+    kFRO_HF_to_MICFILF       = MUX_A(CM_MICFILFCLKSEL, 3),  /*!< Attach FRO_HF to MICFILF. */
+    kPLL1_CLK0_to_MICFILF    = MUX_A(CM_MICFILFCLKSEL, 4),  /*!< Attach PLL1_clk0 to MICFILF. */
+    kSAI0_MCLK_IN_to_MICFILF = MUX_A(CM_MICFILFCLKSEL, 5),  /*!< Attach SAI0_MCLK to MICFILF. */
+    kUSB_PLL_to_MICFILF      = MUX_A(CM_MICFILFCLKSEL, 6),  /*!< Attach USB PLL to MICFILF. */
+    kSAI1_MCLK_IN_to_MICFILF = MUX_A(CM_MICFILFCLKSEL, 8),  /*!< Attach SAI1_MCLK to MICFILF. */
+    kNONE_to_MICFILF         = MUX_A(CM_MICFILFCLKSEL, 15), /*!< Attach NONE to MICFILF. */
 
     kPLL0_to_ESPI      = MUX_A(CM_ESPICLKSEL, 1), /*!< Attach PLL0 to ESPI. */
     kCLK_48M_to_ESPI   = MUX_A(CM_ESPICLKSEL, 3), /*!< Attach CLK_48M to ESPI. */
@@ -1479,6 +1485,16 @@ typedef struct _vbat_osc_config
         coarseAdjustment; /*!< 32kHz crystal oscillator amplifier coarse adjustment value. */
 } vbat_osc_config_t;
 
+/*!
+ * @brief The active run mode (voltage level).
+ */
+typedef enum _run_mode
+{
+    kMD_Mode, /*!< Midvoltage (1.0 V). */
+    kSD_Mode, /*!< Normal voltage (1.1 V). */ 
+    kOD_Mode, /*!< Overdrive voltage (1.2 V). */ 
+} run_mode_t;
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -1614,6 +1630,14 @@ void CLOCK_SetPll1MonitorMode(scg_pll1_monitor_mode_t mode);
  */
 void VBAT_SetOscConfig(VBAT_Type *base, const vbat_osc_config_t *config);
 
+/*!
+* @brief	Set the additional number of wait-states added to account for the ratio of system clock period to flash access time during full speed power mode.
+ * @param	system_freq_hz	: Input frequency
+ * @param	mode	        : Active run mode (voltage level). 
+ * @return	success or fail status
+ */
+status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t mode);
+
 /**
  * @brief   Configure the clock selection muxes.
  * @param   connection  : Clock to be configured.
@@ -1663,6 +1687,11 @@ void CLOCK_SetupClockCtrl(uint32_t mask);
  *  @return Frequency of selected clock
  */
 uint32_t CLOCK_GetFreq(clock_name_t clockName);
+
+/*! @brief  Return Frequency of main
+ *  @return Frequency of the main
+ */
+uint32_t CLOCK_GetMainClkFreq(void);
 
 /*! @brief  Return Frequency of core
  *  @return Frequency of the core

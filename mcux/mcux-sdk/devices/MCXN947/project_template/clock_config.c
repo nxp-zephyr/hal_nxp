@@ -25,11 +25,11 @@
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v10.0
+product: Clocks v11.0
 processor: MCXN947
 package_id: MCXN947VDF
 mcu_data: ksdk2_0
-processor_version: 0.12.3
+processor_version: 0.13.10
 board: MCX-N9XX-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -72,6 +72,7 @@ outputs:
 - {id: gdet_clock.outFreq, value: 48 MHz}
 - {id: trng_clock.outFreq, value: 48 MHz}
 settings:
+- {id: RunPowerMode, value: OD}
 - {id: SCGMode, value: SIRC}
 - {id: SCG.SCSSEL.sel, value: SCG.SIRC}
 - {id: SCG_FIRCCSR_FIRCEN_CFG, value: Disabled}
@@ -88,8 +89,9 @@ settings:
  ******************************************************************************/
 void BOARD_BootClockFRO12M(void)
 {
-    /*!< Enable SCG clock */
-    CLOCK_EnableClock(kCLOCK_Scg);
+    CLOCK_EnableClock(kCLOCK_Scg);                     /*!< Enable SCG clock */
+
+    CLOCK_SetFLASHAccessCyclesForFreq(12000000U, kOD_Mode);           /*!< Set the additional number of flash wait-states */
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO12M */
@@ -119,6 +121,7 @@ outputs:
 - {id: gdet_clock.outFreq, value: 48 MHz}
 - {id: trng_clock.outFreq, value: 48 MHz}
 settings:
+- {id: RunPowerMode, value: OD}
 - {id: SYSCON.FLEXSPICLKSEL.sel, value: NO_CLOCK}
 - {id: SYSCON.FREQMEREFCLKSEL.sel, value: SYSCON.evtg_out0a}
 - {id: SYSCON.FREQMETARGETCLKSEL.sel, value: SYSCON.evtg_out0a}
@@ -133,11 +136,14 @@ settings:
  ******************************************************************************/
 void BOARD_BootClockFROHF48M(void)
 {
-    /*!< Enable SCG clock */
-    CLOCK_EnableClock(kCLOCK_Scg);
+    CLOCK_EnableClock(kCLOCK_Scg);                     /*!< Enable SCG clock */
 
-    CLOCK_SetupFROHFClocking(48000000U);                /*!< Enable FRO HF(48MHz) output */
+    /* FRO OSC setup - begin, enable the FRO for safety switching */
+    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);              /*!< Switch to FRO 12M first to ensure we can change the clock setting */
 
+    CLOCK_SetFLASHAccessCyclesForFreq(48000000U, kOD_Mode);           /*!< Set the additional number of flash wait-states */
+
+    CLOCK_SetupFROHFClocking(48000000U);               /*!< Enable FRO HF(48MHz) output */
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO_HF */
 
@@ -184,11 +190,14 @@ sources:
  ******************************************************************************/
 void BOARD_BootClockFROHF144M(void)
 {
-    /*!< Enable SCG clock */
-    CLOCK_EnableClock(kCLOCK_Scg);
+    CLOCK_EnableClock(kCLOCK_Scg);                     /*!< Enable SCG clock */
+
+    /* FRO OSC setup - begin, enable the FRO for safety switching */
+    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);              /*!< Switch to FRO 12M first to ensure we can change the clock setting */
+
+    CLOCK_SetFLASHAccessCyclesForFreq(144000000U, kOD_Mode);           /*!< Set the additional number of flash wait-states */
 
     CLOCK_SetupFROHFClocking(144000000U);               /*!< Enable FRO HF(144MHz) output */
-
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO_HF */
 
@@ -240,11 +249,14 @@ settings:
  ******************************************************************************/
 void BOARD_BootClockPLL150M(void)
 {
-    /*!< Enable SCG clock */
-    CLOCK_EnableClock(kCLOCK_Scg);
+    CLOCK_EnableClock(kCLOCK_Scg);                     /*!< Enable SCG clock */
 
-    CLOCK_SetupFROHFClocking(48000000U);                /*!< Enable FRO HF(48MHz) output */
+    /* FRO OSC setup - begin, enable the FRO for safety switching */
+    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);              /*!< Switch to FRO 12M first to ensure we can change the clock setting */
 
+    CLOCK_SetFLASHAccessCyclesForFreq(150000000U, kOD_Mode);           /*!< Set the additional number of flash wait-states */
+
+    CLOCK_SetupFROHFClocking(48000000U);               /*!< Enable FRO HF(48MHz) output */
     /*!< Set up PLL0 */
     const pll_setup_t pll0Setup = {
         .pllctrl = SCG_APLLCTRL_SOURCE(1U) | SCG_APLLCTRL_SELI(27U) | SCG_APLLCTRL_SELP(13U),
@@ -286,6 +298,7 @@ outputs:
 - {id: trng_clock.outFreq, value: 48 MHz}
 settings:
 - {id: PLL1_Mode, value: Normal}
+- {id: RunPowerMode, value: OD}
 - {id: SCGMode, value: PLL1}
 - {id: SCG.PLL1M_MULT.scale, value: '100', locked: true}
 - {id: SCG.PLL1_NDIV.scale, value: '6', locked: true}
@@ -308,8 +321,12 @@ sources:
  ******************************************************************************/
 void BOARD_BootClockPLL100M(void)
 {
-    /*!< Enable SCG clock */
-    CLOCK_EnableClock(kCLOCK_Scg);
+    CLOCK_EnableClock(kCLOCK_Scg);                     /*!< Enable SCG clock */
+
+    /* FRO OSC setup - begin, enable the FRO for safety switching */
+    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);              /*!< Switch to FRO 12M first to ensure we can change the clock setting */
+
+    CLOCK_SetFLASHAccessCyclesForFreq(100000000U, kOD_Mode);           /*!< Set the additional number of flash wait-states */
 
     CLOCK_SetupExtClocking(24000000U);
     CLOCK_SetSysOscMonitorMode(kSCG_SysOscMonitorDisable);    /* System OSC Clock Monitor is disabled */

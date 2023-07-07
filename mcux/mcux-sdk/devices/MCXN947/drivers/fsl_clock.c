@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, NXP
+ * Copyright 2022-2023 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -203,6 +203,13 @@ status_t CLOCK_SetupExtClocking(uint32_t iFreq)
 
     /* If clock is used by system, return error. */
     if ((SCG0->SOSCCSR & SCG_SOSCCSR_SOSCSEL_MASK) != 0U)
+    {
+        return (status_t)kStatus_SCG_Busy;
+    }
+
+    /* If sosc is used by PLL and PLL is used by system, return error. */
+    if ((((SCG0->APLLCTRL & SCG_APLLCTRL_SOURCE_MASK) == 0u) && ((SCG0->APLLCSR & SCG_APLLCSR_APLLSEL_MASK) != 0U)) ||
+        (((SCG0->SPLLCTRL & SCG_SPLLCTRL_SOURCE_MASK) == 0u) && ((SCG0->SPLLCSR & SCG_SPLLCSR_SPLLSEL_MASK) != 0U)))
     {
         return (status_t)kStatus_SCG_Busy;
     }
@@ -445,6 +452,84 @@ void CLOCK_SetPll1MonitorMode(scg_pll1_monitor_mode_t mode)
 }
 
 /*!
+ * @brief	Set the additional number of wait-states added to account for the ratio of system clock period to flash access time during full speed power mode.
+ * @param	system_freq_hz	: Input frequency
+ * @param	mode	        : Active run mode (voltage level). 
+ * @return	success or fail status
+ */
+status_t CLOCK_SetFLASHAccessCyclesForFreq(uint32_t system_freq_hz, run_mode_t mode)
+{
+  uint32_t  num_wait_states_added = 3UL; /* Default 3 additional wait states */
+  switch ( mode )
+  {
+      case kMD_Mode:
+      {
+         if (system_freq_hz > 50000000)
+         {
+            return kStatus_Fail;
+         }
+         if (system_freq_hz >24000000)
+         {
+             num_wait_states_added = 1U;
+         }
+         else
+         {
+             num_wait_states_added = 0U;
+         }          
+         break;
+      }
+      case kSD_Mode:
+      {
+         if (system_freq_hz > 100000000)
+         {
+            return kStatus_Fail;
+         }
+         if (system_freq_hz > 64000000)
+         {
+             num_wait_states_added = 2U;
+         }          
+         else if (system_freq_hz > 36000000)
+         {
+             num_wait_states_added = 1U;
+         }
+         else
+         {
+             num_wait_states_added = 0U;
+         }         
+         break;
+      }
+      case kOD_Mode:
+      {
+         if (system_freq_hz > 150000000)
+         {
+            return kStatus_Fail;
+         }
+         if (system_freq_hz > 100000000)
+         {
+             num_wait_states_added = 3U;
+         }
+         else if (system_freq_hz > 64000000)
+         {
+             num_wait_states_added = 2U;
+         }
+         else if (system_freq_hz > 36000000)
+         {
+             num_wait_states_added = 1U;
+         }
+         else
+         {
+             num_wait_states_added = 0U;
+         }    
+      }     
+  }
+  
+  /* additional wait-states are added */
+  FMU0 -> FCTRL = (FMU0 -> FCTRL & 0xFFFFFFF0UL) | (num_wait_states_added & 0xFUL);
+  
+  return kStatus_Success;
+}
+
+/*!
  * @brief Config 32k Crystal Oscillator.
  *
  * @param base VBAT peripheral base address.
@@ -677,11 +762,14 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
 
     switch (clockName)
     {
+        case kCLOCK_MainClk:
+            freq = CLOCK_GetMainClkFreq();
+            break;
         case kCLOCK_CoreSysClk:
             freq = CLOCK_GetCoreSysClkFreq();
             break;
         case kCLOCK_BusClk:
-            freq = CLOCK_GetCoreSysClkFreq() / ((SYSCON->AHBCLKDIV & 0xffU) + 1U);
+            freq = CLOCK_GetCoreSysClkFreq();
             break;
         case kCLOCK_SystickClk0:
             freq = CLOCK_GetSystickClkFreq(0U);
@@ -2160,10 +2248,10 @@ static uint32_t CLOCK_GetOsc32KFreq(uint32_t id)
 }
 
 /* Get MAIN Clk */
-/*! brief  Return Frequency of Core System
- *  return Frequency of Core System
+/*! @brief  Return Frequency of main
+ *  @return Frequency of the main
  */
-uint32_t CLOCK_GetCoreSysClkFreq(void)
+uint32_t CLOCK_GetMainClkFreq(void)
 {
     uint32_t freq = 0U;
 
@@ -2198,6 +2286,19 @@ uint32_t CLOCK_GetCoreSysClkFreq(void)
     return freq;
 }
 
+/* Get cpu Clk */
+/*! brief  Return Frequency of Core System
+ *  return Frequency of Core System
+ */
+uint32_t CLOCK_GetCoreSysClkFreq(void)
+{
+    uint32_t freq = 0U;
+
+    freq = CLOCK_GetMainClkFreq() / ((SYSCON->AHBCLKDIV & 0xffU) + 1U);
+
+    return freq;
+}
+
 /* Get Systick Clk */
 /*! brief  Return Frequency of SystickClock
  *  return Frequency of Systick Clock
@@ -2209,7 +2310,7 @@ static uint32_t CLOCK_GetSystickClkFreq(uint32_t id)
     switch ((id == 0U) ? SYSCON->SYSTICKCLKSEL0 : SYSCON->SYSTICKCLKSEL1)
     {
         case 0U:
-            freq = CLOCK_GetCoreSysClkFreq() / (((SYSCON->SYSTICKCLKDIV[id]) & 0xffU) + 1U);
+            freq = CLOCK_GetMainClkFreq() / (((SYSCON->SYSTICKCLKDIV[id]) & 0xffU) + 1U);
             break;
         case 1U:
             freq = CLOCK_GetClk1MFreq();
@@ -2236,7 +2337,7 @@ static uint32_t CLOCK_GetClockOutClkFreq(void)
     switch (SYSCON->CLKOUTSEL)
     {
         case 0U:
-            freq = CLOCK_GetCoreSysClkFreq();
+            freq = CLOCK_GetMainClkFreq();
             break;
         case 1U:
             freq = CLOCK_GetPll0OutFreq();

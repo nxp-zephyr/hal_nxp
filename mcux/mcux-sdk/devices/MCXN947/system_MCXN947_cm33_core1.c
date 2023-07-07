@@ -10,7 +10,7 @@
 **
 **     Reference manual:    MCX N1xNxxx Reference Manual
 **     Version:             rev. 1.0, 2022-10-01
-**     Build:               b230131
+**     Build:               b230419
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -19,8 +19,6 @@
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2023 NXP
-**     All rights reserved.
-**
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -68,6 +66,9 @@ __attribute__((weak)) void SystemInit(void)
     SCB->NSACR |= ((3UL << 0) | (3UL << 10)); /* enable CP0, CP1, CP10, CP11 Non-secure Access */
 
     SYSCON->ECC_ENABLE_CTRL = 0; /* disable RAM ECC to get max RAM size */
+
+    SYSCON->NVM_CTRL &=
+        ~SYSCON_NVM_CTRL_DIS_MBECC_ERR_DATA_MASK; /* enables bus error on multi-bit ECC error for data */
 
 #if defined(__MCUXPRESSO)
     extern void (*const g_pfnVectors[])(void);

@@ -1,7 +1,0 @@
-/*!
-@defgroup power Power Driver
-
-@details Power driver provides APIs to control peripherals power and control the system
-power mode.
-
-*/

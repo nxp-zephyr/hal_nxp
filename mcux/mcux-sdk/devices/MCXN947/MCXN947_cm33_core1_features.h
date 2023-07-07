@@ -1,15 +1,13 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b230131
+**     Build:               b230504
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2023 NXP
-**     All rights reserved.
-**
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -65,12 +63,16 @@
 #define FSL_FEATURE_SOC_GPIO_COUNT (12)
 /* @brief SPC availability on the SoC. */
 #define FSL_FEATURE_SOC_SPC_COUNT (1)
+/* @brief HPDAC availability on the SoC. */
+#define FSL_FEATURE_SOC_HPDAC_COUNT (1)
 /* @brief I3C availability on the SoC. */
 #define FSL_FEATURE_SOC_I3C_COUNT (2)
 /* @brief I2S availability on the SoC. */
 #define FSL_FEATURE_SOC_I2S_COUNT (2)
 /* @brief INPUTMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
+/* @brief ITRC availability on the SoC. */
+#define FSL_FEATURE_SOC_ITRC_COUNT (1)
 /* @brief LPADC availability on the SoC. */
 #define FSL_FEATURE_SOC_LPADC_COUNT (2)
 /* @brief LPCMP availability on the SoC. */
@@ -117,10 +119,14 @@
 #define FSL_FEATURE_SOC_SCT_COUNT (1)
 /* @brief SEMA42 availability on the SoC. */
 #define FSL_FEATURE_SOC_SEMA42_COUNT (1)
+/* @brief SINC availability on the SoC. */
+#define FSL_FEATURE_SOC_SINC_COUNT (1)
 /* @brief SMARTDMA availability on the SoC. */
 #define FSL_FEATURE_SOC_SMARTDMA_COUNT (1)
 /* @brief SYSCON availability on the SoC. */
 #define FSL_FEATURE_SOC_SYSCON_COUNT (1)
+/* @brief SYSPM availability on the SoC. */
+#define FSL_FEATURE_SOC_SYSPM_COUNT (2)
 /* @brief TRNG availability on the SoC. */
 #define FSL_FEATURE_SOC_TRNG_COUNT (1)
 /* @brief TSI availability on the SoC. */
@@ -569,7 +575,7 @@
 /* @brief Opamp has OPAMP_CTR TRIGMD bit */
 #define FSL_FEATURE_OPAMP_HAS_OPAMP_CTR_TRIGMD (1)
 /* @brief OPAMP support reference buffer */
-#define FSL_FEATURE_OPAMP_HAS_SUPPORT_REFERENCE_BUFFER (1U)
+#define FSL_FEATURE_OPAMP_HAS_SUPPORT_REFERENCE_BUFFER (1)
 
 /* PDM module features */
 
@@ -660,6 +666,13 @@
 #define FSL_FEATURE_PORT_HAS_IRQC_FLAG (0)
 /* @brief Defines whether PCR[IRQC] bit-field has trigger states. */
 #define FSL_FEATURE_PORT_HAS_IRQC_TRIGGER (0)
+
+/* PUF module features */
+
+/* @brief Puf Activation Code Address. */
+#define FSL_FEATURE_PUF_ACTIVATION_CODE_ADDRESS (17826304)
+/* @brief Puf Activation Code Size. */
+#define FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE (1000)
 
 /* PWM module features */
 
@@ -765,6 +778,13 @@
 /* @brief Gate counts */
 #define FSL_FEATURE_SEMA42_GATE_COUNT (16)
 
+/* SINC module features */
+
+/* @brief SINC channel count. */
+#define FSL_FEATURE_SINC_CHANNEL_COUNT (5)
+/* @brief SINC CACFR register has bitfield ADMASEL. */
+#define FSL_FEATURE_SINC_CACFR_HAS_ADMASEL (1)
+
 /* SPC module features */
 
 /* @brief Has 2P4G power domain. */
@@ -794,6 +814,13 @@
 #define FSL_FEATURE_SYSCON_ROMAPI (1)
 /* @brief Powerlib API is different with other series devices.. */
 #define FSL_FEATURE_POWERLIB_EXTEND (1)
+
+/* TRDC module features */
+
+/* @brief Process master count. */
+#define FSL_FEATURE_TRDC_PROCESSOR_MASTER_COUNT (2)
+/* @brief TRDC instance has PID configuration or not. */
+#define FSL_FEATURE_TRDC_INSTANCE_HAS_PID_CONFIGURATIONn(x) (0)
 
 /* TRNG module features */
 

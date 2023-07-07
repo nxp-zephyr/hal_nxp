@@ -4,13 +4,11 @@
 /*            MCXN947_cm33_core1                                             */
 /*  @version: 1.0                                                            */
 /*  @date:    2022-10-1                                                      */
-/*  @build:   b230131                                                        */
+/*  @build:   b230419                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
 /* Copyright 2016-2023 NXP                                                   */
-/* All rights reserved.                                                      */
-/*                                                                           */
 /* SPDX-License-Identifier: BSD-3-Clause                                     */
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */

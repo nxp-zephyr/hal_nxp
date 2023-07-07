@@ -4,17 +4,15 @@
 **                          MCXN947VNL_cm33_core0
 **
 **     Compiler:            GNU C Compiler
-**     Reference manual:    MCX N1xNxxx Reference Manual
+**     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b230112
+**     Build:               b230607
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
 **     Copyright 2016-2023 NXP
-**     All rights reserved.
-**
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com

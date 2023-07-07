@@ -1,10 +1,10 @@
-include_guard()
-message("device_MCXN947_system component is included.")
+#Description: device_system; user_visible: False
+include_guard(GLOBAL)
+message("device_system component is included.")
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/system_MCXN947_cm33_core1.c
 )
-
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/.
@@ -12,4 +12,3 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 
 
 include(device_CMSIS)
-
