@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017,2020-2022 NXP. Not a Contribution.
+ * Copyright 2016-2017,2020,2021 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -204,7 +204,7 @@
      (defined(RTE_USART5) && RTE_USART5 && defined(LPUART5)) || \
      (defined(RTE_USART6) && RTE_USART6 && defined(LPUART6)))
 
-#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (2))
+#define ARM_LPUART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (3))
 
 /*
  * ARMCC does not support split the data section automatically, so the driver
@@ -267,11 +267,11 @@ typedef struct _cmsis_lpuart_edma_resource
 {
     DMA_Type *txEdmaBase;   /*!< EDMA peripheral base address for TX.    */
     uint32_t txEdmaChannel; /*!< EDMA channel for LPUART TX.             */
-    uint32_t txDmaRequest;   /*!< TX EDMA request source.                 */
+    uint16_t txDmaRequest;  /*!< TX EDMA request source.                 */
 
     DMA_Type *rxEdmaBase;   /*!< EDMA peripheral base address for RX.    */
     uint32_t rxEdmaChannel; /*!< EDMA channel for LPUART RX.             */
-    uint32_t rxDmaRequest;   /*!< RX EDMA request source.                 */
+    uint16_t rxDmaRequest;  /*!< RX EDMA request source.                 */
 
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     DMAMUX_Type *txDmamuxBase; /*!< DMAMUX peripheral base address for TX. */
@@ -873,11 +873,6 @@ static int32_t LPUART_EdmaPowerControl(ARM_POWER_STATE state, cmsis_lpuart_edma_
 
             DMAMUX_SetSource(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel, dmaResource->txDmaRequest);
             DMAMUX_EnableChannel(dmaResource->txDmamuxBase, dmaResource->txEdmaChannel);
-#endif
-
-#if defined(FSL_FEATURE_EDMA_HAS_CHANNEL_MUX) && FSL_FEATURE_EDMA_HAS_CHANNEL_MUX
-            EDMA_SetChannelMux(dmaResource->rxEdmaBase, dmaResource->rxEdmaChannel, (dma_request_source_t)dmaResource->rxDmaRequest);
-            EDMA_SetChannelMux(dmaResource->txEdmaBase, dmaResource->txEdmaChannel, (dma_request_source_t)dmaResource->txDmaRequest);
 #endif
 
             /* Setup the LPUART. */
