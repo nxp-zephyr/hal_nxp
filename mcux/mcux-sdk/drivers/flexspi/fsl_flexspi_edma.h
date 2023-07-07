@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2016-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -25,8 +26,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief FLEXSPI EDMA driver. */
-#define FSL_FLEXSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+/*! @brief FLEXSPI EDMA driver version 2.3.2. */
+#define FSL_FLEXSPI_EDMA_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
 /*@}*/
 
 typedef struct _flexspi_edma_handle flexspi_edma_handle_t;

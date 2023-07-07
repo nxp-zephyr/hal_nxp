@@ -590,7 +590,7 @@ status_t FLEXSPI_NorFlash_EraseSector(uint32_t instance, flexspi_nor_config_t *c
  * @retval #kStatus_FLEXSPI_SequenceExecutionTimeout Sequence Execution timeout.
  * @retval #kStatus_FLEXSPI_DeviceTimeout the device timeout
  */
-status_t FLEXSPI_NorFlash_Erase_Block(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
+status_t FLEXSPI_NorFlash_EraseBlock(uint32_t instance, flexspi_nor_config_t *config, uint32_t address);
 
 /*!
  * @brief Get FLEXSPI NOR Configuration Block based on specified option.
@@ -699,6 +699,20 @@ status_t FLEXSPI_NorFlash_UpdateLut(uint32_t instance, uint32_t seqIndex, const 
  * @retval #kStatus_InvalidArgument A invalid argument is provided.
  */
 status_t FLEXSPI_NorFlash_SetClockSource(uint32_t clockSource);
+
+/*!
+ * @brief Configure the FlexSPI clock.
+ *
+ *The API is used for configuring the FlexSPI clock.
+ *
+ * @param instance storage the index of FLEXSPI.
+ * @param freqOption storage FlexSPIFlexSPI flash serial clock frequency.
+ * @param sampleClkMode storage the FlexSPI clock configuration type.
+ *
+ * @retval #kStatus_Success Api was executed succesfuly.
+ * @retval #kStatus_InvalidArgument A invalid argument is provided.
+ */
+void FLEXSPI_NorFlash_ConfigClock(uint32_t instance, uint32_t freqOption, uint32_t sampleClkMode);
 
 #ifdef __cplusplus
 }

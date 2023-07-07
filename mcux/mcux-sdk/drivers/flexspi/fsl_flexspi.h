@@ -242,13 +242,6 @@ typedef struct _flexspi_config
 #if defined(FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF) && FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF
     bool rxSampleClockDiff; /*!< Sample Clock source or source_b selection for Flash Reading. */
 #endif
-#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT)
-    bool enableSckBDiffOpt; /*!< Enable/disable SCKB pad use as SCKA differential clock
-                             output, when enable, Port B flash access is not available. */
-#endif
-#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF) && FSL_FEATURE_FLEXSPI_SUPPORT_RXCLKSRC_DIFF
-    bool rxSampleClockDiff; /*!< Sample Clock source or source_b selection for Flash Reading. */
-#endif
     bool enableSckBDiffOpt;      /*!< Enable/disable SCKB pad use as SCKA differential clock
                                   output, when enable, Port B flash access is not available. */
     bool enableSameConfigForAll; /*!< Enable/disable same configuration for all connected devices

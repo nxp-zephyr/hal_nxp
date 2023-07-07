@@ -500,3 +500,43 @@ void FLEXSPI_NorFlash_ConfigClock(uint32_t instance, uint32_t freqOption, uint32
     assert(BOOTLOADER_API_TREE_POINTER);
     BOOTLOADER_API_TREE_POINTER->flexspiNorDriver->config_clock(instance, freqOption, sampleClkMode);
 }
+
+/********************************************************************************
+ * EFUSE driver API
+ *******************************************************************************/
+
+/*!
+ * @brief Initialize EFUSE controller.
+ */
+status_t EFUSE_Init(void)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->init();
+}
+
+/*!
+ * @brief De-Initialize EFUSE controller.
+ */
+status_t EFUSE_Deinit(void)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->deinit();
+}
+
+/*!
+ * @brief Read Fuse value from eFuse word.
+ */
+status_t EFUSE_Read(uint32_t addr, uint32_t *data)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->read(addr, data);
+}
+
+/*!
+ * @brief Program value to eFuse block.
+ */
+status_t EFUSE_Program(uint32_t addr, uint32_t data)
+{
+    assert(BOOTLOADER_API_TREE_POINTER);
+    return BOOTLOADER_API_TREE_POINTER->efuseDriver->program(addr, data);
+}

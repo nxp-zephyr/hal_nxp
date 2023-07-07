@@ -17,7 +17,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief FlexCOMM driver version. */
-#define FSL_LP_FLEXCOMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 1))
+#define FSL_LP_FLEXCOMM_DRIVER_VERSION (MAKE_VERSION(2, 1, 2))
 /*@}*/
 
 /*! @brief LP_FLEXCOMM peripheral modes. */

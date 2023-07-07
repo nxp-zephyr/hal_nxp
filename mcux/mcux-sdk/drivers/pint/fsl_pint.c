@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2021 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,16 +18,13 @@
  ******************************************************************************/
 
 #if (defined(FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS) && FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS)
-/*! @brief Irq number array */
-static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS +
-                                 FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
 
 /*! @brief Callback function array for SECPINT(s). */
 static pint_cb_t s_secpintCallback[FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS];
-#else
-/*! @brief Irq number array */
-static const IRQn_Type s_pintIRQ[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS] = PINT_IRQS;
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+
+/*! @brief Irq number array */
+static const IRQn_Type s_pintIRQ[] = PINT_IRQS;
 
 /*! @brief Callback function array for PINT(s). */
 static pint_cb_t s_pintCallback[FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS];
@@ -514,12 +511,21 @@ void PINT_EnableCallback(PINT_Type *base)
 
     if (base == PINT)
     {
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+        }
+        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
+        (void)EnableIRQ(s_pintIRQ[0]);
+#else
         for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
         {
             PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
             NVIC_ClearPendingIRQ(s_pintIRQ[i]);
             (void)EnableIRQ(s_pintIRQ[i]);
         }
+#endif
     }
     else
     {
@@ -559,8 +565,13 @@ void PINT_EnableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
     }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+    NVIC_ClearPendingIRQ(s_pintIRQ[0]);
+    (void)EnableIRQ(s_pintIRQ[0]);
+#else
     NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
     (void)EnableIRQ(s_pintIRQ[pintIdx]);
+#endif
 }
 
 /*!
@@ -581,12 +592,21 @@ void PINT_DisableCallback(PINT_Type *base)
 
     if (base == PINT)
     {
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+        (void)DisableIRQ(s_pintIRQ[0]);
+        for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+        {
+            PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
+        }
+        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
+#else
         for (i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
         {
             (void)DisableIRQ(s_pintIRQ[i]);
             PINT_PinInterruptClrStatus(base, (pint_pin_int_t)i);
             NVIC_ClearPendingIRQ(s_pintIRQ[i]);
         }
+#endif
     }
     else
     {
@@ -617,9 +637,15 @@ void PINT_DisableCallbackByIndex(PINT_Type *base, pint_pin_int_t pintIdx)
 
     if (base == PINT)
     {
+#if defined(FSL_FEATURE_PINT_INTERRUPT_COMBINE) && (FSL_FEATURE_PINT_INTERRUPT_COMBINE == 1)
+        (void)DisableIRQ(s_pintIRQ[0]);
+        PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
+        NVIC_ClearPendingIRQ(s_pintIRQ[0]);
+#else
         (void)DisableIRQ(s_pintIRQ[pintIdx]);
         PINT_PinInterruptClrStatus(base, (pint_pin_int_t)pintIdx);
         NVIC_ClearPendingIRQ(s_pintIRQ[pintIdx]);
+#endif
     }
     else
     {
@@ -779,6 +805,34 @@ void SEC_GPIO_INT0_IRQ1_DriverIRQHandler(void)
 }
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
 #endif /* FSL_FEATURE_SECPINT_NUMBER_OF_CONNECTED_OUTPUTS */
+
+void PINT0_DriverIRQHandler(void);
+void PINT0_DriverIRQHandler(void)
+{
+    uint32_t flags = (PINT->IST & PINT_IST_PSTAT_MASK) | PINT_PatternMatchGetStatusAll(PINT);
+    uint32_t pmstatus;
+
+    for (uint32_t i = 0; i < (uint32_t)FSL_FEATURE_PINT_NUMBER_OF_CONNECTED_OUTPUTS; i++)
+    {
+        if ((flags & (1UL << i)) != 0U)
+        {
+            /* Reset pattern match detection */
+            pmstatus = PINT_PatternMatchResetDetectLogic(PINT);
+            /* Call user function */
+            if (s_pintCallback[i] != NULL)
+            {
+                s_pintCallback[i]((pint_pin_int_t)i, pmstatus);
+            }
+            if ((PINT->ISEL & (1UL << i)) == 0x0U)
+            {
+                /* Edge sensitive: clear Pin interrupt after callback */
+                PINT_PinInterruptClrStatus(PINT, (pint_pin_int_t)i);
+            }
+        }
+    }
+
+    SDK_ISR_EXIT_BARRIER;
+}
 
 /* IRQ handler functions overloading weak symbols in the startup */
 void PIN_INT0_DriverIRQHandler(void);

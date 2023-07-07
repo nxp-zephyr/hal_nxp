@@ -27,16 +27,6 @@
  * @param width transfer width.
  */
 static edma_transfer_size_t EDMA_TransferWidthMapping(uint32_t width);
-
-/*!
- * @brief validate edma errata.
- *
- * @param base edma base address.
- * @param tcd edma transfer content descriptor.
- */
-#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327
-static inline status_t EDMA_CheckErrata(EDMA_Type *base, const edma_tcd_t *tcd);
-#endif
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -74,24 +64,6 @@ static uint32_t EDMA_GetInstance(EDMA_Type *base)
     return instance;
 }
 
-#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327
-static inline status_t EDMA_CheckErrata(EDMA_Type *base, const edma_tcd_t *tcd)
-{
-    status_t status = kStatus_Success;
-    /* errata 51327: to use scatter gather feature, NBYTES must be multiple of 8 */
-    if (FSL_FEATURE_EDMA_ERRATA_51327(base) == 1U)
-    {
-        if ((tcd->NBYTES % 8U) != 0U)
-        {
-            assert(false);
-            status = kStatus_InvalidArgument;
-        }
-    }
-
-    return status;
-}
-#endif
-
 /*!
  * brief Push content of TCD structure into hardware TCD register.
  *
@@ -106,14 +78,6 @@ void EDMA_InstallTCD(EDMA_Type *base, uint32_t channel, edma_tcd_t *tcd)
     assert(((uint32_t)tcd & 0x1FU) == 0U);
 
     edma_tcd_t *tcdRegs = EDMA_TCD_BASE(base, channel);
-
-#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327
-    if ((tcd->DLAST_SGA != 0U) && ((tcd->CSR & (uint16_t)DMA_CSR_ESG_MASK) != 0U) &&
-        (EDMA_CheckErrata(base, tcd) != kStatus_Success))
-    {
-        assert(false);
-    }
-#endif
 
 #if FSL_EDMA_SOC_IP_DMA3 || FSL_EDMA_SOC_IP_DMA4
     EDMA_CHANNEL_BASE(base, channel)->CH_CSR |= DMA_CH_CSR_DONE_MASK;
@@ -1543,12 +1507,6 @@ status_t EDMA_SubmitTransfer(edma_handle_t *handle, const edma_transfer_config_t
         /* Chain from previous descriptor unless tcd pool size is 1(this descriptor is its own predecessor). */
         if (currentTcd != previousTcd)
         {
-#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327
-            if (EDMA_CheckErrata(handle->base, &handle->tcdPool[previousTcd]) != kStatus_Success)
-            {
-                return kStatus_InvalidArgument;
-            }
-#endif
             /* Enable scatter/gather feature in the previous TCD block. */
             csr = handle->tcdPool[previousTcd].CSR | ((uint16_t)DMA_CSR_ESG_MASK);
             csr &= ~((uint16_t)DMA_CSR_DREQ_MASK);
@@ -1693,12 +1651,6 @@ status_t EDMA_SubmitLoopTransfer(edma_handle_t *handle, edma_transfer_config_t *
     {
         transfer[i].linkTCD = &handle->tcdPool[i + 1UL];
         EDMA_ConfigChannelSoftwareTCD(&(handle->tcdPool[i]), &transfer[i]);
-#if defined FSL_FEATURE_EDMA_HAS_ERRATA_51327
-        if (EDMA_CheckErrata(handle->base, &(handle->tcdPool[i])) != kStatus_Success)
-        {
-            return kStatus_InvalidArgument;
-        }
-#endif
     }
 
     /* prepare last one in the ring and link it to the HEAD of the ring */

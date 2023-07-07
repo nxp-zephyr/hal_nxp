@@ -1126,36 +1126,6 @@ void I3C_MasterSetBaudRate(I3C_Type *base, const i3c_baudrate_hz_t *baudRate_Hz,
 }
 
 /*!
- * brief Sends a START signal and slave address on the I2C/I3C bus, receive size is also specified
- * in the call.
- * This function is used to initiate a new master mode transfer. First, the bus state is checked to ensure
- * that another master is not occupying the bus. Then a START signal is transmitted, followed by the
- * 7-bit address specified in the a address parameter. Note that this function does not actually wait
- * until the START and address are successfully sent on the bus before returning.
- *
- * param base The I3C peripheral base address.
- * param type The bus type to use in this transaction.
- * param address 7-bit slave device address, in bits [6:0].
- * param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
- *      the R/w bit (bit 0) in the transmitted slave address.
- * param rxSize Read terminate size for the followed read transfer, limit to 255 bytes.
- * retval #kStatus_Success START signal and address were successfully enqueued in the transmit FIFO.
- * retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- */
-status_t I3C_MasterStartWithRxSize(
-    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize)
-{
-    i3c_master_state_t masterState = I3C_MasterGetState(base);
-    bool checkDdrState             = (type == kI3C_TypeI3CDdr) ? (masterState != kI3C_MasterStateDdr) : true;
-    if ((masterState != kI3C_MasterStateIdle) && (masterState != kI3C_MasterStateNormAct) && checkDdrState)
-    {
-        return kStatus_I3C_Busy;
-    }
-
-    return I3C_MasterRepeatedStartWithRxSize(base, type, address, dir, rxSize);
-}
-
-/*!
  * brief Sends a START signal and slave address on the I2C/I3C bus.
  *
  * This function is used to initiate a new master mode transfer. First, the bus state is checked to ensure
@@ -1180,7 +1150,43 @@ status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i
         return kStatus_I3C_Busy;
     }
 
-    return I3C_MasterStartWithRxSize(base, type, address, dir, 0);
+    return I3C_MasterRepeatedStart(base, type, address, dir);
+}
+
+/*!
+ * brief Sends a repeated START signal and slave address on the I2C/I3C bus.
+ *
+ * This function is used to send a Repeated START signal when a transfer is already in progress. Like
+ * I3C_MasterStart(), it also sends the specified 7-bit address.
+ *
+ * note This function exists primarily to maintain compatible APIs between I3C and I2C drivers,
+ *      as well as to better document the intent of code that uses these APIs.
+ *
+ * param base The I3C peripheral base address.
+ * param type The bus type to use in this transaction.
+ * param address 7-bit slave device address, in bits [6:0].
+ * param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
+ *      the R/w bit (bit 0) in the transmitted slave address.
+ * param rxSize if dir is #kI3C_Read, this assigns bytes to read. Otherwise set to 0.
+ * retval #kStatus_Success Repeated START signal and address were successfully enqueued in the transmit FIFO.
+ */
+status_t I3C_MasterRepeatedStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir)
+{
+    uint32_t mctrlVal;
+
+    /* Clear all flags. */
+    I3C_MasterClearStatusFlags(base, (uint32_t)kMasterClearFlags);
+
+    /* Issue start command. */
+    mctrlVal = base->MCTRL;
+    mctrlVal &= ~(I3C_MCTRL_TYPE_MASK | I3C_MCTRL_REQUEST_MASK | I3C_MCTRL_DIR_MASK | I3C_MCTRL_ADDR_MASK |
+                  I3C_MCTRL_RDTERM_MASK);
+    mctrlVal |= I3C_MCTRL_TYPE(type) | I3C_MCTRL_REQUEST(kI3C_RequestEmitStartAddr) | I3C_MCTRL_DIR(dir) |
+                I3C_MCTRL_ADDR(address);
+
+    base->MCTRL = mctrlVal;
+
+    return kStatus_Success;
 }
 
 /*!
@@ -1326,10 +1332,9 @@ void I3C_MasterGetIBIRules(I3C_Type *base, i3c_register_ibi_addr_t *ibiRule)
  */
 status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t flags)
 {
-    status_t result   = kStatus_Success;
-    bool isRxAutoTerm = ((flags & (uint32_t)kI3C_TransferRxAutoTermFlag) != 0UL);
-    bool completed    = false;
+    status_t result = kStatus_Success;
     uint32_t status;
+    bool completed = false;
     uint8_t *buf;
 
     assert(NULL != rxBuff);
@@ -1395,7 +1400,7 @@ status_t I3C_MasterReceive(I3C_Type *base, void *rxBuff, size_t rxSize, uint32_t
         {
             *buf++ = (uint8_t)(base->MRDATAB & I3C_MRDATAB_VALUE_MASK);
             rxSize--;
-            if ((!isRxAutoTerm) && (rxSize == 1U))
+            if (rxSize == 1U)
             {
                 base->MCTRL |= I3C_MCTRL_RDTERM(1U);
             }
@@ -1713,7 +1718,6 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
     i3c_direction_t direction      = transfer->direction;
     i3c_master_state_t masterState = I3C_MasterGetState(base);
     bool checkDdrState             = false;
-    bool isRxAutoTerm;
 
     /* Return an error if the bus is already in use not by us. */
     checkDdrState = (transfer->busType == kI3C_TypeI3CDdr) ? (masterState != kI3C_MasterStateDdr) : true;
@@ -1736,32 +1740,12 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         direction = (0UL != transfer->subaddressSize) ? kI3C_Write : transfer->direction;
     }
 
-    /* True: Set Rx termination bytes at start point, False: Set Rx termination one bytes in advance. */
-    isRxAutoTerm = (transfer->dataSize <= 255U) ? true : false;
-
     if (0UL == (transfer->flags & (uint32_t)kI3C_TransferNoStartFlag))
     {
-        if ((direction == kI3C_Read) && isRxAutoTerm)
-        {
-            result = I3C_MasterStartWithRxSize(base, transfer->busType, transfer->slaveAddress, direction,
-                                               (uint8_t)transfer->dataSize);
-        }
-        else
-        {
-            result = I3C_MasterStart(base, transfer->busType, transfer->slaveAddress, direction);
-        }
-
+        result = I3C_MasterStart(base, transfer->busType, transfer->slaveAddress, direction);
         if (true == I3C_MasterTransferNoStartFlag(base, transfer))
         {
             return kStatus_I3C_IBIWon;
-        }
-    }
-    else
-    {
-        if (direction == kI3C_Read)
-        {
-            /* Can't set Rx termination more than one bytes in advance without START. */
-            isRxAutoTerm = false;
         }
     }
 
@@ -1798,31 +1782,13 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
         /* Need to send repeated start if switching directions to read. */
         if ((transfer->busType != kI3C_TypeI3CDdr) && (0UL != transfer->dataSize) && (transfer->direction == kI3C_Read))
         {
-            if (isRxAutoTerm)
-            {
-                result = I3C_MasterRepeatedStartWithRxSize(base, transfer->busType, transfer->slaveAddress, kI3C_Read,
-                                                           (uint8_t)transfer->dataSize);
-            }
-            else
-            {
-                result = I3C_MasterRepeatedStart(base, transfer->busType, transfer->slaveAddress, kI3C_Read);
-            }
-
+            result = I3C_MasterRepeatedStart(base, transfer->busType, transfer->slaveAddress, kI3C_Read);
             if (kStatus_Success != result)
             {
                 I3C_MasterClearFlagsAndEnableIRQ(base);
                 return result;
             }
         }
-    }
-
-    if (isRxAutoTerm)
-    {
-        transfer->flags |= (uint32_t)kI3C_TransferRxAutoTermFlag;
-    }
-    else
-    {
-        transfer->flags &= ~(uint32_t)kI3C_TransferRxAutoTermFlag;
     }
 
     /* Transmit data. */
@@ -1834,6 +1800,10 @@ status_t I3C_MasterTransferBlocking(I3C_Type *base, i3c_master_transfer_t *trans
     /* Receive Data. */
     else if ((transfer->direction == kI3C_Read) && (transfer->dataSize > 0UL))
     {
+        if (transfer->dataSize == 1U)
+        {
+            base->MCTRL |= I3C_MCTRL_RDTERM(1U);
+        }
         result = I3C_MasterReceive(base, transfer->data, transfer->dataSize, transfer->flags);
     }
     else
@@ -2018,7 +1988,7 @@ static void I3C_TransferStateMachineWaitRepeatedStartCompleteState(I3C_Type *bas
 
         if (handle->remainingBytes < 256U)
         {
-            handle->isRxAutoTerm = true;
+            handle->isReadTerm = true;
             stateParams->result =
                 I3C_MasterRepeatedStartWithRxSize(base, handle->transfer.busType, handle->transfer.slaveAddress,
                                                   kI3C_Read, (uint8_t)handle->remainingBytes);
@@ -2087,11 +2057,11 @@ static void I3C_TransferStateMachineTransferDataState(I3C_Type *base,
         /* Move to stop when the transfer is done. */
         if (--handle->remainingBytes == 0UL)
         {
-            handle->isRxAutoTerm = false;
-            handle->state        = (uint8_t)kWaitForCompletionState;
+            handle->isReadTerm = false;
+            handle->state      = (uint8_t)kWaitForCompletionState;
         }
 
-        if (!handle->isRxAutoTerm && (handle->remainingBytes == 1UL))
+        if (!handle->isReadTerm && (handle->remainingBytes == 1UL))
         {
             base->MCTRL |= I3C_MCTRL_RDTERM(1UL);
         }
@@ -2293,7 +2263,7 @@ static status_t I3C_InitTransferStateMachine(I3C_Type *base, i3c_master_handle_t
 
     if ((handle->remainingBytes < 256U) && (direction == kI3C_Read))
     {
-        handle->isRxAutoTerm = true;
+        handle->isReadTerm = true;
         base->MCTRL |= I3C_MCTRL_RDTERM(handle->remainingBytes);
     }
 

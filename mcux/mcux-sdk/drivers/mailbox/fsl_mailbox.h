@@ -29,8 +29,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief MAILBOX driver version 2.2.0. */
-#define FSL_MAILBOX_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+/*! @brief MAILBOX driver version 2.3.0. */
+#define FSL_MAILBOX_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*@}*/
 
 /*!
@@ -47,6 +47,13 @@ typedef enum _mailbox_cpu_id
 {
     kMAILBOX_CM0Plus = 0,
     kMAILBOX_CM4
+} mailbox_cpu_id_t;
+#elif (defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || \
+       defined(MCXN547_cm33_core0_SERIES) || defined(MCXN547_cm33_core1_SERIES))
+typedef enum _mailbox_cpu_id
+{
+    kMAILBOX_CM33_Core0 = 0,
+    kMAILBOX_CM33_Core1
 } mailbox_cpu_id_t;
 #endif
 
@@ -108,8 +115,9 @@ static inline void MAILBOX_Deinit(MAILBOX_Type *base)
 
 /* @} */
 
-#if ((defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES)) || \
-     (defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
+#if ((defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES)) ||                                   \
+     defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+     defined(MCXN547_cm33_core1_SERIES) || defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES))
 /*!
  * @brief Set data value in the mailbox based on the CPU ID.
  *
@@ -122,7 +130,9 @@ static inline void MAILBOX_Deinit(MAILBOX_Type *base)
  */
 static inline void MAILBOX_SetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id, uint32_t mboxData)
 {
-#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES))
+#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) ||                                     \
+     defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+     defined(MCXN547_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -141,7 +151,9 @@ static inline void MAILBOX_SetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id,
  */
 static inline uint32_t MAILBOX_GetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id)
 {
-#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES))
+#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) ||                                     \
+     defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+     defined(MCXN547_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -162,7 +174,9 @@ static inline uint32_t MAILBOX_GetValue(MAILBOX_Type *base, mailbox_cpu_id_t cpu
  */
 static inline void MAILBOX_SetValueBits(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id, uint32_t mboxSetBits)
 {
-#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES))
+#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) ||                                     \
+     defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+     defined(MCXN547_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));
@@ -183,7 +197,9 @@ static inline void MAILBOX_SetValueBits(MAILBOX_Type *base, mailbox_cpu_id_t cpu
  */
 static inline void MAILBOX_ClearValueBits(MAILBOX_Type *base, mailbox_cpu_id_t cpu_id, uint32_t mboxClrBits)
 {
-#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES))
+#if (defined(LPC55S69_cm33_core0_SERIES) || defined(LPC55S69_cm33_core1_SERIES) ||                                     \
+     defined(MCXN947_cm33_core0_SERIES) || defined(MCXN947_cm33_core1_SERIES) || defined(MCXN547_cm33_core0_SERIES) || \
+     defined(MCXN547_cm33_core1_SERIES))
     assert((cpu_id == kMAILBOX_CM33_Core0) || (cpu_id == kMAILBOX_CM33_Core1));
 #elif ((defined(LPC54114_cm4_SERIES) || defined(LPC54114_cm0plus_SERIES)))
     assert((cpu_id == kMAILBOX_CM0Plus) || (cpu_id == kMAILBOX_CM4));

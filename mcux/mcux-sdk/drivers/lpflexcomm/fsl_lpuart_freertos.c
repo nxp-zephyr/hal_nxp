@@ -13,7 +13,7 @@
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
-#define FSL_COMPONENT_ID "platform.drivers.flexcomm_lpuart_freertos"
+#define FSL_COMPONENT_ID "platform.drivers.lpflexcomm_lpuart_freertos"
 #endif
 
 /*******************************************************************************

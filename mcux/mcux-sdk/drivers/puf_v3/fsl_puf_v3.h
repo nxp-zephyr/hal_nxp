@@ -61,6 +61,12 @@ typedef uint32_t puf_key_scope_t;
 #define kPUF_Failure                   (0xFFu)
 typedef uint32_t puf_result_code_t;
 
+#define kPUF_NonsecureUser      (0xCu) /* b1100 */
+#define kPUF_NonsecurePrivilege (0x9u) /* b1001 */
+#define kPUF_SecureUser         (0x6u) /* b0110 */
+#define kPUF_SecurePrivilege    (0x3u) /* b0011 */
+typedef uint32_t puf_sec_level_t;
+
 typedef struct
 {
     puf_endianness_t dataEndianness;
@@ -75,10 +81,11 @@ typedef struct
     uint32_t userCtx1;
 } puf_key_ctx_t;
 
-#define PUF_ACTIVATION_CODE_SIZE              996
-#define PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(x) ((0x34u + x) + 0x10u * (x / 0x32u))
+#define PUF_ACTIVATION_CODE_SIZE              1000u
+#define PUF_GET_KEY_CODE_SIZE_FOR_KEY_SIZE(x) ((0x34u + (x)) + 0x10u * ((x) / 0x32u))
+#define SEC_LOCK_PATTERN                      0xAC50u
 
-enum _puf_status
+enum
 {
     kStatus_PUF_OperationNotAllowed       = MAKE_STATUS(kStatusGroup_PUF, 0xA5),
     kStatus_PUF_AcNotForThisProductPhase1 = MAKE_STATUS(kStatusGroup_PUF, kPUF_AcNotForThisProductPhase1),
@@ -271,13 +278,41 @@ status_t PUF_Test(PUF_Type *base, uint8_t *score);
  * This function blocks PUF commands specified by mask parameter.
  *
  * @param base PUF peripheral base address
- * @param score Value of the PUF Score that was obtained during the enroll operation.
+ * @param mask Mask of parameters which should be blocked until power-cycle.
  * @return Status of the test operation.
  */
 static inline void PUF_BlockCommand(PUF_Type *base, uint32_t mask)
 {
     base->CONFIG |= mask;
 }
+
+/*!
+ * brief Set lock of PUF operation
+ *
+ * Lock the security level of PUF block until key generate, wrap or unwrap operation is completed.
+ * Note: Only security level defined in SEC_LOCK register can use PUFv3 or change its security level.
+ *       Default setting after leaving ROM is Secure-Privilege
+ *
+ * @param base PUF peripheral base address
+ * @param securityLevel Security level of PUF block.
+ * @return Status of the test operation.
+ */
+status_t PUF_SetLock(PUF_Type *base, puf_sec_level_t securityLevel);
+
+/*!
+ * brief Set App Context mask
+ *
+ * This function sets Application defined context mask used in conjunction with key user context 2.
+ * Whenever bit in this register is 1, corresponding bit in user context 2 provided
+ * during key code creation should be zero only.
+ *
+ * This register is only modifiable by task running at secure-privilege level.
+ *
+ * @param base PUF peripheral base address
+ * @param appCtxMask Value of the Application defined context mask.
+ * @return Status of the test operation.
+ */
+status_t PUF_SetCtxMask(PUF_Type *base, uint32_t appCtxMask);
 
 #if defined(__cplusplus)
 }

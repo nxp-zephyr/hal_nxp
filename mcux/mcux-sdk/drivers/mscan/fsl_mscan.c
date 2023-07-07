@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2020, 2023 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,9 +40,6 @@
 #define IDEAL_SP_FACTOR  (1000U)
 #define MAX_CAN_BAUDRATE (1000000U)
 #endif
-
-/* Max length of data length. */
-#define MSCAN_DLC_MAX (8U)
 
 /*! @brief MSCAN Internal State. */
 enum _mscan_state
@@ -563,7 +560,6 @@ void MSCAN_SetTimingConfig(MSCAN_Type *base, const mscan_timing_config_t *config
  * param pTxFrame Pointer to CAN message frame to be sent.
  * retval kStatus_Success - Write Tx Message Buffer Successfully.
  * retval kStatus_Fail    - Tx Message Buffer is currently in use.
- * retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame)
 {
@@ -572,11 +568,6 @@ status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame)
     IDR1_3_UNION sIDR1 = {0}, sIDR3 = {0};
     status_t status;
     uint8_t i;
-
-    if (pTxFrame->DLR > MSCAN_DLC_MAX)
-    {
-        return kStatus_MSCAN_DataLengthError;
-    }
 
     /* Write IDR. */
     if (kMSCAN_FrameFormatExtend == pTxFrame->format)
@@ -659,7 +650,6 @@ status_t MSCAN_WriteTxMb(MSCAN_Type *base, mscan_frame_t *pTxFrame)
  * param pRxFrame Pointer to CAN message frame structure for reception.
  * retval kStatus_Success            - Rx Message Buffer is full and has been read successfully.
  * retval kStatus_Fail               - Rx Message Buffer is empty.
- * retval kStatus_MSCAN_DataLengthError - Rx Message data length is wrong.
  */
 status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
 {
@@ -670,8 +660,6 @@ status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
 
     if (0U != MSCAN_GetRxBufferFullFlag(base))
     {
-        status = kStatus_Success;
-
         sIDR1.Bytes      = MSCAN_ReadRIDR1(base);
         sIDR3.Bytes      = MSCAN_ReadRIDR3(base);
         pRxFrame->format = (mscan_frame_format_t)(sIDR1.IDR1.R_TEIDE);
@@ -693,13 +681,6 @@ status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
         }
 
         pRxFrame->DLR = base->RDLR & 0x0FU;
-
-        if (pRxFrame->DLR > MSCAN_DLC_MAX)
-        {
-            pRxFrame->DLR = MSCAN_DLC_MAX;
-            status        = kStatus_MSCAN_DataLengthError;
-        }
-
         for (i = 0; i < pRxFrame->DLR; i++)
         {
             pRxFrame->DSR[i] = base->REDSR[i];
@@ -707,6 +688,8 @@ status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
 
         pRxFrame->TSRH = base->RTSRH;
         pRxFrame->TSRL = base->RTSRL;
+
+        status = kStatus_Success;
     }
     else
     {
@@ -725,21 +708,24 @@ status_t MSCAN_ReadRxMb(MSCAN_Type *base, mscan_frame_t *pRxFrame)
  * param pTxFrame Pointer to CAN message frame to be sent.
  * retval kStatus_Success - Write Tx Message Buffer Successfully.
  * retval kStatus_Fail    - Tx Message Buffer is currently in use.
- * retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_TransferSendBlocking(MSCAN_Type *base, mscan_frame_t *pTxFrame)
 {
     status_t status;
 
     /* Write Tx Message Buffer to initiate a data sending. */
-    status = MSCAN_WriteTxMb(base, pTxFrame);
-
-    if (kStatus_Success == status)
+    if (kStatus_Success == MSCAN_WriteTxMb(base, pTxFrame))
     {
         /* Wait until CAN Message send out. */
         while (0U == MSCAN_GetTxBufferStatusFlags(base, MSCAN_GetTxBufferSelect(base)))
         {
         }
+
+        status = kStatus_Success;
+    }
+    else
+    {
+        status = kStatus_Fail;
     }
 
     return status;
@@ -754,7 +740,6 @@ status_t MSCAN_TransferSendBlocking(MSCAN_Type *base, mscan_frame_t *pTxFrame)
  * param pRxFrame Pointer to CAN message frame to be received.
  * retval kStatus_Success - Read Rx Message Buffer Successfully.
  * retval kStatus_Fail    - Tx Message Buffer is currently in use.
- * retval kStatus_MSCAN_DataLengthError - Rx Message data length is wrong.
  */
 status_t MSCAN_TransferReceiveBlocking(MSCAN_Type *base, mscan_frame_t *pRxFrame)
 {
@@ -766,11 +751,15 @@ status_t MSCAN_TransferReceiveBlocking(MSCAN_Type *base, mscan_frame_t *pRxFrame
     }
 
     /* Read Received CAN Message. */
-    status = MSCAN_ReadRxMb(base, pRxFrame);
-    if (kStatus_Success == status)
+    if (kStatus_Success == MSCAN_ReadRxMb(base, pRxFrame))
     {
         /* Clear RXF flag to release the buffer. */
         MSCAN_ClearRxBufferFullFlag(base);
+        status = kStatus_Success;
+    }
+    else
+    {
+        status = kStatus_Fail;
     }
 
     return status;
@@ -845,7 +834,6 @@ void MSCAN_TransferCreateHandle(MSCAN_Type *base,
  * param xfer MsCAN Message Buffer transfer structure. See the #mscan_mb_transfer_t.
  * retval kStatus_Success        Start Tx Message Buffer sending process successfully.
  * retval kStatus_Fail           Write Tx Message Buffer failed.
- * retval kStatus_MSCAN_DataLengthError - Tx Message Buffer data length is wrong.
  */
 status_t MSCAN_TransferSendNonBlocking(MSCAN_Type *base, mscan_handle_t *handle, mscan_mb_transfer_t *xfer)
 {
@@ -870,16 +858,17 @@ status_t MSCAN_TransferSendNonBlocking(MSCAN_Type *base, mscan_handle_t *handle,
         handle->mbStateTx = (uint8_t)kMSCAN_StateTxData;
     }
 
-    status = MSCAN_WriteTxMb(base, xfer->frame);
-
-    if (kStatus_Success == status)
+    if (kStatus_Success == MSCAN_WriteTxMb(base, xfer->frame))
     {
         /* Enable Message Buffer Interrupt. */
         MSCAN_EnableTxInterrupts(base, xfer->mask);
+
+        status = kStatus_Success;
     }
     else
     {
         handle->mbStateTx = (uint8_t)kMSCAN_StateIdle;
+        status            = kStatus_Fail;
     }
 
     return status;

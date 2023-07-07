@@ -21,7 +21,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief I3C driver version */
-#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 9, 0))
+#define FSL_I3C_DRIVER_VERSION (MAKE_VERSION(2, 8, 1))
 /*@}*/
 
 /*! @brief Timeout times for waiting flag. */
@@ -327,8 +327,6 @@ enum _i3c_master_transfer_flags
     kI3C_TransferRepeatedStartFlag = 0x02U, /*!< Send a repeated start condition */
     kI3C_TransferNoStopFlag        = 0x04U, /*!< Don't send a stop condition. */
     kI3C_TransferWordsFlag         = 0x08U, /*!< Transfer in words, else transfer in bytes. */
-    kI3C_TransferRxAutoTermFlag =
-        0x10U, /*!< Set Rx auto-termination. Note: It's adaptive based on Rx size except in I3C_MasterReceive. */
 };
 
 /*!
@@ -358,7 +356,7 @@ struct _i3c_master_handle
 {
     uint8_t state;                           /*!< Transfer state machine current state. */
     uint32_t remainingBytes;                 /*!< Remaining byte count in current state. */
-    bool isRxAutoTerm;                       /*!< Is read auto-termination configured. */
+    bool isReadTerm;                         /*!< Is readterm configured. */
     i3c_master_transfer_t transfer;          /*!< Copy of the current transfer info. */
     uint8_t ibiAddress;                      /*!< Slave address which request IBI. */
     uint8_t *ibiBuff;                        /*!< Pointer to IBI buffer to keep ibi bytes. */
@@ -1059,27 +1057,6 @@ static inline bool I3C_MasterGetBusIdleState(I3C_Type *base)
 }
 
 /*!
- * @brief Sends a START signal and slave address on the I2C/I3C bus, receive size is also specified
- * in the call.
- *
- * This function is used to initiate a new master mode transfer. First, the bus state is checked to ensure
- * that another master is not occupying the bus. Then a START signal is transmitted, followed by the
- * 7-bit address specified in the a address parameter. Note that this function does not actually wait
- * until the START and address are successfully sent on the bus before returning.
- *
- * @param base The I3C peripheral base address.
- * @param type The bus type to use in this transaction.
- * @param address 7-bit slave device address, in bits [6:0].
- * @param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
- *      the R/w bit (bit 0) in the transmitted slave address.
- * @param rxSize Read terminate size for the followed read transfer, limit to 255 bytes.
- * @retval #kStatus_Success START signal and address were successfully enqueued in the transmit FIFO.
- * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
- */
-status_t I3C_MasterStartWithRxSize(
-    I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize);
-
-/*!
  * @brief Sends a START signal and slave address on the I2C/I3C bus.
  *
  * This function is used to initiate a new master mode transfer. First, the bus state is checked to ensure
@@ -1096,6 +1073,24 @@ status_t I3C_MasterStartWithRxSize(
  * @retval #kStatus_I3C_Busy Another master is currently utilizing the bus.
  */
 status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir);
+
+/*!
+ * @brief Sends a repeated START signal and slave address on the I2C/I3C bus.
+ *
+ * This function is used to send a Repeated START signal when a transfer is already in progress. Like
+ * I3C_MasterStart(), it also sends the specified 7-bit address.
+ *
+ * @note This function exists primarily to maintain compatible APIs between I3C and I2C drivers,
+ *      as well as to better document the intent of code that uses these APIs.
+ *
+ * @param base The I3C peripheral base address.
+ * @param type The bus type to use in this transaction.
+ * @param address 7-bit slave device address, in bits [6:0].
+ * @param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
+ *      the R/w bit (bit 0) in the transmitted slave address.
+ * @retval #kStatus_Success Repeated START signal and address were successfully enqueued in the transmit FIFO.
+ */
+status_t I3C_MasterRepeatedStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir);
 
 /*!
  * @brief Sends a repeated START signal and slave address on the I2C/I3C bus, receive size is also specified
@@ -1120,30 +1115,6 @@ status_t I3C_MasterStart(I3C_Type *base, i3c_bus_type_t type, uint8_t address, i
  */
 status_t I3C_MasterRepeatedStartWithRxSize(
     I3C_Type *base, i3c_bus_type_t type, uint8_t address, i3c_direction_t dir, uint8_t rxSize);
-
-/*!
- * @brief Sends a repeated START signal and slave address on the I2C/I3C bus.
- *
- * This function is used to send a Repeated START signal when a transfer is already in progress. Like
- * I3C_MasterStart(), it also sends the specified 7-bit address.
- *
- * @note This function exists primarily to maintain compatible APIs between I3C and I2C drivers,
- *      as well as to better document the intent of code that uses these APIs.
- *
- * @param base The I3C peripheral base address.
- * @param type The bus type to use in this transaction.
- * @param address 7-bit slave device address, in bits [6:0].
- * @param dir Master transfer direction, either #kI3C_Read or #kI3C_Write. This parameter is used to set
- *      the R/w bit (bit 0) in the transmitted slave address.
- * @retval #kStatus_Success Repeated START signal and address were successfully enqueued in the transmit FIFO.
- */
-static inline status_t I3C_MasterRepeatedStart(I3C_Type *base,
-                                               i3c_bus_type_t type,
-                                               uint8_t address,
-                                               i3c_direction_t dir)
-{
-    return I3C_MasterRepeatedStartWithRxSize(base, type, address, dir, 0);
-}
 
 /*!
  * @brief Performs a polling send transfer on the I2C/I3C bus.

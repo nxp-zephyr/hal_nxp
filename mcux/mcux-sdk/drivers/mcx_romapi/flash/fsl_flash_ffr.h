@@ -419,46 +419,6 @@ status_t FFR_Init(flash_config_t *config);
 status_t FFR_Lock(flash_config_t *config);
 
 /*!
- * @brief Initialize the Security Library for FFR driver.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param context A pointer to the storage for the nboot data.
- *
- * @retval #kStatus_FLASH_Success An invalid argument is provided.
- * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
- */
-status_t FFR_SecLibInit(flash_config_t *config, uint32_t *context);
-
-status_t FFR_GetCustKeystoreData(flash_config_t *config, uint8_t *pData, uint32_t offset, uint32_t len);
-
-/*!
- * @brief APIs to access CFPA pages
- *
- * This routine will erase CFPA and program the CFPA page with passed data.
- *
- * @param config A pointer to the storage for the driver runtime state.
- *
- * @retval #kStatus_FLASH_Success The desire page-data were programed successfully into CFPA.
- * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FLASH_FfrBankIsLocked The FFR bank region is locked.
- * @retval #kStatus_FLASH_InvalidArgument An invalid argument is provided.
- * @retval #kStatus_FTFx_AddressError Address is out of range.
- * @retval #kStatus_FLASH_ReadHidingAreaDisallowed Flash hiding read is not allowed
- * @retval #kStatus_FLASH_CfpaScratchPageInvalid CFPA Scratch Page is invalid
- * @retval #kStatus_FLASH_CfpaVersionRollbackDisallowed CFPA version rollback is not allowed
- * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with the specified baseline
- * @retval #kStatus_FLASH_EraseKeyError API erase key is invalid.
- * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed Flash firewall page locked erase and program are not allowed
- * @retval #kStatus_FLASH_FfrBankIsLocked The CFPA was locked.
- * @retval #kStatus_FLASH_OutOfDateCfpaPage It is not newest CFPA page.
- * @retval #kStatus_FLASH_CommandFailure access error.
- * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported
- * @retval #kStatus_FLASH_EccError A correctable or uncorrectable error during command execution.
- * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
- */
-status_t FFR_CustomerPagesInit(flash_config_t *config);
-
-/*!
  * @brief APIs to access CFPA pages
  *
  * This routine will erase CFPA and program the CFPA page with passed data.
@@ -619,31 +579,6 @@ status_t FFR_CustKeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStor
  * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
  */
 status_t FFR_GetUUID(flash_config_t *config, uint8_t *uuid);
-
-/*!
- * @brief This routine writes the 3 pages allocated for Key store data,
- *
- * 1.Used during manufacturing. Should write pages when 'customer factory page' is not in sealed state.
- * 2.Optional routines to set individual data members (activation code, key codes etc) to construct
- * the key store structure in RAM before committing it to IFR/FFR.
- *
- * @param config A pointer to the storage for the driver runtime state.
- * @param pKeyStore A Pointer to the 3 pages allocated for Key store data.
- *        that will be written to 'customer factory page'.
- *
- * @retval #kStatus_FLASH_Success The key were programed successfully into FFR.
- * @retval #kStatus_FLASH_InvalidArgument Parameter is not aligned with the specified baseline.
- * @retval #kStatus_FTFx_AddressError Address is out of range.
- * @retval #kStatus_FLASH_CommandFailure access error.
- * @retval #kStatus_FLASH_SealedFfrRegion The FFR region is sealed.
- * @retval #kStatus_FLASH_AlignmentError Parameter is not aligned with the specified baseline.
- * @retval #kStatus_FLASH_AddressError Address is out of range
- * @retval #kStatus_FLASH_EraseKeyError API erase key is invalid.
- * @retval #kStatus_FLASH_ModifyProtectedAreaDisallowed Flash firewall page locked erase and program are not allowed
- * @retval #kStatus_FLASH_CommandNotSupported Flash API is not supported
- * @retval #kStatus_FLASH_RegulationLoss A loss of regulation during read.
- */
-status_t FFR_CustKeystoreWrite(flash_config_t *config, ffr_key_store_t *pKeyStore);
 
 /*@}*/
 

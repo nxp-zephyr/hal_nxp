@@ -184,13 +184,13 @@ typedef struct _boot_hdr2
 typedef struct _ldr_Context ldr_Context_t;
 
 /*! @brief Function pointer definition for all loader action functions. */
-typedef status_t (*pLdrFnc_t)(ldr_Context_t *);
+typedef status_t (*pLdrFnc_t)(ldr_Context_t *context);
 
 /*! @brief Jump command function pointer definition. */
-typedef status_t (*pJumpFnc_t)(uint32_t);
+typedef status_t (*pJumpFnc_t)(uint32_t parameter);
 
 /*! @brief Call command function pointer definition. */
-typedef status_t (*pCallFnc_t)(uint32_t, uint32_t *);
+typedef status_t (*pCallFnc_t)(uint32_t parameter, uint32_t *func);
 
 /*! @brief State information for the CRC32 algorithm. */
 typedef struct Crc32Data

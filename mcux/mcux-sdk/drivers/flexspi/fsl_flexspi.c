@@ -1067,7 +1067,7 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
     uint32_t intEnableStatus;
     uint32_t txWatermark;
     uint32_t rxWatermark;
-    uint32_t i = 0;
+    uint8_t i = 0;
 
     status          = base->INTR;
     intEnableStatus = base->INTEN;
@@ -1114,7 +1114,7 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
                     }
 
                     /* Adjust size by the amount processed. */
-                    handle->dataSize -= 4U * i;
+                    handle->dataSize -= (size_t)4U * i;
 
                     /* Read word un-aligned data from rx fifo. */
                     if (0x00U != handle->dataSize)
@@ -1173,7 +1173,7 @@ void FLEXSPI_TransferHandleIRQ(FLEXSPI_Type *base, flexspi_handle_t *handle)
                         }
 
                         /* Adjust size by the amount processed. */
-                        handle->dataSize -= 4U * i;
+                        handle->dataSize -= (size_t)4U * i;
 
                         /* Write word un-aligned data into tx fifo. */
                         if (0x00U != handle->dataSize)
