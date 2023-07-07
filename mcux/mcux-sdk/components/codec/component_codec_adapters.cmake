@@ -10,4 +10,8 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/port
 )
 
+#OR Logic component
+if(CONFIG_USE_component_ak4497_adapter) 
+    include(component_ak4497_adapter)
+endif()
 

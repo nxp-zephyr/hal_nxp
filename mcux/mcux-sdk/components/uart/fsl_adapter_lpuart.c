@@ -433,6 +433,7 @@ static void HAL_UartInterruptHandle(uint8_t instance)
             if ((0U != ((uint32_t)kLPUART_TransmissionCompleteFlag & status)) &&
                 (0U != (LPUART_GetEnabledInterrupts(s_LpuartAdapterBase[instance]) &
                         (uint32_t)kLPUART_TransmissionCompleteFlag)))
+
             {
                 /* Disable tx complete interrupt */
                 (void)LPUART_DisableInterrupts(s_LpuartAdapterBase[instance],
@@ -452,12 +453,21 @@ static void HAL_UartInterruptHandle(uint8_t instance)
         if ((NULL != uartDmaHandle->dma_rx.buffer) && (false == uartDmaHandle->dma_rx.receiveAll))
 #endif
         {
+#if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
             if ((0U != ((uint32_t)kLPUART_IdleLineFlag & status)) &&
+#else
+            if ((0U != ((uint32_t)kLPUART_IdleLineFlag & status)) &&
+#endif /* FSL_FEATURE_LPUART_IS_LPFLEXCOMM */
+
                 (0U != (LPUART_GetEnabledInterrupts(s_LpuartAdapterBase[instance]) &
                         (uint32_t)kLPUART_IdleLineInterruptEnable)))
             {
                 HAL_UartDMAIdlelineInterruptHandle(instance);
+#if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
                 (void)LPUART_ClearStatusFlags(s_LpuartAdapterBase[instance], (uint32_t)kLPUART_IdleLineFlag);
+#else
+                (void)LPUART_ClearStatusFlags(s_LpuartAdapterBase[instance], (uint32_t)kLPUART_IdleLineFlag);
+#endif /* FSL_FEATURE_LPUART_IS_LPFLEXCOMM */
             }
         }
     }
@@ -498,7 +508,7 @@ static void HAL_UartInterruptHandle(uint8_t instance)
         status = LPUART_GetStatusFlags(s_LpuartAdapterBase[instance]);
     }
 #if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
-    if (((0U != ((uint32_t)kLPUART_RxDataRegFullInterruptFlag & status)) &&
+    if (((0U != ((uint32_t)kLPUART_RxDataRegFullFlag & status)) &&
 #else
     /* Receive data register full */
     if (((0U != ((uint32_t)kLPUART_RxDataRegFullFlag & status)) &&
@@ -520,14 +530,7 @@ static void HAL_UartInterruptHandle(uint8_t instance)
             count = ((uint8_t)((s_LpuartAdapterBase[instance]->WATER & LPUART_WATER_RXCOUNT_MASK) >>
                                LPUART_WATER_RXCOUNT_SHIFT));
 #else
-            if (0U != (status & (uint32_t)kLPUART_RxDataRegFullInterruptEnable))
-            {
-                count = 1U;
-            }
-            else
-            {
-                count = 0U;
-            }
+            count = 1u;
 #endif
             while (0u != count)
             {
@@ -611,7 +614,7 @@ static void HAL_UartInterruptHandle(uint8_t instance)
 }
 #endif /* HAL_UART_TRANSFER_MODE */
 #if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
-static void HAL_LpUartInterruptHandle_Wapper(void *base, void *handle)
+static void HAL_LpUartInterruptHandle_Wapper(uint32_t instance, void *handle)
 {
     hal_uart_state_t *uartHandle = (hal_uart_state_t *)handle;
     HAL_UartInterruptHandle(uartHandle->instance);
@@ -700,7 +703,8 @@ hal_uart_status_t HAL_UartInit(hal_uart_handle_t handle, const hal_uart_config_t
 
         s_UartState[uartHandle->instance] = uartHandle;
 #if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
-        LP_FLEXCOMM_SetIRQHandler(s_LpuartAdapterBase[config->instance], HAL_LpUartInterruptHandle_Wapper, handle);
+        LP_FLEXCOMM_SetIRQHandler(config->instance, HAL_LpUartInterruptHandle_Wapper, handle,
+                                  LP_FLEXCOMM_PERIPH_LPUART);
 #endif /* FSL_FEATURE_LPUART_IS_LPFLEXCOMM */
 
 /* Enable interrupt in NVIC. */
@@ -1822,6 +1826,9 @@ hal_uart_dma_status_t HAL_UartDMAInit(hal_uart_handle_t handle,
 #if defined(EDMA_BASE_PTRS)
     EDMA_Type *dmaBases[]                                             = EDMA_BASE_PTRS;
     IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_MAX_CHANNEL] = EDMA_CHN_IRQS;
+#elif (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
+    DMA_Type *dmaBases[]                                              = DMA_BASE_PTRS;
+    IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_MAX_CHANNEL] = DMA_CHN_IRQS;
 #else
     DMA_Type *dmaBases[]                                          = DMA_BASE_PTRS;
     IRQn_Type s_edmaIRQNumbers[][FSL_FEATURE_EDMA_MODULE_CHANNEL] = DMA_CHN_IRQS;
@@ -1996,6 +2003,14 @@ hal_uart_dma_status_t HAL_UartDMATransferInstallCallback(hal_uart_handle_t handl
     LPUART_TransferCreateHandleEDMA(s_LpuartAdapterBase[uartDmaHandle->instance], &uartDmaHandle->edmaHandle,
                                     LPUART_DMACallbacks, uartDmaHandle, &uartDmaHandle->txEdmaHandle,
                                     &uartDmaHandle->rxEdmaHandle);
+
+#if (defined(UART_ADAPTER_NON_BLOCKING_MODE) && (UART_ADAPTER_NON_BLOCKING_MODE > 0U))
+#if (defined(FSL_FEATURE_LPUART_IS_LPFLEXCOMM) && (FSL_FEATURE_LPUART_IS_LPFLEXCOMM > 0U))
+    LP_FLEXCOMM_SetIRQHandler(uartHandle->instance, HAL_LpUartInterruptHandle_Wapper, handle,
+                              LP_FLEXCOMM_PERIPH_LPUART);
+#endif /* FSL_FEATURE_LPUART_IS_LPFLEXCOMM */
+#endif /* UART_ADAPTER_NON_BLOCKING_MODE */
+
 #if (defined(HAL_UART_DMA_RING_BUFFER_ENABLE) && (HAL_UART_DMA_RING_BUFFER_ENABLE > 0U))
     LPUART_StartRingBufferEDMA(handle);
 #endif /* HAL_UART_DMA_RING_BUFFER_ENABLE */
@@ -2177,15 +2192,6 @@ hal_uart_dma_status_t HAL_UartDMAAbortReceive(hal_uart_handle_t handle)
     uartDmaHandle = uartHandle->dmaHandle;
 
     assert(uartDmaHandle);
-#if (defined(HAL_UART_DMA_RING_BUFFER_ENABLE) && (HAL_UART_DMA_RING_BUFFER_ENABLE > 0U))
-    /* Make sure to re-initialize the ring bufferIndex */
-    ringBufferIndex[uartDmaHandle->instance] = 0U;
-#endif
-
-#if (defined(HAL_UART_DMA_RING_BUFFER_ENABLE) && (HAL_UART_DMA_RING_BUFFER_ENABLE > 0U))
-    /* Make sure to re-initialize the ring bufferIndex */
-    ringBufferIndex[uartDmaHandle->instance] = 0U;
-#endif
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && (FSL_FEATURE_SOC_EDMA_COUNT > 0U))
     LPUART_TransferAbortReceiveEDMA(s_LpuartAdapterBase[uartDmaHandle->instance], &uartDmaHandle->edmaHandle);

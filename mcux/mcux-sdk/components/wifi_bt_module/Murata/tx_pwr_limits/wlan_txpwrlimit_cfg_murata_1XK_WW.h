@@ -292,31 +292,31 @@ static wlan_chanlist_t chanlist_5g_cfg = {.num_chans = 25,
                                                   {
                                                       .chan_num                     = 149,
                                                       .chan_freq                    = 5745,
-                                                      .passive_scan_or_radar_detect = false,
+                                                      .passive_scan_or_radar_detect = true,
                                                   },
                                               [21] =
                                                   {
                                                       .chan_num                     = 153,
                                                       .chan_freq                    = 5765,
-                                                      .passive_scan_or_radar_detect = false,
+                                                      .passive_scan_or_radar_detect = true,
                                                   },
                                               [22] =
                                                   {
                                                       .chan_num                     = 157,
                                                       .chan_freq                    = 5785,
-                                                      .passive_scan_or_radar_detect = false,
+                                                      .passive_scan_or_radar_detect = true,
                                                   },
                                               [23] =
                                                   {
                                                       .chan_num                     = 161,
                                                       .chan_freq                    = 5805,
-                                                      .passive_scan_or_radar_detect = false,
+                                                      .passive_scan_or_radar_detect = true,
                                                   },
                                               [24] =
                                                   {
                                                       .chan_num                     = 165,
                                                       .chan_freq                    = 5825,
-                                                      .passive_scan_or_radar_detect = false,
+                                                      .passive_scan_or_radar_detect = true,
                                                   },
                                               [25] = {0},
                                               [26] = {0},

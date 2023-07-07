@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2020, 2022 NXP
+ * Copyright 2016-2020 NXP
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -167,39 +167,39 @@ typedef enum _osa_status
 
 /*! @brief Priority setting for OSA. */
 #ifndef OSA_PRIORITY_IDLE
-#define OSA_PRIORITY_IDLE (6U)
+#define OSA_PRIORITY_IDLE (6)
 #endif
 
 #ifndef OSA_PRIORITY_LOW
-#define OSA_PRIORITY_LOW (5U)
+#define OSA_PRIORITY_LOW (5)
 #endif
 
 #ifndef OSA_PRIORITY_BELOW_NORMAL
-#define OSA_PRIORITY_BELOW_NORMAL (4U)
+#define OSA_PRIORITY_BELOW_NORMAL (4)
 #endif
 
 #ifndef OSA_PRIORITY_NORMAL
-#define OSA_PRIORITY_NORMAL (3U)
+#define OSA_PRIORITY_NORMAL (3)
 #endif
 
 #ifndef OSA_PRIORITY_ABOVE_NORMAL
-#define OSA_PRIORITY_ABOVE_NORMAL (2U)
+#define OSA_PRIORITY_ABOVE_NORMAL (2)
 #endif
 
 #ifndef OSA_PRIORITY_HIGH
-#define OSA_PRIORITY_HIGH (1U)
+#define OSA_PRIORITY_HIGH (1)
 #endif
 
 #ifndef OSA_PRIORITY_REAL_TIME
-#define OSA_PRIORITY_REAL_TIME (0U)
+#define OSA_PRIORITY_REAL_TIME (0)
 #endif
 
 #ifndef OSA_TASK_PRIORITY_MAX
-#define OSA_TASK_PRIORITY_MAX (0U)
+#define OSA_TASK_PRIORITY_MAX (0)
 #endif
 
 #ifndef OSA_TASK_PRIORITY_MIN
-#define OSA_TASK_PRIORITY_MIN (15U)
+#define OSA_TASK_PRIORITY_MIN (15)
 #endif
 
 #define SIZE_IN_UINT32_UNITS(size) (((size) + sizeof(uint32_t) - 1) / sizeof(uint32_t))
