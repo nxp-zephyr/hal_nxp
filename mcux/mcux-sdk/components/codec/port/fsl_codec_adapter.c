@@ -414,6 +414,18 @@ status_t HAL_CODEC_SetVolume(void *handle, uint32_t playChannel, uint32_t volume
             break;
 #endif
 
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_SetVolume(handle, playChannel, volume);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetVolume(handle, playChannel, volume);
+            break;
+#endif
+
         default:
             retVal = kStatus_InvalidArgument;
             break;
@@ -509,6 +521,12 @@ status_t HAL_CODEC_SetMute(void *handle, uint32_t playChannel, bool isMute)
             break;
 #endif
 
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetMute(handle, playChannel, isMute);
+            break;
+#endif
+
         default:
             retVal = kStatus_InvalidArgument;
             break;
@@ -598,6 +616,18 @@ status_t HAL_CODEC_SetPower(void *handle, uint32_t module, bool powerOn)
             break;
 #endif
 
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_SetPower(handle, module, powerOn);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetPower(handle, module, powerOn);
+            break;
+#endif
+
         default:
             retVal = kStatus_InvalidArgument;
             break;
@@ -684,6 +714,18 @@ status_t HAL_CODEC_SetRecord(void *handle, uint32_t recordSource)
 #ifdef CODEC_TFA9XXX_ENABLE
         case kCODEC_TFA9XXX:
             retVal = HAL_CODEC_TFA9XXX_SetRecord(handle, recordSource);
+            break;
+#endif
+
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_SetRecord(handle, recordSource);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetRecord(handle, recordSource);
             break;
 #endif
 
@@ -779,6 +821,18 @@ status_t HAL_CODEC_SetRecordChannel(void *handle, uint32_t leftRecordChannel, ui
             break;
 #endif
 
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_SetRecordChannel(handle, leftRecordChannel, rightRecordChannel);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetRecordChannel(handle, leftRecordChannel, rightRecordChannel);
+            break;
+#endif
+
         default:
             retVal = kStatus_InvalidArgument;
             break;
@@ -868,6 +922,18 @@ status_t HAL_CODEC_SetPlay(void *handle, uint32_t playSource)
             break;
 #endif
 
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_SetPlay(handle, playSource);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_SetPlay(handle, playSource);
+            break;
+#endif
+
         default:
             retVal = kStatus_InvalidArgument;
             break;
@@ -953,6 +1019,18 @@ status_t HAL_CODEC_ModuleControl(void *handle, uint32_t cmd, uint32_t data)
 #ifdef CODEC_AK4458_ENABLE
         case kCODEC_AK4458:
             retVal = HAL_CODEC_AK4458_ModuleControl(handle, cmd, data);
+            break;
+#endif
+
+#ifdef CODEC_PCM512X_ENABLE
+        case kCODEC_PCM512X:
+            retVal = HAL_CODEC_PCM512x_ModuleControl(handle, cmd, data);
+            break;
+#endif
+
+#ifdef CODEC_PCM186X_ENABLE
+        case kCODEC_PCM186X:
+            retVal = HAL_CODEC_PCM186x_ModuleControl(handle, cmd, data);
             break;
 #endif
 
