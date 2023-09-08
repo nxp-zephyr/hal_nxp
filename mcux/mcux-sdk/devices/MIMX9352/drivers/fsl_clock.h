@@ -22,6 +22,19 @@
     (2500000000UL) /* When using Overdrive Voltage, the maximum frequency of cm33 is 250 MHz */
 #endif
 
+/*! LPM_SETTING
+ *  0b000..LPCG will be OFF in any CPU mode.
+ *  0b001..LPCG will be ON in RUN mode, OFF in WAIT/STOP/SUSPEND mode.
+ *  0b010..LPCG will be ON in RUN/WAIT mode, OFF in STOP/SUSPEND mode.
+ *  0b011..LPCG will be ON in RUN/WAIT/STOP mode, OFF in SUSPEND mode.
+ *  0b100..LPCG will be ON in RUN/WAIT/STOP/SUSPEND mode.
+ */
+#define CCM_LPCG_LPM_SETTING_0 (0U)
+#define CCM_LPCG_LPM_SETTING_1 (1U)
+#define CCM_LPCG_LPM_SETTING_2 (2U)
+#define CCM_LPCG_LPM_SETTING_3 (3U)
+#define CCM_LPCG_LPM_SETTING_4 (4U)
+
 /*******************************************************************************
  * PLL Definitions
  ******************************************************************************/
@@ -66,7 +79,7 @@ static inline void CLOCK_PllInit(PLL_Type *pll, const fracn_pll_init_t *pll_cfg)
 
     /* Power up for locking */
     pll->CTRL.SET = PLL_CTRL_POWERUP_MASK;
-    while (!(pll->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK))
+    while ((pll->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK) == 0UL)
     {
     }
 
@@ -96,10 +109,12 @@ static inline void CLOCK_PllPfdInit(PLL_Type *pll, uint32_t pfd_n, const fracn_p
     pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_CLKOUT_EN_MASK;
     /* Enable div2 */
     if (pfd_cfg->div2_en)
+    {
         pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_CLKOUT_DIVBY2_EN_MASK;
+    }
     /* Enable DFS for locking*/
     pll->NO_OF_DFS[pfd_n].DFS_CTRL.SET = PLL_NO_OF_DFS_ENABLE_MASK;
-    while (!((pll->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) & (1 << pfd_n)))
+    while (((pll->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) & (1UL << pfd_n)) == 0UL)
     {
     }
     /* Clean bypass */
@@ -932,8 +947,8 @@ typedef enum _clock_root_mux_source
 /*! @brief Clock gate value */
 typedef enum _clock_gate_value
 {
-    kCLOCK_Off = (int)~CCM_LPCG_DIRECT_ON_MASK, /*!< Clock is off. */
-    kCLOCK_On  = CCM_LPCG_DIRECT_ON_MASK,       /*!< Clock is on*/
+    kCLOCK_Off = CCM_LPCG_LPM_SETTING_0,
+    kCLOCK_On  = CCM_LPCG_LPM_SETTING_4,
 } clock_gate_value_t;
 
 /*!
@@ -1088,6 +1103,12 @@ typedef enum _clock_lpcg
         kCLOCK_Mu_A, kCLOCK_Mu_A \
     }
 
+/*! @brief Clock ip name array for LCDIFV3. */
+#define LCDIFV3_CLOCKS                 \
+    {                                  \
+        kCLOCK_IpInvalid, kCLOCK_Lcdif \
+    }
+
 /*! @brief Clock ip name array for LPI2C. */
 #define LPI2C_CLOCKS                                                                                                \
     {                                                                                                               \
@@ -1112,6 +1133,24 @@ typedef enum _clock_lpcg
 #define TPM_CLOCKS                                                                    \
     {                                                                                 \
         kCLOCK_Tpm1, kCLOCK_Tpm2, kCLOCK_Tpm3, kCLOCK_Tpm4, kCLOCK_Tpm5, kCLOCK_Tpm6, \
+    }
+
+/*! @brief Clock ip name array for FLEXIO. */
+#define FLEXIO_CLOCKS                                    \
+    {                                                    \
+        kCLOCK_IpInvalid, kCLOCK_Flexio1, kCLOCK_Flexio2 \
+    }
+
+/*! @brief Clock ip name array for FLEXSPI. */
+#define FLEXSPI_CLOCKS                    \
+    {                                     \
+        kCLOCK_IpInvalid, kCLOCK_Flexspi1 \
+    }
+
+/*! @brief Clock ip name array for TMU. */
+#define TMU_CLOCKS  \
+    {               \
+        kCLOCK_Tmc, \
     }
 
 /*! @brief Clock ip name array for FLEXCAN. */
@@ -1277,19 +1316,15 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
 /*!
  * @brief Control the clock gate for specific IP.
  *
- * @note This API will not have any effect when this clock is in CPULPM or SetPoint Mode
- *
  * @param name  Which clock to enable, see \ref clock_lpcg_t.
  * @param value Clock gate value to set, see \ref clock_gate_value_t.
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
-    if (((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK) != (CCM_CTRL->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
-    {
-        CCM_CTRL->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
-        __DSB();
-        __ISB();
-    }
+    CCM_CTRL->LPCG[name].AUTHEN |= CCM_LPCG_AUTHEN_CPULPM_MODE(1U);
+    CCM_CTRL->LPCG[name].LPM_CUR = CCM_LPCG_LPM_CUR_LPM_SETTING_CUR(value);
+    __DSB();
+    __ISB();
 }
 
 /*!
