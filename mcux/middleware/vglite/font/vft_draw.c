@@ -35,7 +35,7 @@
 #include "vg_lite_text.h"
 #include "vft_draw.h"
 #include "vft_debug.h"
-#include "FreeRTOS.h"
+#include "vg_lite_os.h"
 
 /** Macros */
 #define VFT_ALLOC(x) _mem_allocate(x)
@@ -83,7 +83,7 @@ void *_mem_allocate(int size)
 #endif
   }
   
-  buf = pvPortMalloc(size);
+  buf = vg_lite_os_malloc(size);
   if (buf == NULL) {
     printf("ERROR: HALT: allocating %d bytes \"system out of memory\"\n", size);
 #if HALT_ALLOCATOR_ERROR
@@ -98,7 +98,7 @@ void *_mem_allocate(int size)
 
 void _mem_free(void *buf)
 {
-    vPortFree(buf);
+    vg_lite_os_free(buf);
 }
 
 /** GLYPH CACHING Code */
