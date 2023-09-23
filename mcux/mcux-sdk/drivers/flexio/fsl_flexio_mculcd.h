@@ -98,7 +98,7 @@ enum _flexio_mculcd_dma_enable
 };
 
 /*! @brief Function to set or clear the CS and RS pin. */
-typedef void (*flexio_mculcd_pin_func_t)(bool set);
+typedef void (*flexio_mculcd_pin_func_t)(bool set, void *userData);
 
 /*! @brief Define FlexIO MCULCD access structure typedef. */
 typedef struct _flexio_mculcd_type
@@ -118,6 +118,7 @@ typedef struct _flexio_mculcd_type
     flexio_mculcd_pin_func_t setCSPin;   /*!< Function to set or clear the CS pin. */
     flexio_mculcd_pin_func_t setRSPin;   /*!< Function to set or clear the RS pin. */
     flexio_mculcd_pin_func_t setRDWRPin; /*!< Function to set or clear the RD/WR pin, only used in 6800 mode. */
+    void *userData;                      /*!< Function parameter.*/
 } FLEXIO_MCULCD_Type;
 
 /*! @brief Define FlexIO MCULCD configuration structure. */
@@ -522,7 +523,7 @@ static inline void FLEXIO_MCULCD_WriteData(FLEXIO_MCULCD_Type *base, uint32_t da
  */
 static inline void FLEXIO_MCULCD_StartTransfer(FLEXIO_MCULCD_Type *base)
 {
-    base->setCSPin(false);
+    base->setCSPin(false, base->userData);
 }
 
 /*!
@@ -532,7 +533,7 @@ static inline void FLEXIO_MCULCD_StartTransfer(FLEXIO_MCULCD_Type *base)
  */
 static inline void FLEXIO_MCULCD_StopTransfer(FLEXIO_MCULCD_Type *base)
 {
-    base->setCSPin(true);
+    base->setCSPin(true, base->userData);
 }
 
 /*!

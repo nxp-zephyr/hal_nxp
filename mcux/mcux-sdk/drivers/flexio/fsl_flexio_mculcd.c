@@ -68,8 +68,8 @@ status_t FLEXIO_MCULCD_Init(FLEXIO_MCULCD_Type *base, flexio_mculcd_config_t *co
 
     if (kStatus_Success == status)
     {
-        base->setCSPin(true);
-        base->setRSPin(true);
+        base->setCSPin(true, base->userData);
+        base->setRSPin(true, base->userData);
     }
 
     return status;
@@ -752,12 +752,12 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
     FLEXIO_Type *flexioBase = base->flexioBase;
 
     /* De-assert the RS pin. */
-    base->setRSPin(false);
+    base->setRSPin(false, base->userData);
 
     /* For 6800, de-assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
-        base->setRDWRPin(false);
+        base->setRDWRPin(false, base->userData);
     }
 
     /* Configure the timer and TX shifter. */
@@ -775,11 +775,11 @@ void FLEXIO_MCULCD_WriteCommandBlocking(FLEXIO_MCULCD_Type *base, uint32_t comma
     FLEXIO_MCULCD_ClearSingleBeatWriteConfig(base);
 
     /* Assert the RS pin. */
-    base->setRSPin(true);
+    base->setRSPin(true, base->userData);
     /* For 6800, assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
-        base->setRDWRPin(true);
+        base->setRDWRPin(true, base->userData);
     }
 }
 
@@ -805,11 +805,11 @@ void FLEXIO_MCULCD_WriteDataArrayBlocking(FLEXIO_MCULCD_Type *base, const void *
     FLEXIO_Type *flexioBase = base->flexioBase;
 
     /* Assert the RS pin. */
-    base->setRSPin(true);
+    base->setRSPin(true, base->userData);
     /* For 6800, de-assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
-        base->setRDWRPin(false);
+        base->setRDWRPin(false, base->userData);
     }
 
     /* Configure the timer and TX shifter. */
@@ -877,11 +877,11 @@ void FLEXIO_MCULCD_ReadDataArrayBlocking(FLEXIO_MCULCD_Type *base, void *data, s
     FLEXIO_Type *flexioBase = base->flexioBase;
 
     /* Assert the RS pin. */
-    base->setRSPin(true);
+    base->setRSPin(true, base->userData);
     /* For 6800, de-assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
-        base->setRDWRPin(false);
+        base->setRDWRPin(false, base->userData);
     }
 
     /* Enable the timer and RX shifter. */
@@ -953,11 +953,11 @@ void FLEXIO_MCULCD_WriteSameValueBlocking(FLEXIO_MCULCD_Type *base, uint32_t sam
 #endif
 
     /* Assert the RS pin. */
-    base->setRSPin(true);
+    base->setRSPin(true, base->userData);
     /* For 6800, de-assert the RDWR pin. */
     if (kFLEXIO_MCULCD_6800 == base->busType)
     {
-        base->setRDWRPin(false);
+        base->setRDWRPin(false, base->userData);
     }
 
     /* Configure the timer and TX shifter. */
@@ -1127,7 +1127,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
             /* For 6800, assert the RDWR pin. */
             if (kFLEXIO_MCULCD_6800 == base->busType)
             {
-                base->setRDWRPin(true);
+                base->setRDWRPin(true, base->userData);
             }
             FLEXIO_MCULCD_SetSingleBeatReadConfig(base);
             FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_RxFullInterruptEnable);
@@ -1137,7 +1137,7 @@ status_t FLEXIO_MCULCD_TransferNonBlocking(FLEXIO_MCULCD_Type *base,
             /* For 6800, de-assert the RDWR pin. */
             if (kFLEXIO_MCULCD_6800 == base->busType)
             {
-                base->setRDWRPin(false);
+                base->setRDWRPin(false, base->userData);
             }
             FLEXIO_MCULCD_SetSingleBeatWriteConfig(base);
             FLEXIO_MCULCD_EnableInterrupts(base, (uint32_t)kFLEXIO_MCULCD_TxEmptyInterruptEnable);
