@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=../../bin/generator/sdk_generator/data/sdk_data_schema/v3/software_set_and_project_schema.json
+
+__load__:
+- devices/platform_lib_v3.yml
+- bin/generator/records_v3/set/device/MIMX9322/index.yml
+
+__hierarchy__:
+  MIMX9322_settings:
+    section-type: library
+    belong_to: set.device.${platform_devices_soc_name}
+    dependency:
+    - device.${platform_devices_soc_name}_CMSIS
+    merge_segment:
+    - MIMX9322_options
+    contents:
+      document:
+        board: MIMX9322_cm33
+        platform_devices_soc_name: MIMX9322
+        core: cm33
+      configuration:
+        tools:
+          __common__:
+            config:
+              __common__: {}
+          __remove__:
+            mdk: 
+KsdkPlatformLib:
+  section-type: library
+  required: true
+  belong_to: set.device.${platform_devices_soc_name}
+  dependency:
+  - driver.cache_xcache
+  - driver.clock
+  - driver.common
+  - driver.dma3
+  - driver.enet
+  - driver.enet_qos
+  - driver.flexcan
+  - driver.flexcan_edma
+  - driver.i3c
+  - driver.iomuxc
+  - driver.lpi2c
+  - driver.lpi2c_edma
+  - driver.lpit
+  - driver.lpspi
+  - driver.lpspi_edma
+  - driver.lptmr
+  - driver.lpuart
+  - driver.lpuart_edma
+  - driver.memory
+  - driver.mu1
+  - driver.pdm
+  - driver.pdm_edma
+  - driver.rgpio
+  - driver.sai
+  - driver.tpm
+  - driver.trdc
+  - driver.tstmr
+  - driver.wdog32
+  - device.${platform_devices_soc_name}_startup
+  contents:
+    document:
+      name: ksdk_platform_lib
+      core: cm33
