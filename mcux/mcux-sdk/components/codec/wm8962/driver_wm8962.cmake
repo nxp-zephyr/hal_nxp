@@ -17,4 +17,7 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MIMXRT1176_cm7")
     include(component_codec_i2c_MIMXRT1176_cm7)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX9352")
+    include(component_codec_i2c_MIMX9352)
+endif()
 
