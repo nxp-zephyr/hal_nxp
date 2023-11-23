@@ -20,4 +20,7 @@ endif()
 if(${MCUX_DEVICE} STREQUAL "MIMX9352")
     include(component_codec_i2c_MIMX9352)
 endif()
+if(${MCUX_DEVICE} STREQUAL "MIMX9352_ca55")
+    include(component_codec_i2c_MIMX9352)
+endif()
 
