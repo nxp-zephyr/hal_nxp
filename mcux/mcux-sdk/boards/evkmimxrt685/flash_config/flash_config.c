@@ -58,7 +58,7 @@ const flexspi_nor_config_t
                     .deviceType           = 0x1,
                     .sflashPadType        = kSerialFlash_8Pads,
                     .serialClkFreq        = kFlexSpiSerialClk_SDR_48MHz,
-                    .sflashA1Size         = 0,
+                    .sflashA1Size         = 0x800000,
                     .sflashA2Size         = 0,
                     .sflashB1Size         = 0x4000000U,
                     .sflashB2Size         = 0,
