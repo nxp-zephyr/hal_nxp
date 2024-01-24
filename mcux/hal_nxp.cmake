@@ -365,6 +365,7 @@ include_codec_ifdef(CONFIG_CODEC_PCM186X	pcm186x)
 include_codec_ifdef(CONFIG_CODEC_WM8960 	wm8960)
 include_codec_ifdef(CONFIG_CODEC_WM8962 	wm8962)
 include_codec_ifdef(CONFIG_CODEC_WM8524 	wm8524)
+include_codec_ifdef(CONFIG_CODEC_CS42448 	cs42448)
 
 if(CONFIG_PHY_AR8031)
   list(APPEND CMAKE_MODULE_PATH
