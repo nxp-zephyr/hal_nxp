@@ -24,7 +24,11 @@
  * Variables
  ******************************************************************************/
 /*! @brief Pointers to flexio bases for each instance. */
+#ifdef CONFIG_SOC_FAMILY_NXP_S32
+FLEXIO_Type *const s_flexioBases[] = IP_FLEXIO_BASE_PTRS;
+#else
 FLEXIO_Type *const s_flexioBases[] = FLEXIO_BASE_PTRS;
+#endif
 
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
 /*! @brief Pointers to flexio clocks for each instance. */
@@ -99,14 +103,19 @@ void FLEXIO_Init(FLEXIO_Type *base, const flexio_config_t *userConfig)
     FLEXIO_Reset(base);
 
     ctrlReg = base->CTRL;
+#ifdef CONFIG_SOC_SERIES_S32K3XX
+    ctrlReg &= ~(FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#else
     ctrlReg &= ~(FLEXIO_CTRL_DOZEN_MASK | FLEXIO_CTRL_DBGE_MASK | FLEXIO_CTRL_FASTACC_MASK | FLEXIO_CTRL_FLEXEN_MASK);
+#endif
     ctrlReg |= (FLEXIO_CTRL_DBGE(userConfig->enableInDebug) | FLEXIO_CTRL_FASTACC(userConfig->enableFastAccess) |
                 FLEXIO_CTRL_FLEXEN(userConfig->enableFlexio));
+#ifndef CONFIG_SOC_SERIES_S32K3XX
     if (!userConfig->enableInDoze)
     {
         ctrlReg |= FLEXIO_CTRL_DOZEN_MASK;
     }
-
+#endif
     base->CTRL = ctrlReg;
 }
 
