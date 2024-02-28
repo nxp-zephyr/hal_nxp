@@ -1,0 +1,125 @@
+# The west manifest file (west.yml) for the NXP ZSDK
+#
+# The per-installation west configuration file, .west/config, sets the
+# path to the project containing this file in the [manifest] section's
+# "path" variable.
+#
+# You are free to create your own manifest files and put them in any
+# repository you want, to create your own custom Zephyr installations.
+# For example, you could create a manifest file in your own out of
+# tree application directory, which would pull this zephyr repository
+# in as an ordinary project.
+#
+# You can pass your manifest repositories to west init when creating a
+# new Zephyr installation. See the west documentation for more
+# information.
+#
+#     [manifest]
+#     path = zsdk
+#
+manifest:
+  version: "1.2"
+
+  # "remotes" is a list of locations where git repositories are cloned
+  # and fetched from.
+  remotes:
+    - name: nxp-zsdk
+      url-base: https://github.com/nxp-zephyr
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos
+
+  # If not otherwise specified, the projects below should be obtained
+  # from the zsdk remote.
+  defaults:
+    remote: nxp-zsdk
+
+  group-filter: [+optional]
+
+  # "projects" is a list of git repositories to populate NXP Zephyr downstream
+  # workspace.
+  projects:
+
+    - name: zephyr
+      repo-path: nxp-zephyr
+      revision: cf362a018c4d4cf6eeef94f8309028b600ad5abd
+      import:
+        #
+        # ZSDK imports the contents of zephyr/west.yml at the above
+        # revision. Only the projects explicitly named in the
+        # following allowlist are imported.
+        #
+        name-allowlist:
+          - TraceRecorderSource
+          - canopennode
+          - chre
+          - cmsis
+          - cmsis-dsp
+          - cmsis-nn
+          - edtt
+          - fatfs
+          - hal_nxp
+          - liblc3
+          - libmetal
+          - littlefs
+          - loramac-node
+          - lvgl
+          - lz4
+          - mipi-sys-t
+          - nanopb
+          - net-tools
+          - open-amp
+          - picolibc
+          - segger
+          - tinycrypt
+          - uoscore-uedhoc
+          - zcbor
+          - zscilib
+    #
+    # NXP based overrides of Zephyr modules and additional
+    # added modules
+    #
+    - name: mbedtls
+      repo-path: zephyr_mbedtls
+      revision: 322a38cf0fdf6bf2c7faf6fbb7c30a3d5d253a36
+      path: modules/crypto/mbedtls
+      groups:
+        - crypto
+    - name: trusted-firmware-m
+      repo-path: zephyr_tf-m
+      revision: 6d2ff1c295651b10ee5a42680934e9fec749dd5d
+      path: modules/tee/tf-m/trusted-firmware-m
+      groups:
+        - tee
+    - name: psa-arch-tests
+      repo-path: zephyr_psa_arch_test
+      revision: 44b1ef0d8b6e423ae353d579c7c604152e5e81e4
+      path: modules/tee/tf-m/psa-arch-tests
+      groups:
+        - tee
+    - name: tf-m-tests
+      revision: a878426da78fbd1486dfc29d6c6b82be4ee79e72
+      path: modules/tee/tf-m/tf-m-tests
+      remote: zephyrproject
+      groups:
+        - tee
+    - name: hostap
+      url: ssh://git@bitbucket.sw.nxp.com/wmcusw/wpa_supplicant-rtos.git
+      revision: 4e4adec0fb17faef0be520f254b7b5c7b311d8e4
+      path: modules/lib/hostap
+    - name: wifi_nxp
+      url: ssh://git@bitbucket.sw.nxp.com/mcucore/mcux-sdk-wifi-nxp.git
+      revision: 33e1085c858d0708bf3b4902d8761324ce654d3d
+      path: modules/hal/nxp/mcux/middleware/wifi_nxp
+    - name: fw_bin
+      url: ssh://git@bitbucket.sw.nxp.com/wmcusw/fw_bin.git
+      revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
+      path: modules/hal/nxp/mcux/components/fw_bin
+
+
+    # Add any additional third-party repositories.
+
+  self:
+    # This repository should be cloned to nxp/zsdk.
+    path: zsdk
+    # Configure west extensions.
+    #west-commands: scripts/west-commands.yml
