@@ -1,10 +1,10 @@
 build:
   cmake: .
-  #kconfig: Kconfig.nxp
+  kconfig: Kconfig.nxp
   #sysbuild-cmake: sysbuild
   #sysbuild-kconfig: sysbuild/Kconfig.sysbuild
-#  settings:
-#     board_root: .
-#     dts_root: .
+  settings:
+    soc_root: .
+    board_root: .
+    dts_root: .
 #     module_ext_root: .
-#     soc_root: .

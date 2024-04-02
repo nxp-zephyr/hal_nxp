@@ -1,0 +1,6 @@
+# Copyright 2024 NXP
+
+# SPDX-License-Identifier: Apache-2.0
+# Top level Kconfig file for out of tree ZSDK
+
+source "$(ZEPHYR_ZSDK_MODULE_DIR)/drivers/Kconfig"
