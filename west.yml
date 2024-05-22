@@ -48,6 +48,10 @@ manifest:
         # revision. Only the projects explicitly named in the
         # following allowlist are imported.
         #
+        # If there is an override of one of the Zephyr modules,
+        # remove it from the name-allowlist and add explicitly
+        # below the list.
+        #
         name-allowlist:
           - TraceRecorderSource
           - canopennode
@@ -64,13 +68,16 @@ manifest:
           - loramac-node
           - lvgl
           - lz4
+          - mbedtls
           - mipi-sys-t
           - nanopb
           - net-tools
           - open-amp
           - picolibc
+          - psa-arch-tests
           - segger
           - tinycrypt
+          - trusted-firmware-m
           - uoscore-uedhoc
           - zcbor
           - zscilib
@@ -78,42 +85,42 @@ manifest:
     # NXP based overrides of Zephyr modules and additional
     # added modules
     #
-    - name: mbedtls
-      repo-path: zephyr_mbedtls
-      revision: 322a38cf0fdf6bf2c7faf6fbb7c30a3d5d253a36
-      path: modules/crypto/mbedtls
-      groups:
-        - crypto
-    - name: trusted-firmware-m
-      repo-path: zephyr_tf-m
-      revision: 6d2ff1c295651b10ee5a42680934e9fec749dd5d
-      path: modules/tee/tf-m/trusted-firmware-m
-      groups:
-        - tee
-    - name: psa-arch-tests
-      repo-path: zephyr_psa_arch_test
-      revision: 44b1ef0d8b6e423ae353d579c7c604152e5e81e4
-      path: modules/tee/tf-m/psa-arch-tests
-      groups:
-        - tee
-    - name: tf-m-tests
-      revision: a878426da78fbd1486dfc29d6c6b82be4ee79e72
-      path: modules/tee/tf-m/tf-m-tests
-      remote: zephyrproject
-      groups:
-        - tee
-    - name: hostap
-      url: ssh://git@bitbucket.sw.nxp.com/wmcusw/wpa_supplicant-rtos.git
-      revision: 4e4adec0fb17faef0be520f254b7b5c7b311d8e4
-      path: modules/lib/hostap
-    - name: wifi_nxp
-      url: ssh://git@bitbucket.sw.nxp.com/mcucore/mcux-sdk-wifi-nxp.git
-      revision: 33e1085c858d0708bf3b4902d8761324ce654d3d
-      path: modules/hal/nxp/mcux/middleware/wifi_nxp
-    - name: fw_bin
-      url: ssh://git@bitbucket.sw.nxp.com/wmcusw/fw_bin.git
-      revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
-      path: modules/hal/nxp/mcux/components/fw_bin
+    # - name: mbedtls
+      # repo-path: zephyr_mbedtls
+      # revision: 322a38cf0fdf6bf2c7faf6fbb7c30a3d5d253a36
+      # path: modules/crypto/mbedtls
+      # groups:
+        # - crypto
+    # - name: trusted-firmware-m
+      # repo-path: zephyr_tf-m
+      # revision: 6d2ff1c295651b10ee5a42680934e9fec749dd5d
+      # path: modules/tee/tf-m/trusted-firmware-m
+      # groups:
+        # - tee
+    # - name: psa-arch-tests
+      # repo-path: zephyr_psa_arch_test
+      # revision: 44b1ef0d8b6e423ae353d579c7c604152e5e81e4
+      # path: modules/tee/tf-m/psa-arch-tests
+      # groups:
+        # - tee
+    # - name: tf-m-tests
+      # revision: a878426da78fbd1486dfc29d6c6b82be4ee79e72
+      # path: modules/tee/tf-m/tf-m-tests
+      # remote: zephyrproject
+      # groups:
+        # - tee
+    # - name: hostap
+      # url: ssh://git@bitbucket.sw.nxp.com/wmcusw/wpa_supplicant-rtos.git
+      # revision: 4e4adec0fb17faef0be520f254b7b5c7b311d8e4
+      # path: modules/lib/hostap
+    # - name: wifi_nxp
+      # url: ssh://git@bitbucket.sw.nxp.com/mcucore/mcux-sdk-wifi-nxp.git
+      # revision: 33e1085c858d0708bf3b4902d8761324ce654d3d
+      # path: modules/hal/nxp/mcux/middleware/wifi_nxp
+    # - name: fw_bin
+      # url: ssh://git@bitbucket.sw.nxp.com/wmcusw/fw_bin.git
+      # revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
+      # path: modules/hal/nxp/mcux/components/fw_bin
 
 
     # Add any additional third-party repositories.
