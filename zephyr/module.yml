@@ -5,6 +5,6 @@ build:
   #sysbuild-kconfig: sysbuild/Kconfig.sysbuild
   settings:
     soc_root: .
-    board_root: .
+#    board_root: .
     dts_root: .
-#     module_ext_root: .
+#    module_ext_root: .
