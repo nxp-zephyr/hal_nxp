@@ -1,0 +1,26 @@
+---
+driver.romapi:
+  section-type: component
+  __requires__:
+  - driver.common
+  contents:
+    repo_base_path: devices/KW45B41Z83/drivers/romapi
+    package_base_path: devices/${platform_devices_soc_name}/drivers
+    project_base_path: drivers
+    cc-include:
+    - repo_relative_path: "./"
+    files:
+    - source: fsl_romapi.c
+    - source: fsl_flash_api.h
+    - source: fsl_lpspi_flash.h
+    - source: fsl_kb_api.h
+    - source: fsl_nboot.h
+  component_info:
+    common:
+      description: ROMAPI Driver
+      version: 1.0.0
+      type: driver
+      full_name: ROMAPI Driver
+      change_log: devices/KW45B41Z83/drivers/ChangeLogKSDK.txt
+      component_bundle: bundle.drivers
+      manifest_name: ROMAPI

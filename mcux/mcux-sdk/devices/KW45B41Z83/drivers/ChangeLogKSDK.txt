@@ -1,0 +1,22 @@
+/*!
+@page driver_log Driver Change Log
+@section clock CLOCK
+  The current CLOCK driver version is 2.0.0.
+
+  - 2.0.0
+    - Fixed the MISRA issues.
+  - 1.1.0
+    - Some minor fixes.
+  - 1.0.0
+    - Initial version.
+
+@section romapi ROMAPI
+  The current ROMAPI driver version is 1.1.0.
+
+  - 1.1.0
+    - New Feature
+      - Added support kinetis_bootloader and nboot api for (KW45B41Z82/KW45B41Z83).
+  - 1.0.0
+    - initial version.
+
+*/
