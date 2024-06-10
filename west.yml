@@ -23,6 +23,8 @@ manifest:
   # "remotes" is a list of locations where git repositories are cloned
   # and fetched from.
   remotes:
+    - name: nxp
+      url-base: https://github.com/NXP
     - name: nxp-zsdk
       url-base: https://github.com/nxp-zephyr
     - name: zephyrproject
@@ -68,7 +70,6 @@ manifest:
           - loramac-node
           - lvgl
           - lz4
-          - mbedtls
           - mipi-sys-t
           - nanopb
           - net-tools
@@ -96,12 +97,27 @@ manifest:
     # NXP based overrides of Zephyr modules and additional
     # added modules
     #
-    # - name: mbedtls
-      # repo-path: zephyr_mbedtls
-      # revision: 322a38cf0fdf6bf2c7faf6fbb7c30a3d5d253a36
-      # path: modules/crypto/mbedtls
-      # groups:
-        # - crypto
+    - name: els_pkc
+      remote: nxp
+      repo-path: els_pkc
+      revision: cf88d69e4f403b1184eaa4596790e77cf945f386
+      path: modules/crypto/els_pkc
+      groups:
+        - crypto
+    - name: psa_crypto_driver
+      remote: nxp
+      repo-path: psa_crypto_driver
+      revision: 54fe3d1513695465a971e2957851fd58aa39554a
+      path: modules/crypto/psa_crypto_driver
+      groups:
+        - crypto
+    - name: mbedtls
+      remote: nxp
+      repo-path: nxp_mbedtls
+      revision: 7e7a9b2749860b16aaa649dbe18042dcc5a2f1b9
+      path: modules/crypto/mbedtls
+      groups:
+        - crypto
     # - name: trusted-firmware-m
       # repo-path: zephyr_tf-m
       # revision: 6d2ff1c295651b10ee5a42680934e9fec749dd5d
