@@ -33,7 +33,7 @@ manifest:
   defaults:
     remote: nxp-zsdk
 
-  group-filter: [+optional]
+  group-filter: [+optional, -bifrost]
 
   # "projects" is a list of git repositories to populate NXP Zephyr downstream
   # workspace.
@@ -44,13 +44,13 @@ manifest:
       revision: a06553a7e434f2af9baba8118063866067a6c30e
       import:
         #
-        # ZSDK imports the contents of zephyr/west.yml at the above
+        # ZSDK imports the contents of nxp-zephyr/west.yml at the above
         # revision. Only the projects explicitly named in the
         # following allowlist are imported.
         #
         # If there is an override of one of the Zephyr modules,
-        # remove it from the name-allowlist and add explicitly
-        # below the list.
+        # remove it from the name-allowlist and add the project
+        # explicitly below the list.
         #
         name-allowlist:
           - TraceRecorderSource
@@ -81,6 +81,17 @@ manifest:
           - uoscore-uedhoc
           - zcbor
           - zscilib
+
+    # For internal NXP development support
+    - name: bifrost
+      repo-path: bifrost
+      #
+      # for now just grab tip of main
+      #
+      revision: main
+      groups:
+        - bifrost
+
     #
     # NXP based overrides of Zephyr modules and additional
     # added modules
@@ -126,7 +137,6 @@ manifest:
     # Add any additional third-party repositories.
 
   self:
-    # This repository should be cloned to nxp/zsdk.
     path: zsdk
     # Configure west extensions.
     #west-commands: scripts/west-commands.yml
