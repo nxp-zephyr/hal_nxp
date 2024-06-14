@@ -60193,4 +60193,3 @@ static inline uint8_t Chip_GetVersion(void)
 
 
 #endif  /* _KW45B41Z83_H_ */
-

@@ -1,0 +1,15 @@
+# Copyright 2023 NXP
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_ccm32k
+config MCUX_HAS_driver_ccm32k
+    bool
+
+config MCUX_USE_driver_ccm32k
+    depends on MCUX_HAS_driver_ccm32k
+    bool "ccm32k Driver"
+    select MCUX_USE_driver_common
+    help
+      ccm32k Driver

@@ -24,6 +24,8 @@
 #endif
 #include "HWParameter.h"
 #include "RNG_Interface.h"
+// #include "fwk_platform_coex.h"
+#define connBle_c      (uint8_t)(1U << 0)
 
 #ifdef SERIAL_BTSNOOP
 #include "sbtsnoop.h"
@@ -66,6 +68,16 @@
  * the returned status will be negative */
 #define RAISE_ERROR(__st, __error_code) -(int)((uint32_t)(((uint32_t)(__st) << 4) | (uint32_t)(__error_code)));
 
+// /*!
+//  * \brief RPMSG Rx callback used to receive HCI messages from Controller
+//  *
+//  * \param[in] param Usually NULL
+//  * \param[in] data pointer to data buffer
+//  * \param[in] len size of the data
+//  * \return hal_rpmsg_return_status_t tells RPMSG to free or hold the buffer
+//  */
+// static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_t *data, uint32_t len);
+
 /* -------------------------------------------------------------------------- */
 /*                         Private memory declarations                        */
 /* -------------------------------------------------------------------------- */
@@ -85,6 +97,21 @@ static const hal_rpmsg_config_t hciRpmsgConfig = {
 };
 
 static void (*hci_rx_callback)(uint8_t packetType, uint8_t *data, uint16_t len);
+
+// static hal_rpmsg_config_t hci_rpmsg_config = {
+//     .local_addr  = 30,
+//     .remote_addr = 40,
+//     // .imuLink     = (uint8_t)kIMU_LinkCpu2Cpu3,
+//     .imuLink     = (uint8_t)kIMU_LinkCpu1Cpu2,
+//     .callback    = PLATFORM_HciRpmsgRxCallback,
+//     .param       = NULL,
+// };
+
+static bool              initialized    = false;
+static bool              hciInitialized = false;
+
+// static OSA_EVENT_HANDLE_DEFINE(wakeUpEventGroup);
+// static OSA_MUTEX_HANDLE_DEFINE(bleMutexHandle);
 
 /* -------------------------------------------------------------------------- */
 /*                             Private prototypes                             */
@@ -173,9 +200,13 @@ int PLATFORM_InitBle(void)
     return status;
 }
 
-void PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
+int PLATFORM_SetHciRxCallback(void (*callback)(uint8_t packetType, uint8_t *data, uint16_t len))
 {
+    int ret = 0;
+
     hci_rx_callback = callback;
+
+    return ret;
 }
 
 void PLATFORM_SendHciMessage(uint8_t *msg, uint32_t len)
@@ -351,3 +382,127 @@ static void PLATFORM_SetBleMaxTxPower(int8_t max_tx_power)
     extern void Controller_SetMaxTxPower(int8_t power_dBm, uint8_t ldo_ant_trim);
     Controller_SetMaxTxPower(max_tx_power, ldo_ana_trim);
 }
+
+// /*!
+//  * \brief Return HCI link status
+//  *
+//  * \return true Link is ready
+//  * \return false Link is not ready yet
+//  */
+// static bool PLATFORM_IsHciLinkReady(void);
+
+// static bool PLATFORM_IsHciLinkReady(void)
+// {
+//     return (HAL_ImuLinkIsUp(hci_rpmsg_config.imuLink) == kStatus_HAL_RpmsgSuccess);
+// }
+
+// int PLATFORM_StartHci(void)
+// {
+//     int ret = 0;
+
+//     do
+//     {
+//         if (hciInitialized == true)
+//         {
+//             break;
+//         }
+
+//         while (PLATFORM_IsHciLinkReady() != true)
+//         {
+//         }
+
+// #if !defined(gPlatformDisableVendorSpecificInit) || (gPlatformDisableVendorSpecificInit == 0)
+//         /* This function call uses HCI vendor commands to configure the controller,
+//          * this can cause troubles with some BLE Host. A host can send the HCI commands
+//          * using its own API and then expect the right response from the controller, if the
+//          * commands are sent under the hood using the framework, the host may receive unexpected
+//          * responses which may lead to issues. In this case enable gPlatformDisableVendorSpecificInit.
+//          */
+//         PLATFORM_VendorSpecificInit();
+// #endif
+//         hciInitialized = true;
+//     } while (false);
+
+//     return ret;
+// }
+
+// int PLATFORM_TerminateBle(void)
+// {
+//     int ret = 0;
+
+//     do
+//     {
+//         if (initialized == false)
+//         {
+//             break;
+//         }
+
+//         if (PLATFORM_TerminateHciLink() != 0)
+//         {
+//             ret = -1;
+//             break;
+//         }
+
+//         if (PLATFORM_TerminateControllers((uint8_t)connBle_c) != 0) /* MISRA CID 26829044 */
+//         {
+//             ret = -2;
+//             break;
+//         }
+
+//         // if (OSA_EventDestroy((osa_event_handle_t)wakeUpEventGroup) != KOSA_StatusSuccess)
+//         // {
+//         //     ret = -3;
+//         //     break;
+//         // }
+
+//         // if (OSA_MutexDestroy((osa_mutex_handle_t)bleMutexHandle) != KOSA_StatusSuccess)
+//         // {
+//         //     ret = -4;
+//         //     break;
+//         // }
+
+//         initialized = false;
+//         /* after re-init cpu2, Reset hciInitialized to false. */
+//         hciInitialized = false;
+//     } while (false);
+
+//     return ret;
+// }
+
+// static hal_rpmsg_return_status_t PLATFORM_HciRpmsgRxCallback(void *param, uint8_t *data, uint32_t len)
+// {
+//     bool    handled    = false;
+//     uint8_t packetType = data[0];
+
+//     (void)param;
+
+//     (void)PLATFORM_HandleControllerPowerState();
+
+//     /* If the macro BLE_VENDOR_EVENT_HANDLE is set to true, PLATFORM module will check if it can handle Vendor Specific
+//      * Events without going through Ethermind's HCI tasks If the packet is not handled, then it is sent to upper layers
+//      * This is likely used to handle Controller low power state, so this is
+//      * completely transparent to the application. If the macro BLE_VENDOR_EVENT_HANDLE is set false, the Ethermind's HCI
+//      * tasks will handle vendor event */
+//     if (packetType == HCI_EVENT_PACKET)
+//     {
+//         uint8_t eventType = data[1];
+
+//         if (eventType == HCI_VENDOR_SPECIFIC_DEBUG_EVENT)
+//         {
+//             /* Received packet is a Vendor Specific event, check if PLATFORM
+//              * can process it, if not, it will be sent to Ethermind */
+//             handled = PLATFORM_HandleHciVendorEvent(&data[3], data[2]);
+//         }
+//     }
+
+//     if ((handled == false) && (hci_rx_callback != NULL))
+//     {
+//         hci_rx_callback(packetType, &data[1], (uint16_t)(len - 1U));
+//     }
+
+// #ifdef SERIAL_BTSNOOP
+//     sbtsnoop_write_hci_pkt(data[0U], 1U, &data[1], (uint16_t)(len - 1U));
+// #endif
+
+//     return kStatus_HAL_RL_RELEASE;
+// }

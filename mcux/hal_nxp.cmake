@@ -277,7 +277,11 @@ endif()
 
 if("${CONFIG_SOC_FAMILY}" STREQUAL "nxp_kinetis")
 
-  include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash		driver_flash)
+  if("${CONFIG_SOC_SERIES}" STREQUAL "kw45")
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash_k4		driver_flash_k4)
+  else()
+    include_driver_ifdef(CONFIG_SOC_FLASH_MCUX		flash		driver_flash)
+  endif()
 
   include(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port/driver_port.cmake)
   zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/port)
@@ -404,4 +408,88 @@ if(CONFIG_NXP_RF_IMU)
         ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/gdma
     )
     include(component_wireless_imu_adapter)
+endif()
+
+if(${MCUX_DEVICE} MATCHES "KW45")
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ltc
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/lptmr
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/imu
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/flash_k4
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/rpmsg
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/internal_flash
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer_manager
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/timer
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/mem_manager
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/power_manager/devices/KW45B41Z-EVK
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/power_manager/core
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
+  include(driver_ccm32k)
+  if(CONFIG_BT)
+    zephyr_compile_definitions(HAL_RPMSG_SELECT_ROLE=0U)
+    zephyr_compile_definitions(gPlatformUseUniqueDeviceIdForBdAddr_d=1U)
+    zephyr_compile_definitions(gRngUseSecureSubSystem_d=0U)
+    zephyr_compile_definitions(gUseToolchainMemFunc_d=0U)
+
+    include(driver_ltc)
+    include(driver_imu)
+    include(component_rpmsg_adapter)
+    include(driver_flash_k4)
+    include(component_flash_k4_adapter)
+    include(component_timer_manager)
+    include(component_lptmr_adapter)
+    include(component_osa_bm)
+    # include(component_osa)
+
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/FunctionLib)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/HWParameter)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/Common)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/DBG)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/RNG)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-connectivity-framework/platform/kw45_k32w1)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-connectivity-framework/platform/kw45_k32w1/configs)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/ble_controller/interface)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/mcmgr/src)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/include)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/include/platform/kw45b41)
+    # zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/osa)
+
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-connectivity-framework/platform/kw45_k32w1/fwk_platform_ble.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/mcmgr/src/mcmgr_internal_core_api_kw45b41_ext.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/mcmgr/src/mcmgr_internal_core_api_kw45b41.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/mcmgr/src/mcmgr.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-connectivity-framework/platform/kw45_k32w1/fwk_platform.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/FunctionLib/FunctionLib.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/mcux-sdk-middleware-connectivity-framework/platform/kw45_k32w1/fwk_platform_ics.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/common/llist.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/virtio/virtqueue.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/rpmsg_lite/porting/platform/kw45b41/rpmsg_platform_ext.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/rpmsg_lite/porting/environment/rpmsg_env_bm.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/rpmsg_lite/porting/platform/kw45b41/rpmsg_platform.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/mcmgr/src/mcmgr_imu_internal.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/multicore/rpmsg_lite/lib/rpmsg_lite/rpmsg_lite.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/framework_5.3.3/HWParameter/HWParameter.c)
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/middleware/wireless/ble_controller/src/controller_api.c)
+
+  endif()
+
+  if(CONFIG_PM OR CONFIG_BT)
+    include(component_mem_manager)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/middleware/wireless/framework/Common)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/middleware/wireless/framework/DBG)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/middleware/wireless/framework/platform/kw45_k32w1)
+  endif()
+
+  if(CONFIG_PM)
+    include(component_power_manager_evkkw45b41z_KW45B41Z83)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/power_manager/core)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/power_manager/boards/KW45B41Z-EVK)
+    zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/components/lists)
+
+    zephyr_library_sources(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/middleware/wireless/framework/platform/kw45_k32w1/fwk_platform_lowpower.c)
+  endif()
 endif()
