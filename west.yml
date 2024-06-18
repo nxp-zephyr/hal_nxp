@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: a06553a7e434f2af9baba8118063866067a6c30e
+      revision: c888e0e4ee17027cce5f52a28aa626722f7c7c1c
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -75,10 +75,8 @@ manifest:
           - net-tools
           - open-amp
           - picolibc
-          - psa-arch-tests
           - segger
           - tinycrypt
-          - trusted-firmware-m
           - uoscore-uedhoc
           - zcbor
           - zscilib
@@ -114,28 +112,30 @@ manifest:
     - name: mbedtls
       remote: nxp
       repo-path: nxp_mbedtls
-      revision: 7e7a9b2749860b16aaa649dbe18042dcc5a2f1b9
+      revision: 511ab85ad19af1faa0e45766d96f6ade438209e0
       path: modules/crypto/mbedtls
       groups:
         - crypto
-    # - name: trusted-firmware-m
-      # repo-path: zephyr_tf-m
-      # revision: 6d2ff1c295651b10ee5a42680934e9fec749dd5d
-      # path: modules/tee/tf-m/trusted-firmware-m
-      # groups:
-        # - tee
-    # - name: psa-arch-tests
-      # repo-path: zephyr_psa_arch_test
-      # revision: 44b1ef0d8b6e423ae353d579c7c604152e5e81e4
-      # path: modules/tee/tf-m/psa-arch-tests
-      # groups:
-        # - tee
-    # - name: tf-m-tests
-      # revision: a878426da78fbd1486dfc29d6c6b82be4ee79e72
-      # path: modules/tee/tf-m/tf-m-tests
-      # remote: zephyrproject
-      # groups:
-        # - tee
+    - name: trusted-firmware-m
+      remote: nxp
+      repo-path: nxp_tf-m
+      revision: 7453263f807c05431fcc720b006cfae3c58735bd
+      path: modules/tee/tf-m/trusted-firmware-m
+      groups:
+        - tee
+    - name: psa-arch-tests
+      remote: nxp
+      repo-path: nxp_psa_arch_test
+      revision: 532df132525add95914389855a6f5f67dc4fd13b
+      path: modules/tee/tf-m/psa-arch-tests
+      groups:
+        - tee
+    - name: tf-m-tests
+      revision: d552e4f18b92032bd335d5e3aa312f6acd82a83b
+      path: modules/tee/tf-m/tf-m-tests
+      remote: zephyrproject
+      groups:
+        - tee
     # - name: hostap
       # url: ssh://git@bitbucket.sw.nxp.com/wmcusw/wpa_supplicant-rtos.git
       # revision: 4e4adec0fb17faef0be520f254b7b5c7b311d8e4
