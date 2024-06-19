@@ -288,3 +288,8 @@ zephyr_udc0: &usb_otg {
 	status = "okay";
 	wakeup-source;
 };
+
+&pin1 {
+	status = "okay";
+	wakeup-level = "low";
+};
