@@ -1,0 +1,20 @@
+sample:
+  name: nxp mbedtls psa crypto
+common:
+  tags:
+    - crypto
+    - mbedtls
+tests:
+  sample.boards.rd_rw612_bga.nxp_mbedtls_psa_crypto_thread:
+    platform_allow:
+      - rd_rw612_bga
+    integration_platforms:
+      - rd_rw612_bga
+    harness: console
+    harness_config:
+      type: multi_line
+      regex:
+        - "Thread one was created successfully"
+        - "Thread two was created successfully"
+        - "Thread 1 is running."
+        - "Thread 2 is running."
