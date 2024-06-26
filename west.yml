@@ -95,6 +95,11 @@ manifest:
     # NXP based overrides of Zephyr modules and additional
     # added modules
     #
+    - name: hal_nxp
+      revision: bee15c31e19ff1982583d9b750ef844d64320160
+      path: modules/hal/nxp
+      groups:
+        - hal
     - name: els_pkc
       remote: nxp
       repo-path: els_pkc
