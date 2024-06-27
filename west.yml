@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: c888e0e4ee17027cce5f52a28aa626722f7c7c1c
+      revision: 2c5d73faec9990c47e8edd6505bafd58c636bdcb
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -141,18 +141,18 @@ manifest:
       remote: zephyrproject
       groups:
         - tee
-    # - name: hostap
-      # url: ssh://git@bitbucket.sw.nxp.com/wmcusw/wpa_supplicant-rtos.git
-      # revision: 4e4adec0fb17faef0be520f254b7b5c7b311d8e4
-      # path: modules/lib/hostap
-    # - name: wifi_nxp
-      # url: ssh://git@bitbucket.sw.nxp.com/mcucore/mcux-sdk-wifi-nxp.git
-      # revision: 33e1085c858d0708bf3b4902d8761324ce654d3d
-      # path: modules/hal/nxp/mcux/middleware/wifi_nxp
-    # - name: fw_bin
-      # url: ssh://git@bitbucket.sw.nxp.com/wmcusw/fw_bin.git
-      # revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
-      # path: modules/hal/nxp/mcux/components/fw_bin
+    - name: hostap
+      repo-path: hostap
+      revision: 3aaa3257d4aa20e536d91250011a5586de52fd62
+      path: modules/lib/hostap
+    - name: wifi_nxp
+      repo-path: wifi_nxp
+      revision: 239fc0326cbbe810c515fc293ff50a2674eeb87f
+      path: modules/hal/nxp/mcux/middleware/wifi_nxp
+    - name: fw_bin
+      repo-path: fw_bin
+      revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
+      path: modules/hal/nxp/zephyr/blobs/rw61x
 
 
     # Add any additional third-party repositories.
