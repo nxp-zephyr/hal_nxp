@@ -96,7 +96,7 @@ manifest:
     # added modules
     #
     - name: hal_nxp
-      revision: bee15c31e19ff1982583d9b750ef844d64320160
+      revision: d0246401e99d983a238d6f5275a35b5148453dcd
       path: modules/hal/nxp
       groups:
         - hal
@@ -143,11 +143,11 @@ manifest:
         - tee
     - name: hostap
       repo-path: hostap
-      revision: 3aaa3257d4aa20e536d91250011a5586de52fd62
+      revision: a839c7c5466d8b8af84c64c73794c63765a6708d
       path: modules/lib/hostap
     - name: wifi_nxp
       repo-path: wifi_nxp
-      revision: 239fc0326cbbe810c515fc293ff50a2674eeb87f
+      revision: 79d5f1901007ddb9b72b3cc6a00e8dd1a6db9de6
       path: modules/hal/nxp/mcux/middleware/wifi_nxp
     - name: fw_bin
       repo-path: fw_bin
