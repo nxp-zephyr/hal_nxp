@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: c7c7683a662cbf5811cc185419c43fbcc12a970d
+      revision: ed22c9285fbdf19cd2097925fb51497b99ed4439
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -70,6 +70,7 @@ manifest:
           - loramac-node
           - lvgl
           - lz4
+          - mcuboot
           - mipi-sys-t
           - nanopb
           - net-tools
@@ -80,7 +81,6 @@ manifest:
           - uoscore-uedhoc
           - zcbor
           - zscilib
-          - mcuboot
 
     # For internal NXP development support
     - name: bifrost
