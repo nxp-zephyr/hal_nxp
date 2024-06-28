@@ -284,6 +284,11 @@ zephyr_udc0: &usb_otg {
 	status = "disabled";
 };
 
+&imu {
+	status = "okay";
+	wakeup-source;
+};
+
 &hci {
 	status = "okay";
 	wakeup-source;
