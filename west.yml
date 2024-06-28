@@ -80,6 +80,7 @@ manifest:
           - uoscore-uedhoc
           - zcbor
           - zscilib
+          - mcuboot
 
     # For internal NXP development support
     - name: bifrost
