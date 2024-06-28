@@ -1,0 +1,18 @@
+# Copyright 2022-2024 NXP
+# SPDX-License-Identifier: Apache-2.0
+
+config SUPPORT_BLE_15D4
+	bool "Support IEEE 802154"
+	imply MONOLITHIC_IEEE802154
+
+config SUPPORT_BLE
+	bool "Support bluetooth low energy"
+	default y
+	imply NXP_MONOLITHIC_BT
+
+config SUPPORT_WIFI
+	bool "Support WiFi"
+	default y
+	imply NXP_MONOLITHIC_WIFI
+
+source "Kconfig.zephyr"

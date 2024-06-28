@@ -1,0 +1,11 @@
+sample:
+  name: nxp manufacture bridge
+common:
+  tags: wifi
+tests:
+  sample.boards.rd_rw612_bga.nxp_mfg_bridge:
+    build_only: true
+    platform_allow:
+      - rd_rw612_bga
+    integration_platforms:
+      - rd_rw612_bga
