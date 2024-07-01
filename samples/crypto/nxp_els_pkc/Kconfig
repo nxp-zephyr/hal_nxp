@@ -1,0 +1,12 @@
+# Copyright 2023-2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
+config MCUX_ELS_PKC_EXAMPLES
+	bool "Support of MCUX ELS PKC examples"
+	help
+	    Builds with els_pkc examples to verify high level els_pkc api calls.
+
+	    The option includes the example src files from els_pkc component.
+
+source "Kconfig.zephyr"

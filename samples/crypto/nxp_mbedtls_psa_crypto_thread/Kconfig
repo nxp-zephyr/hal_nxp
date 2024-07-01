@@ -1,4 +1,5 @@
-# Copyright 2022-2024 NXP
+# Copyright 2023-2024 NXP
+#
 # SPDX-License-Identifier: Apache-2.0
 
 source "Kconfig.zephyr"

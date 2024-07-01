@@ -1,3 +1,7 @@
+# Copyright 2023-2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
 sample:
   name: nxp mbedtls psa crypto
 common:
@@ -8,6 +12,7 @@ tests:
   sample.boards.rd_rw612_bga.nxp_mbedtls_psa_crypto_thread:
     platform_allow:
       - rd_rw612_bga
+      - frdm_rw612
     integration_platforms:
       - rd_rw612_bga
     harness: console

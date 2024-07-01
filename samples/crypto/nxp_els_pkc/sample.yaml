@@ -1,0 +1,22 @@
+# Copyright 2023-2024 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
+sample:
+  name: nxp els pkc
+common:
+  tags:
+    - crypto
+    - els_pkc
+tests:
+  sample.crypto.nxp_els_pkc:
+    platform_allow:
+      - rd_rw612_bga
+      - frdm_rw612
+    integration_platforms:
+      - rd_rw612_bga
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "RESULT: All 24 test PASS!!"
