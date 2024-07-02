@@ -83,6 +83,7 @@ manifest:
           - uoscore-uedhoc
           - zcbor
           - zscilib
+          - openthread
 
     # For internal NXP development support
     - name: bifrost
