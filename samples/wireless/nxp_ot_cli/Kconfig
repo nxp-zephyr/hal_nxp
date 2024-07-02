@@ -1,0 +1,19 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: Apache-2.0
+
+config SUPPORT_BLE_15D4
+	int "Support IEEE 802154"
+	default 1
+
+config SUPPORT_BLE
+	int "Support bluetooth low energy"
+	default 0
+
+config SUPPORT_WIFI
+	int "Support WiFi"
+	default 0
+
+source "Kconfig.zephyr"
+module = OT_COMMAND_LINE_INTERFACE
+module-str = ot_cli
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"

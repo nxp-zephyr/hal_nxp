@@ -1,0 +1,11 @@
+sample:
+  name: OpenThread CLI sample
+  description: Test OpenThread Command Line Interface.
+tests:
+  sample.boards.rd_rw612_bga.nxp_ot_cli:
+    build_only: true
+    platform_allow:
+      - rd_rw612_bga
+      - frdm_rw612
+    integration_platforms:
+      - rd_rw612_bga
