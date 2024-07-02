@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: 497c65040d3a33f95ffe4902ab0c918890ed0c9c
+      revision: c20affd60866076bca79181d859f6ff54b6504b5
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -125,14 +125,14 @@ manifest:
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: 7453263f807c05431fcc720b006cfae3c58735bd
+      revision: 1223d5c39ea790225743df19e3dbf696e2032a9c
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
     - name: psa-arch-tests
       remote: nxp
       repo-path: nxp_psa_arch_test
-      revision: 532df132525add95914389855a6f5f67dc4fd13b
+      revision: 32784fe0367394a6e70dfe1771e0301cb4ab76f3
       path: modules/tee/tf-m/psa-arch-tests
       groups:
         - tee
