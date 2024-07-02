@@ -125,7 +125,7 @@ manifest:
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: 1223d5c39ea790225743df19e3dbf696e2032a9c
+      revision: b466925350361260fecc1523fa6208966238e3d8
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
@@ -154,7 +154,11 @@ manifest:
       repo-path: fw_bin
       revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
       path: modules/hal/nxp/zephyr/blobs/rw61x
-
+    - name: nxp_iot_agent
+      remote: nxp
+      repo-path: el2go-agent
+      revision: 9c2f920074b9c05f9e5e9b415eba5cb63757b24a
+      path: modules/lib/nxp_iot_agent
 
     # Add any additional third-party repositories.
 
