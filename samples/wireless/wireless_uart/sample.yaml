@@ -1,0 +1,11 @@
+sample:
+  name: Bluetooth Wireless Uart
+  description: Demonstrates the Wireless Uart GATT Service
+tests:
+  sample.bluetooth.wireless_uart:
+    harness: bluetooth
+    platform_allow:
+      - rd_rw612_bga
+    tags: bluetooth
+    integration_platforms:
+      - rd_rw612_bga
