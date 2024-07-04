@@ -9,27 +9,27 @@ Overview
 This is the UART Wi-Fi bridge example to demonstrate the Lab Tool support.
 
 The source code for this sample application can be found at:
-:zephyr_file:`samples/boards/rd_rw612_bga/nxp_mfg_bridge`.
+:zephyr_file:`samples/nxp_mfg_bridge`.
 
 Requirements
 ************
 
 - Micro USB cable
-- RD-RW61X-BGA board
+- RD-RW61X-BGA/frdm_rw612 board
 - Personal Computer
 
 Building, Flashing and Running
 ******************************
 
 .. zephyr-app-commands::
-   :zephyr-app: samples/boards/rd_rw612_bga/nxp_mfg_bridge
-   :board: rd_rw612_bga
+   :zephyr-app: samples/nxp_mfg_bridge
+   :board: rd_rw612_bga, frdm_rw612
    :goals: build flash
    :compact:
 
 Flashing:
 
-    For CPU1 and CPU2 image, please refer to modules/hal/nxp/mcux/components/fw_bin/readme.rst
+    For CPU1 and CPU2 image, please refer to modules/hal/nxp/zephyr/blobs/rw61x/readme.txt
 
 .. code-block:: console
 

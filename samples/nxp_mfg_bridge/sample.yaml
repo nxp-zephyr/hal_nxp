@@ -7,5 +7,6 @@ tests:
     build_only: true
     platform_allow:
       - rd_rw612_bga
+      - frdm_rw612
     integration_platforms:
       - rd_rw612_bga
