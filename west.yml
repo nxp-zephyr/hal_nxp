@@ -64,6 +64,7 @@ manifest:
           - edtt
           - fatfs
           - hal_nxp
+          - hal_xtensa
           - liblc3
           - libmetal
           - littlefs
