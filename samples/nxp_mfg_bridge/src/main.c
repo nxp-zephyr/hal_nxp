@@ -684,7 +684,7 @@ static void task_main(void)
 				should be defined, or it will not download any formware!!"
 #endif
 #if defined(CONFIG_SUPPORT_WIFI) && (CONFIG_SUPPORT_WIFI == 1)
-	sb3_fw_download(LOAD_WIFI_FIRMWARE, 1, WIFI_FW_ADDRESS);
+	sb3_fw_reset(LOAD_WIFI_FIRMWARE, 1, WIFI_FW_ADDRESS);
 #endif
 
 	wifi_cau_temperature_enable();
@@ -692,12 +692,12 @@ static void task_main(void)
 
 	/* 15d4 single and 15d4+ble combo */
 #if defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 1)
-	sb3_fw_download(LOAD_15D4_FIRMWARE, 1, COMBO_FW_ADDRESS);
+	sb3_fw_reset(LOAD_15D4_FIRMWARE, 1, COMBO_FW_ADDRESS);
 #endif
 	/* only ble, no 15d4 */
 #if defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 0) && defined(CONFIG_SUPPORT_BLE) &&   \
 	(CONFIG_SUPPORT_BLE == 1)
-	sb3_fw_download(LOAD_BLE_FIRMWARE, 1, BLE_FW_ADDRESS);
+	sb3_fw_reset(LOAD_BLE_FIRMWARE, 1, BLE_FW_ADDRESS);
 #endif
 
 	/* Initialize WIFI Driver */
