@@ -87,10 +87,7 @@ manifest:
     # For internal NXP development support
     - name: bifrost
       repo-path: bifrost
-      #
-      # for now just grab tip of main
-      #
-      revision: main
+      revision: 7da8d6842acbd0fbdb513bf777c89cc4a3ac2bad
       groups:
         - bifrost
 
