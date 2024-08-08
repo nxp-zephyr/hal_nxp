@@ -656,6 +656,12 @@ int PLATFORM_RequestBleWakeUp(void)
          * completely awake and ready to receive a message */
         NVIC_EnableIRQ(BLE_MCI_WAKEUP_DONE0_IRQn);
 
+        /* Make sure to clear wake up event */
+        if (OSA_EventClear((osa_event_handle_t)wakeUpEventGroup, (uint32_t)ble_awake_event) != KOSA_StatusSuccess)
+        {
+            ret = -1;
+        }
+
         /* Wake up BLE core with PMU BLE_WAKEUP bit
          * This bit is maintained until we receive a BLE_MCI_WAKEUP_DONE0
          * interrupt */
@@ -769,6 +775,14 @@ static bool PLATFORM_IsHciLinkReady(void)
 
 static bool PLATFORM_IsBleAwake(void)
 {
+    /* The power state information of CPU2 is managed by a software state machine.
+     * This is an additional hardware check to make sure of the CPU2 power state
+     * Sending a HCI message while CPU2 is in low power causes message loss
+     */
+    if (BLE_POWER_STATUS() != BLE_POWER_ON)
+    {
+        blePowerState = ble_asleep_state;
+    }
     return (blePowerState != ble_asleep_state);
 }
 
@@ -887,12 +901,6 @@ static int PLATFORM_HandleBlePowerStateEvent(ble_ps_event_t psEvent)
             {
                 case ble_asleep_event:
                     blePowerState = ble_asleep_state;
-                    /* Make sure to clear wake up event */
-                    if (OSA_EventClear((osa_event_handle_t)wakeUpEventGroup, (uint32_t)ble_awake_event) !=
-                        KOSA_StatusSuccess)
-                    {
-                        ret = -1;
-                    }
                     break;
 
                 default:
