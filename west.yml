@@ -87,6 +87,7 @@ manifest:
 
     # For internal NXP development support
     - name: bifrost
+      west-commands: scripts/west_commands.yml
       repo-path: bifrost
       revision: 682668f66d81bafbe9bd79cce4dfbd1459018dac
       groups:
