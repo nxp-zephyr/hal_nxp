@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: 70b12b8be2b126a5eabba3906d1c4e3b2603f6b5
+      revision: 402bb62de524e852907f931adf28fac6e8a06ecd
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -98,7 +98,7 @@ manifest:
     # added modules
     #
     - name: hal_nxp
-      revision: 44724e2efd39a0b85b313f2d2d6849f04831475d
+      revision: 40e7d9c25c86548adb894956fd56be9589bafc85
       path: modules/hal/nxp
       groups:
         - hal
