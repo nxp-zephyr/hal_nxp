@@ -61,7 +61,7 @@
 		/* Note slot 0 has one additional sector,
 		 * this is intended for use with the swap move algorithm
 		 */
-		slot0_ns_partition: partition@080A0000 {
+		slot0_ns_partition: partition@80A0000 {
 			label = "image-0-nonsecure";
 			reg = <0x080A0000 0x083A0000>;
 		};
