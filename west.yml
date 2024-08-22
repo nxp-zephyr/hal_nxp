@@ -112,7 +112,7 @@ manifest:
     - name: psa_crypto_driver
       remote: nxp
       repo-path: psa_crypto_driver
-      revision: 3c38ea61fe9ed837693a9ffa7b300239d5a7f018
+      revision: 913268e7bfb5783993772e0f680df1e7076fdf6d
       path: modules/crypto/psa_crypto_driver
       groups:
         - crypto
@@ -126,7 +126,7 @@ manifest:
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: 48a770ee9e4b8b8fc50f5979df560cff2861b5a0
+      revision: 6276343a5a32d933cb401c234e69b181462dde9a
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
