@@ -158,6 +158,17 @@ In this case, the BLE blob won't be linked with the application, so the user nee
 flash the BLE binary blob to the board at the address ``0x18540000``.
 The binary blob will be located here: ``<zephyr workspace>/modules/hal/nxp/zephyr/blobs/rw61x/rw61x_sb_ble_a2.bin``
 
+RTC Sub-Second Counter
+======================
+
+To use the RTC sub-second counter which is clocked at a 32kHZ rate, you first need to make the
+following modifications to the board hardware:
+
+1. Move the short on SJ21 from 1 and 2 to short 2 and 3.
+2. Move the short on SJ22 from 1 and 2 to short 2 and 3.
+
+After you make this change, the ENET will stop functioning on the board.
+
 Resources
 =========
 
