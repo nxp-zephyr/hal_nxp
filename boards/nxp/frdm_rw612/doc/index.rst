@@ -59,6 +59,9 @@ Supported Features
 +-----------+------------+-----------------------------------+
 | OS_TIMER  | on-chip    | os timer                          |
 +-----------+------------+-----------------------------------+
+| PM        | on-chip    | power management; uses SoC Power  |
+|           |            | Modes 1, 2 and 3                  |
++-----------+------------+-----------------------------------+
 
 The default configuration can be found in the defconfig file:
 
