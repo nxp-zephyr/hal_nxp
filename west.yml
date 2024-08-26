@@ -89,7 +89,7 @@ manifest:
     - name: bifrost
       west-commands: scripts/west_commands.yml
       repo-path: bifrost
-      revision: 682668f66d81bafbe9bd79cce4dfbd1459018dac
+      revision: 8fe46876c5b5d6768094d0760034d6982b76dbfb
       groups:
         - bifrost
 
@@ -148,6 +148,7 @@ manifest:
       revision: f3c1c2b8ca9686405f50b4b6bb7b1c9142278587
       path: modules/lib/hostap
     - name: wifi_nxp
+      remote: nxp
       repo-path: wifi_nxp
       revision: d69b378c67711d43419ab183f9ede0f487b4a54e
       path: modules/hal/nxp/mcux/middleware/wifi_nxp
