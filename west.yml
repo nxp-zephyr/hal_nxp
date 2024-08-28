@@ -112,7 +112,7 @@ manifest:
     - name: psa_crypto_driver
       remote: nxp
       repo-path: psa_crypto_driver
-      revision: 913268e7bfb5783993772e0f680df1e7076fdf6d
+      revision: 2a0b75df8f1a7e0c2781d297ddf8a0e3b64d4b08
       path: modules/crypto/psa_crypto_driver
       groups:
         - crypto
@@ -159,7 +159,7 @@ manifest:
     - name: nxp_iot_agent
       remote: nxp
       repo-path: el2go-agent
-      revision: 85a251dbce8de534c9caeef4f1de5525037660a2
+      revision: 54bd67ea2f47d56af8db378497b1dde6394ac0d6
       path: modules/lib/nxp_iot_agent
 
     # Add any additional third-party repositories.
