@@ -67,13 +67,13 @@ LOG_MODULE_REGISTER(mfg_bridge, LOG_LEVEL_ERR);
 
 /* Set default mode of fw download */
 #ifndef CONFIG_SUPPORT_WIFI
-#define CONFIG_SUPPORT_WIFI 1
+#define CONFIG_SUPPORT_WIFI
 #endif
 #ifndef CONFIG_SUPPORT_BLE
-#define CONFIG_SUPPORT_BLE 1
+#define CONFIG_SUPPORT_BLE
 #endif
-#ifndef CONFIG_SUPPORT_BLE_15D4
-#define CONFIG_SUPPORT_BLE_15D4 1
+#ifndef SUPPORT_IEEE802154
+#define SUPPORT_IEEE802154
 #endif
 
 #define WLAN_CAU_ENABLE_ADDR         (0x45004008U)
@@ -165,21 +165,21 @@ static struct cmd_header last_cmd_hdr;
 uint8_t *local_outbuf;
 static struct SDIOPkt *sdiopkt;
 
-#if defined(CONFIG_MONOLITHIC_WIFI)
+#if defined(CONFIG_NXP_MONOLITHIC_WIFI)
 extern const uint32_t fw_cpu1[];
 #define WIFI_FW_ADDRESS  (uint32_t)&fw_cpu1[0]
 #else
 #define WIFI_FW_ADDRESS  0U
 #endif
 
-#if defined(CONFIG_MONOLITHIC_IEEE802154)
+#if defined(CONFIG_NXP_MONOLITHIC_IEEE802154)
 extern const uint32_t fw_cpu2_combo[];
 #define COMBO_FW_ADDRESS (uint32_t)&fw_cpu2_combo[0]
 #else
 #define COMBO_FW_ADDRESS   0U
 #endif
 
-#if defined(CONFIG_MONOLITHIC_BT) && !defined(CONFIG_MONOLITHIC_IEEE802154)
+#if defined(CONFIG_NXP_MONOLITHIC_BT) && !defined(CONFIG_NXP_MONOLITHIC_IEEE802154)
 extern const uint32_t fw_cpu2_ble[];
 #define BLE_FW_ADDRESS   (uint32_t)&fw_cpu2_ble[0]
 #else
@@ -511,8 +511,7 @@ static hal_rpmsg_status_t  imu_wifi_config(void)
 	return state;
 }
 
-#if (defined(CONFIG_SUPPORT_BLE) && (CONFIG_SUPPORT_BLE == 1)) || \
-	(defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 1))
+#if (defined(CONFIG_SUPPORT_BLE)) || (defined(CONFIG_SUPPORT_IEEE802154))
 static hal_rpmsg_status_t  rpmsg_config(uint32_t linkId)
 {
 	hal_rpmsg_status_t  state = kStatus_HAL_RpmsgSuccess;
@@ -531,28 +530,25 @@ static hal_rpmsg_status_t  rpmsg_config(uint32_t linkId)
 
 	return state;
 }
-#endif
 
 static hal_rpmsg_status_t  rpmsg_init(void)
 {
-#if (defined(CONFIG_SUPPORT_BLE) && (CONFIG_SUPPORT_BLE == 1)) ||                                  \
-	(defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 1))
 	uint32_t linkId;
-#endif
 	hal_rpmsg_status_t  state = kStatus_HAL_RpmsgSuccess;
 
 	/* Init RPMSG/IMU Channel */
-#if defined(CONFIG_SUPPORT_BLE) && (CONFIG_SUPPORT_BLE == 1)
+#if defined(CONFIG_SUPPORT_BLE)
 	linkId = 0;
 	state = rpmsg_config(linkId);
 #endif
-#if defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 1)
+#if defined(CONFIG_SUPPORT_IEEE802154)
 	linkId = 1;
 	state = rpmsg_config(linkId);
 #endif
 
 	return state;
 }
+#endif
 
 #define RW610_PACKAGE_TYPE_QFN 0
 #define RW610_PACKAGE_TYPE_CSP 1
@@ -679,11 +675,12 @@ static void task_main(void)
 	uart_init_crc32(uart);
 
 	/* Download firmware */
-#if (CONFIG_SUPPORT_WIFI == 0) && (CONFIG_SUPPORT_BLE_15D4 == 0) && (CONFIG_SUPPORT_BLE == 0)
-#error "One of CONFIG_SUPPORT_WIFI CONFIG_SUPPORT_BLE_15D4 and CONFIG_SUPPORT_BLE \
+#if !defined(CONFIG_SUPPORT_WIFI) && !defined(CONFIG_SUPPORT_BLE) &&                               \
+	!defined(CONFIG_SUPPORT_IEEE802154)
+#error "One of CONFIG_SUPPORT_WIFI, CONFIG_SUPPORT_BLE and CONFIG_SUPPORT_IEEE802154\
 				should be defined, or it will not download any formware!!"
 #endif
-#if defined(CONFIG_SUPPORT_WIFI) && (CONFIG_SUPPORT_WIFI == 1)
+#if defined(CONFIG_SUPPORT_WIFI)
 	sb3_fw_reset(LOAD_WIFI_FIRMWARE, 1, WIFI_FW_ADDRESS);
 #endif
 
@@ -691,20 +688,20 @@ static void task_main(void)
 	wifi_cau_temperature_write_to_firmware();
 
 	/* 15d4 single and 15d4+ble combo */
-#if defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 1)
+#if defined(CONFIG_SUPPORT_IEEE802154)
 	sb3_fw_reset(LOAD_15D4_FIRMWARE, 1, COMBO_FW_ADDRESS);
-#endif
+#elif defined(CONFIG_SUPPORT_BLE)
 	/* only ble, no 15d4 */
-#if defined(CONFIG_SUPPORT_BLE_15D4) && (CONFIG_SUPPORT_BLE_15D4 == 0) && defined(CONFIG_SUPPORT_BLE) &&   \
-	(CONFIG_SUPPORT_BLE == 1)
 	sb3_fw_reset(LOAD_BLE_FIRMWARE, 1, BLE_FW_ADDRESS);
 #endif
 
 	/* Initialize WIFI Driver */
 	imu_wifi_config();
 
+#if defined(CONFIG_SUPPORT_BLE) || defined(CONFIG_SUPPORT_IEEE802154)
 	/* Initialize rpmsg */
 	rpmsg_init();
+#endif
 
 	k_timer_init(&g_wifi_cau_temperature_timer, wifi_cau_temperature_timer_cb, NULL);
 	k_timer_start(&g_wifi_cau_temperature_timer, K_MSEC(5000), K_MSEC(5000));

@@ -74,7 +74,6 @@ Running:
 
 Customization options
 *********************
-NOTE: MFG does not support monolithic build.
 
 For RW610/612 board, before compiling the CPU3 image, there are three macros need to be configured to determine which fw to download.
   - CONFIG_SUPPORT_WIFI
@@ -82,26 +81,38 @@ For RW610/612 board, before compiling the CPU3 image, there are three macros nee
   - CONFIG_SUPPORT_BLE_15D4
 
 Build steps:
-1) Add the below macros to "zsdk/samples/nxp_mfg_bridge/prj.conf" file.
-    CONFIG_SUPPORT_WIFI=n
-    CONFIG_SUPPORT_BLE=n
-    CONFIG_SUPPORT_BLE_15D4=n
+Change the below macros to "zsdk/samples/nxp_mfg_bridge/prj.conf" file.
+  - Radio enable:
+	CONFIG_SUPPORT_WIFI/CONFIG_SUPPORT_BLE/CONFIG_SUPPORT_IEEE802154
+  - Monolithic build:
+	CONFIG_NXP_MONOLITHIC_WIFI/CONFIG_NXP_MONOLITHIC_BT/CONFIG_NXP_MONOLITHIC_IEEE802154
 
-2) Change the value of CONFIG_SUPPORT_WIFI/CONFIG_SUPPORT_BLE/CONFIG_SUPPORT_BLE_15D4
-in the "zsdk/samples/nxp_mfg_bridge/src/main.c" file.
+By default: (enable WiFi and BLE)
 wifi only
-  - CONFIG_SUPPORT_WIFI=1
-  - CONFIG_SUPPORT_BLE=0
-  - CONFIG_SUPPORT_BLE_15D4=0
+  - CONFIG_SUPPORT_WIFI=y
+  - CONFIG_SUPPORT_BLE=n
+  - CONFIG_SUPPORT_IEEE802154=n
+  - CONFIG_NXP_MONOLITHIC_WIFI=y
+  - CONFIG_NXP_MONOLITHIC_BT=n
+  - CONFIG_NXP_MONOLITHIC_IEEE802154=n
 wifi + ble
-  - CONFIG_SUPPORT_WIFI=1
-  - CONFIG_SUPPORT_BLE=1
-  - CONFIG_SUPPORT_BLE_15D4=0
+  - CONFIG_SUPPORT_WIFI=y
+  - CONFIG_SUPPORT_BLE=y
+  - CONFIG_SUPPORT_IEEE802154=n
+  - CONFIG_NXP_MONOLITHIC_WIFI=y
+  - CONFIG_NXP_MONOLITHIC_BT=y
+  - CONFIG_NXP_MONOLITHIC_IEEE802154=n
 wifi + ble + 15d4
-  - CONFIG_SUPPORT_WIFI=1
-  - CONFIG_SUPPORT_BLE=1
-  - CONFIG_SUPPORT_BLE_15D4=1
+  - CONFIG_SUPPORT_WIFI=y
+  - CONFIG_SUPPORT_BLE=y
+  - CONFIG_SUPPORT_IEEE802154=y
+  - CONFIG_NXP_MONOLITHIC_WIFI=y
+  - CONFIG_NXP_MONOLITHIC_BT=y
+  - CONFIG_NXP_MONOLITHIC_IEEE802154=y
 wifi + 15d4
-  - CONFIG_SUPPORT_WIFI=1
-  - CONFIG_SUPPORT_BLE=0
-  - CONFIG_SUPPORT_BLE_15D4=1
+  - CONFIG_SUPPORT_WIFI=y
+  - CONFIG_SUPPORT_BLE=n
+  - CONFIG_SUPPORT_IEEE802154=y
+  - CONFIG_NXP_MONOLITHIC_WIFI=y
+  - CONFIG_NXP_MONOLITHIC_BT=n
+  - CONFIG_NXP_MONOLITHIC_IEEE802154=y

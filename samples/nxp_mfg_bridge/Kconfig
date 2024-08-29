@@ -1,9 +1,9 @@
 # Copyright 2022-2024 NXP
 # SPDX-License-Identifier: Apache-2.0
 
-config SUPPORT_BLE_15D4
+config SUPPORT_IEEE802154
 	bool "Support IEEE 802154"
-	imply MONOLITHIC_IEEE802154
+	imply NXP_MONOLITHIC_IEEE802154
 
 config SUPPORT_BLE
 	bool "Support bluetooth low energy"
