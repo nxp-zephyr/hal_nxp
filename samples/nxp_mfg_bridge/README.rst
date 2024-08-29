@@ -74,27 +74,34 @@ Running:
 
 Customization options
 *********************
+NOTE: MFG does not support monolithic build.
+
 For RW610/612 board, before compiling the CPU3 image, there are three macros need to be configured to determine which fw to download.
   - CONFIG_SUPPORT_WIFI
   - CONFIG_SUPPORT_BLE
   - CONFIG_SUPPORT_BLE_15D4
 
-By default: Enable wifi and ble (15d4 is not supported yet)
-wifi+ble
-  - CONFIG_SUPPORT_WIFI=y
-  - CONFIG_SUPPORT_BLE=y
-  - CONFIG_SUPPORT_BLE_15D4=n
+Build steps:
+1) Add the below macros to "zsdk/samples/nxp_mfg_bridge/prj.conf" file.
+    CONFIG_SUPPORT_WIFI=n
+    CONFIG_SUPPORT_BLE=n
+    CONFIG_SUPPORT_BLE_15D4=n
 
-Here are some example about fw be used:
+2) Change the value of CONFIG_SUPPORT_WIFI/CONFIG_SUPPORT_BLE/CONFIG_SUPPORT_BLE_15D4
+in the "zsdk/samples/nxp_mfg_bridge/src/main.c" file.
 wifi only
-  - CONFIG_SUPPORT_WIFI=y
-  - CONFIG_SUPPORT_BLE=n
-  - CONFIG_SUPPORT_BLE_15D4=n
-wifi+ble+15d4
-  - CONFIG_SUPPORT_WIFI=y
-  - CONFIG_SUPPORT_BLE=n
-  - CONFIG_SUPPORT_BLE_15D4=y
-wifi+15d4
-  - CONFIG_SUPPORT_WIFI=y
-  - CONFIG_SUPPORT_BLE=n
-  - CONFIG_SUPPORT_BLE_15D4=y
+  - CONFIG_SUPPORT_WIFI=1
+  - CONFIG_SUPPORT_BLE=0
+  - CONFIG_SUPPORT_BLE_15D4=0
+wifi + ble
+  - CONFIG_SUPPORT_WIFI=1
+  - CONFIG_SUPPORT_BLE=1
+  - CONFIG_SUPPORT_BLE_15D4=0
+wifi + ble + 15d4
+  - CONFIG_SUPPORT_WIFI=1
+  - CONFIG_SUPPORT_BLE=1
+  - CONFIG_SUPPORT_BLE_15D4=1
+wifi + 15d4
+  - CONFIG_SUPPORT_WIFI=1
+  - CONFIG_SUPPORT_BLE=0
+  - CONFIG_SUPPORT_BLE_15D4=1
