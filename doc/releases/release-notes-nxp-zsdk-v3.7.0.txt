@@ -1,0 +1,95 @@
+NXP Zephyr SDK v3.7.0.0 Release Notes
+=============================
+
+The nxp-zsdk provides a NXP Zephyr Downstream for NXP SOCs.
+
+How to get the code
+===================
+
+Use the getting Zephyr started guide to setup your development environment. However,
+the west init command is as follows:
+
+ $ west init -m https://github.com/nxp-zephyr/nxp-zsdk.git --mr <<TODO: INSERT version/tag/branch>>
+
+Then, run:
+ $ west update
+ $ west zephyr-export
+
+The Zephyr getting started guide can be found at: https://docs.zephyrproject.org/latest/develop/getting_started/index.html
+
+Release Highlights
+==================
+
+Aligned with Zephyr Project v3.7-branch
+
+Zephyr Project sync SHA : 36940db938a8f4a1e919496793ed439850a221c2
+
+nxp-zephyr Change Log
+=====================
+Following Changes have been applied on top of the Zephyr v3.7.0 release branch:
+
+Base Enablement
+===============
+
+- RW61x: Added standby (Power Mode 3 - PM3) support
+- Enabled standby (PM3) for RW612 and set IMU as wakeup source
+- rw6xx: Added support for XTAL32K clock
+- Added support to wakeup from a pin input
+- Added support to wakeup from an external pin
+- Set IMU as wakeup source for frdm_rw612
+- Added PM Action for MCUX LPC and NXP UART Flexcomm drivers
+- soc: rw6xx: Add code to fire the GPIO callback
+- drivers: gpio_mcux_lpc: Provide an API to fire callbacks
+- drivers: mdio: Clear interrupt signal in ISR
+
+
+BLE support
+============
+
+- Add config for coex applications
+- Added command cmd_unblock_send in Bluetooth shell to send data traffic in coex scenario.
+- Added rw612_bga overlay for hci_uart sample
+- bt_shell: Support ble multilink connection
+- Enabled standby (PM3) for coex, central_ht and peripheral_ht applications
+
+Wi-Fi support
+=============
+
+STA mode with supplicant control interface support
+- Added STA Basic mode:
+- Added STA Enterprise mode
+- Added STA DPP mode
+- Added STA WPS support
+- Added STA mode 11 k/v/r roaming support
+- Added STA mode MBO CERT support
+
+Soft-AP mode with hostap control interface support
+- Added Soft-AP Basic mode
+- Added Soft-AP Enterprise mode
+- Added Soft-AP DPP mode
+- Added Soft-AP WPS support
+- Added Soft-AP ECSA support
+
+OpenThread Support
+==================
+
+- Added RCP Spinel interface support for OpenThread
+
+TF-M / mbedTLS / Crypto
+=======================
+
+- els_pkc crypto module updated to v1.9.0
+- psa_crypto_driver v1.0.1 interface added to provide hardware acceleration via PSA APIs for RW61x
+- mbedTLS v3.6.0 with support for HW acceleration via PSA APIs for RW61x
+- TF-M v2.1.0 enablement for RW61x
+  - Supports frdm_rw612/rw612/ns and rd_rw612_bga/rw612/ns boards
+  - Enabled use of Hardware TRNG as entropy source
+  - Use of ELS based key for initial attestation
+  - Use of ELS die internal key as ROT for HUK
+  - Added inline PRINCE encryption and decryption (IPED) - encryption of external Flash - support to ITS
+
+EdgeLock 2GO support
+====================
+
+- Added nxp_iot_agent v5.2.1 module
+  - Enabled el2go_agent, el2go_claimcode_encryption, el2go_import_blob and el2go_mqtt_demo samples for RW61x
