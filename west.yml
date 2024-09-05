@@ -89,7 +89,7 @@ manifest:
     - name: bifrost
       west-commands: scripts/west_commands.yml
       repo-path: bifrost
-      revision: 8fe46876c5b5d6768094d0760034d6982b76dbfb
+      revision: acd0ba0c674298aab25d0e4a85f92f1c792d4b47
       groups:
         - bifrost
 
@@ -98,7 +98,7 @@ manifest:
     # added modules
     #
     - name: hal_nxp
-      revision: 40e7d9c25c86548adb894956fd56be9589bafc85
+      revision: 203d4fb3aaf825d4fe9f7dbab6ec09545cb1a80c
       path: modules/hal/nxp
       groups:
         - hal
@@ -152,9 +152,10 @@ manifest:
       repo-path: wifi_nxp
       revision: d69b378c67711d43419ab183f9ede0f487b4a54e
       path: modules/hal/nxp/mcux/middleware/wifi_nxp
-    - name: fw_bin
-      repo-path: fw_bin
-      revision: 65592ab50e05d7740b1ae0357fe5464a4c880c5f
+    - name: wifi_nb_fw
+      remote: nxp
+      repo-path: wifi_nb_fw
+      revision: fe620ea842a7590c3bd19e8f01f3bb893f782ed9
       path: modules/hal/nxp/zephyr/blobs/rw61x
     - name: nxp_iot_agent
       remote: nxp
