@@ -16,6 +16,8 @@ extern "C" {
 /* flag macros */
 #define EDMA_HAS_CH_MUX_FLAG EDMA_BIT(0)
 #define EDMA_ALLOWS_128B_TRANSFER_FLAG EDMA_BIT(1)
+#define EDMA_HAS_MP_MUX_FLAG EDMA_BIT(2)
+#define EDMA_HAS_64BIT_TCD_FLAG EDMA_BIT(3)
 
 /* internal utility macros */
 #define EDMA_BIT(x) (1 << (x))
@@ -30,13 +32,12 @@ extern "C" {
     (((index) << EDMA_REGISTER_INDEX_SHIFT) |\
     ((access) << EDMA_REGISTER_ACCESS_SHIFT))
 
-/* common MP-related registers */
+/* register indexes */
 #define EDMA_MP_CS_INDEX 0
 #define EDMA_MP_ES_INDEX 1
 #define EDMA_MP_INT_INDEX 2
 #define EDMA_MP_HRS_INDEX 3
 #define EDMA_MP_CH_GRPRI_INDEX 4
-/* common TCD-related registers */
 #define EDMA_TCD_CH_CSR_INDEX 5
 #define EDMA_TCD_CH_ES_INDEX 6
 #define EDMA_TCD_CH_INT_INDEX 7
@@ -53,14 +54,17 @@ extern "C" {
 #define EDMA_TCD_DLAST_SGA_INDEX 18
 #define EDMA_TCD_CSR_INDEX 19
 #define EDMA_TCD_BITER_INDEX 20
-/* non-common MP-related registers */
 #define EDMA_MP_INT_LOW_INDEX 21
 #define EDMA_MP_INT_HIGH_INDEX 22
 #define EDMA_MP_HRS_LOW_INDEX 23
 #define EDMA_MP_HRS_HIGH_INDEX 24
-/* non-common TCD-related registers */
 #define EDMA_TCD_CH_MUX_INDEX 25
 #define EDMA_TCD_CH_MATTR_INDEX 26
+#define EDMA_MP_CH_MUX_INDEX 27
+#define EDMA_TCD_SADDR_HIGH_INDEX 28
+#define EDMA_TCD_DADDR_HIGH_INDEX 29
+#define EDMA_TCD_SLAST_SDA_HIGH_INDEX 30
+#define EDMA_TCD_DLAST_SGA_HIGH_INDEX 31
 
 /* utility macros - for external and internal usage */
 #define EDMA_HAS_MUX(cfg) ((cfg)->flags & EDMA_HAS_CH_MUX_FLAG)
@@ -118,9 +122,14 @@ extern "C" {
 #define EDMA_MP_INT_HIGH EDMA_REGISTER_MAKE(EDMA_MP_INT_HIGH_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_HRS_LOW EDMA_REGISTER_MAKE(EDMA_MP_HRS_LOW_INDEX, kEDMA_RegAccess32)
 #define EDMA_MP_HRS_HIGH EDMA_REGISTER_MAKE(EDMA_MP_HRS_HIGH_INDEX, kEDMA_RegAccess32)
+#define EDMA_MP_CH_MUX EDMA_REGISTER_MAKE(EDMA_MP_CH_MUX_INDEX, kEDMA_RegAccess32)
 /* non-common TCD-related registers */
 #define EDMA_TCD_CH_MUX EDMA_REGISTER_MAKE(EDMA_TCD_CH_MUX_INDEX, kEDMA_RegAccess32)
 #define EDMA_TCD_CH_MATTR EDMA_REGISTER_MAKE(EDMA_TCD_CH_MATTR_INDEX, kEDMA_RegAccess16)
+#define EDMA_TCD_SADDR_HIGH EDMA_REGISTER_MAKE(EDMA_TCD_SADDR_HIGH_INDEX, kEDMA_RegAccess32)
+#define EDMA_TCD_DADDR_HIGH EDMA_REGISTER_MAKE(EDMA_TCD_DADDR_HIGH_INDEX, kEDMA_RegAccess32)
+#define EDMA_TCD_SLAST_SDA_HIGH EDMA_REGISTER_MAKE(EDMA_TCD_SLAST_SDA_HIGH_INDEX, kEDMA_RegAccess32)
+#define EDMA_TCD_DLAST_SGA_HIGH EDMA_REGISTER_MAKE(EDMA_TCD_DLAST_SGA_HIGH_INDEX, kEDMA_RegAccess32)
 
 enum _edma_status {
     /* Passed configuration is invalid */
