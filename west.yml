@@ -160,7 +160,7 @@ manifest:
     - name: nxp_iot_agent
       remote: nxp
       repo-path: el2go-agent
-      revision: 2a6be33e6af201406ff4a097205cd232c6872039
+      revision: ac85c947a7372172f927a6ca9af981d6e94066df
       path: modules/lib/nxp_iot_agent
 
     # Add any additional third-party repositories.
