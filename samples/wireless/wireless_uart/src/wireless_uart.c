@@ -280,7 +280,7 @@ static void bt_ready(int error)
 	}
 	printf("Scan successfully started\n");
 #else
-	error = bt_le_adv_start(BT_LE_ADV_CONN, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
+	error = bt_le_adv_start(BT_LE_ADV_CONN_FAST_2, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
 	if (error) {
 		printf("Advertising failed to start (error %d)\n", error);
 		return;
