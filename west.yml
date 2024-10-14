@@ -119,14 +119,14 @@ manifest:
     - name: mbedtls
       remote: nxp
       repo-path: nxp_mbedtls
-      revision: 3c15bfaeefde7d22bcf17c444a12fe82372c6293
+      revision: a44a7436ca3e42ffb3f116b170919803b595f79a
       path: modules/crypto/mbedtls
       groups:
         - crypto
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: d13c5f09aa980b33741c18eb8a46a034550319dd
+      revision: 71e251b3ec31e66cd5bfb8dc75ecf43d83da7103
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
