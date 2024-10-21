@@ -119,7 +119,7 @@ manifest:
     - name: mbedtls
       remote: nxp
       repo-path: nxp_mbedtls
-      revision: a44a7436ca3e42ffb3f116b170919803b595f79a
+      revision: f90cf7011cd5734d54dd0d77527e94165a3ad83b
       path: modules/crypto/mbedtls
       groups:
         - crypto
