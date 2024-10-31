@@ -1865,4 +1865,1433 @@ typedef struct {
 /* The count of CAN_ERFFEL */
 #define CAN_ERFFEL_COUNT (128U)
 
+/* ----------------------------------------------------------------------------
+   -- DMA Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DMA_Peripheral_Access_Layer DMA Peripheral Access Layer
+ * @{
+ */
+
+/** DMA - Register Layout Typedef */
+typedef struct {
+    __IO uint32_t MP_CSR;                            /**< Management Page Control, offset: 0x0 */
+    __I  uint32_t MP_ES;                             /**< Management Page Error Status, offset: 0x4 */
+    __I  uint32_t MP_INT;                            /**< Management Page Interrupt Request Status, offset: 0x8 */
+    __I  uint32_t MP_HRS;                            /**< Management Page Hardware Request Status, offset: 0xC */
+         uint8_t RESERVED_0[240];
+    __IO uint32_t CH_GRPRI[32];                      /**< Channel Arbitration Group, array offset: 0x100, array step: 0x4 */
+         uint8_t RESERVED_1[196224];
+    struct {                                         /* offset: 0x10000, array step: 0x10000 */
+        __IO uint32_t CH_CSR;                            /**< Channel Control and Status, array offset: 0x0, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint32_t CH_ES;                             /**< Channel Error Status, array offset: 0x4, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint32_t CH_INT;                            /**< Channel Interrupt Status, array offset: 0x8, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint32_t CH_SBR;                            /**< Channel System Bus, array offset: 0xC, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint32_t CH_PRI;                            /**< Channel Priority, array offset: 0x10, array step: 0x10000, irregular array, not all indices are valid */
+        uint8_t RESERVED_0[12];
+        __IO uint32_t TCD_SADDR;                             /**< TCD Source Address, array offset: 0x20, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint16_t TCD_SOFF;                              /**< TCD Signed Source Address Offset, array offset: 0x24, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint16_t TCD_ATTR;                              /**< TCD Transfer Attributes, array offset: 0x26, array step: 0x10000, irregular array, not all indices are valid */
+        union {                                          /* offset: 0x1028, array step: 0x1000 */
+            __IO uint32_t TCD_NBYTES_MLOFFNO;                /**< TCD Transfer Size Without Minor Loop Offsets, array offset: 0x1028, array step: 0x1000, irregular array, not all indices are valid */
+            __IO uint32_t TCD_NBYTES_MLOFFYES;               /**< TCD Transfer Size with Minor Loop Offsets, array offset: 0x1028, array step: 0x1000, irregular array, not all indices are valid */
+        };
+        __IO uint32_t TCD_SLAST_SDA;                         /**< TCD Last Source Address Adjustment / Store DADDR Address, array offset: 0x2C, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint32_t TCD_DADDR;                             /**< TCD Destination Address, array offset: 0x30, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint16_t TCD_DOFF;                              /**< TCD Signed Destination Address Offset, array offset: 0x34, array step: 0x10000, irregular array, not all indices are valid */
+        union {                                          /* offset: 0x1036, array step: 0x1000 */
+            __IO uint16_t TCD_CITER_ELINKNO;                 /**< TCD Current Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x1036, array step: 0x1000, irregular array, not all indices are valid */
+            __IO uint16_t TCD_CITER_ELINKYES;                /**< TCD Current Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x1036, array step: 0x1000, irregular array, not all indices are valid */
+        };
+        __IO uint32_t TCD_DLAST_SGA;                         /**< TCD Last Destination Address Adjustment / Scatter Gather Address, array offset: 0x38, array step: 0x10000, irregular array, not all indices are valid */
+        __IO uint16_t TCD_CSR;                               /**< TCD Control and Status, array offset: 0x3C, array step: 0x10000, irregular array, not all indices are valid */
+        union {                                          /* offset: 0x103E, array step: 0x1000 */
+            __IO uint16_t TCD_BITER_ELINKNO;                 /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled), array offset: 0x103E, array step: 0x1000, irregular array, not all indices are valid */
+            __IO uint16_t TCD_BITER_ELINKYES;                /**< TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled), array offset: 0x103E, array step: 0x1000, irregular array, not all indices are valid */
+        };
+        uint8_t RESERVED_1[65472];
+    } CH[32];
+} DMA_Type;
+
+/* ----------------------------------------------------------------------------
+   -- EDMA3_MP Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup EDMA3_MP_Register_Masks EDMA3_MP Register Masks
+ * @{
+ */
+
+/*! @name CSR - Management Page Control */
+/*! @{ */
+
+#define DMA_MP_CSR_EDBG_MASK                       EDMA3_MP_CSR_EDBG_MASK
+#define DMA_MP_CSR_EDBG_SHIFT                      EDMA3_MP_CSR_EDBG_SHIFT
+#define DMA_MP_CSR_EDBG_WIDTH                      EDMA3_MP_CSR_EDBG_WIDTH
+#define DMA_MP_CSR_EDBG(x)                         EDMA3_MP_CSR_EDBG(x)
+
+#define DMA_MP_CSR_ERCA_MASK                       EDMA3_MP_CSR_ERCA_MASK
+#define DMA_MP_CSR_ERCA_SHIFT                      EDMA3_MP_CSR_ERCA_SHIFT
+#define DMA_MP_CSR_ERCA_WIDTH                      EDMA3_MP_CSR_ERCA_WIDTH
+#define DMA_MP_CSR_ERCA(x)                         EDMA3_MP_CSR_ERCA(x)
+
+#define DMA_MP_CSR_HAE_MASK                        EDMA3_MP_CSR_HAE_MASK
+#define DMA_MP_CSR_HAE_SHIFT                       EDMA3_MP_CSR_HAE_SHIFT
+#define DMA_MP_CSR_HAE_WIDTH                       EDMA3_MP_CSR_HAE_WIDTH
+#define DMA_MP_CSR_HAE(x)                          EDMA3_MP_CSR_HAE(x)
+
+#define DMA_MP_CSR_HALT_MASK                       EDMA3_MP_CSR_HALT_MASK
+#define DMA_MP_CSR_HALT_SHIFT                      EDMA3_MP_CSR_HALT_SHIFT
+#define DMA_MP_CSR_HALT_WIDTH                      EDMA3_MP_CSR_HALT_WIDTH
+#define DMA_MP_CSR_HALT(x)                         EDMA3_MP_CSR_HALT(x)
+
+#define DMA_MP_CSR_GCLC_MASK                       EDMA3_MP_CSR_GCLC_MASK
+#define DMA_MP_CSR_GCLC_SHIFT                      EDMA3_MP_CSR_GCLC_SHIFT
+#define DMA_MP_CSR_GCLC_WIDTH                      EDMA3_MP_CSR_GCLC_WIDTH
+#define DMA_MP_CSR_GCLC(x)                         EDMA3_MP_CSR_GCLC(x)
+
+#define DMA_MP_CSR_GMRC_MASK                       EDMA3_MP_CSR_GMRC_MASK
+#define DMA_MP_CSR_GMRC_SHIFT                      EDMA3_MP_CSR_GMRC_SHIFT
+#define DMA_MP_CSR_GMRC_WIDTH                      EDMA3_MP_CSR_GMRC_WIDTH
+#define DMA_MP_CSR_GMRC(x)                         EDMA3_MP_CSR_GMRC(x)
+
+#define DMA_MP_CSR_ECX_MASK                        EDMA3_MP_CSR_ECX_MASK
+#define DMA_MP_CSR_ECX_SHIFT                       EDMA3_MP_CSR_ECX_SHIFT
+#define DMA_MP_CSR_ECX_WIDTH                       EDMA3_MP_CSR_ECX_WIDTH
+#define DMA_MP_CSR_ECX(x)                          EDMA3_MP_CSR_ECX(x)
+
+#define DMA_MP_CSR_CX_MASK                         EDMA3_MP_CSR_CX_MASK
+#define DMA_MP_CSR_CX_SHIFT                        EDMA3_MP_CSR_CX_SHIFT
+#define DMA_MP_CSR_CX_WIDTH                        EDMA3_MP_CSR_CX_WIDTH
+#define DMA_MP_CSR_CX(x)                           EDMA3_MP_CSR_CX(x)
+
+#define DMA_MP_CSR_ACTIVE_ID_MASK                  EDMA3_MP_CSR_ACTIVE_ID_MASK
+#define DMA_MP_CSR_ACTIVE_ID_SHIFT                 EDMA3_MP_CSR_ACTIVE_ID_SHIFT
+#define DMA_MP_CSR_ACTIVE_ID_WIDTH                 EDMA3_MP_CSR_ACTIVE_ID_WIDTH
+#define DMA_MP_CSR_ACTIVE_ID(x)                    EDMA3_MP_CSR_ACTIVE_ID(x)
+
+#define DMA_MP_CSR_ACTIVE_MASK                     EDMA3_MP_CSR_ACTIVE_MASK
+#define DMA_MP_CSR_ACTIVE_SHIFT                    EDMA3_MP_CSR_ACTIVE_SHIFT
+#define DMA_MP_CSR_ACTIVE_WIDTH                    EDMA3_MP_CSR_ACTIVE_WIDTH
+#define DMA_MP_CSR_ACTIVE(x)                       EDMA3_MP_CSR_ACTIVE(x)
+
+#define DMA_MP_CSR_EBW_MASK                        EDMA3_TCD_CH_CSR_EBW_MASK
+#define DMA_MP_CSR_EBW_SHIFT                       EDMA3_TCD_CH_CSR_EBW_SHIFT
+#define DMA_MP_CSR_EBW_WIDTH                       EDMA3_TCD_CH_CSR_EBW_WIDTH
+#define DMA_MP_CSR_EBW(x)                          EDMA3_TCD_CH_CSR_EBW(x)
+/*! @} */
+
+/*! @name ES - Management Page Error Status */
+/*! @{ */
+
+#define DMA_MP_ES_DBE_MASK                         EDMA3_MP_ES_DBE_MASK
+#define DMA_MP_ES_DBE_SHIFT                        EDMA3_MP_ES_DBE_SHIFT
+#define DMA_MP_ES_DBE_WIDTH                        EDMA3_MP_ES_DBE_WIDTH
+#define DMA_MP_ES_DBE(x)                           EDMA3_MP_ES_DBE(x)
+
+#define DMA_MP_ES_SBE_MASK                         EDMA3_MP_ES_SBE_MASK
+#define DMA_MP_ES_SBE_SHIFT                        EDMA3_MP_ES_SBE_SHIFT
+#define DMA_MP_ES_SBE_WIDTH                        EDMA3_MP_ES_SBE_WIDTH
+#define DMA_MP_ES_SBE(x)                           EDMA3_MP_ES_SBE(x)
+
+#define DMA_MP_ES_SGE_MASK                         EDMA3_MP_ES_SGE_MASK
+#define DMA_MP_ES_SGE_SHIFT                        EDMA3_MP_ES_SGE_SHIFT
+#define DMA_MP_ES_SGE_WIDTH                        EDMA3_MP_ES_SGE_WIDTH
+#define DMA_MP_ES_SGE(x)                           EDMA3_MP_ES_SGE(x)
+
+#define DMA_MP_ES_NCE_MASK                         EDMA3_MP_ES_NCE_MASK
+#define DMA_MP_ES_NCE_SHIFT                        EDMA3_MP_ES_NCE_SHIFT
+#define DMA_MP_ES_NCE_WIDTH                        EDMA3_MP_ES_NCE_WIDTH
+#define DMA_MP_ES_NCE(x)                           EDMA3_MP_ES_NCE(x)
+
+#define DMA_MP_ES_DOE_MASK                         EDMA3_MP_ES_DOE_MASK
+#define DMA_MP_ES_DOE_SHIFT                        EDMA3_MP_ES_DOE_SHIFT
+#define DMA_MP_ES_DOE_WIDTH                        EDMA3_MP_ES_DOE_WIDTH
+#define DMA_MP_ES_DOE(x)                           EDMA3_MP_ES_DOE(x)
+
+#define DMA_MP_ES_DAE_MASK                         EDMA3_MP_ES_DAE_MASK
+#define DMA_MP_ES_DAE_SHIFT                        EDMA3_MP_ES_DAE_SHIFT
+#define DMA_MP_ES_DAE_WIDTH                        EDMA3_MP_ES_DAE_WIDTH
+#define DMA_MP_ES_DAE(x)                           EDMA3_MP_ES_DAE(x)
+
+#define DMA_MP_ES_SOE_MASK                         EDMA3_MP_ES_SOE_MASK
+#define DMA_MP_ES_SOE_SHIFT                        EDMA3_MP_ES_SOE_SHIFT
+#define DMA_MP_ES_SOE_WIDTH                        EDMA3_MP_ES_SOE_WIDTH
+#define DMA_MP_ES_SOE(x)                           EDMA3_MP_ES_SOE(x)
+
+#define DMA_MP_ES_SAE_MASK                         EDMA3_MP_ES_SAE_MASK
+#define DMA_MP_ES_SAE_SHIFT                        EDMA3_MP_ES_SAE_SHIFT
+#define DMA_MP_ES_SAE_WIDTH                        EDMA3_MP_ES_SAE_WIDTH
+#define DMA_MP_ES_SAE(x)                           EDMA3_MP_ES_SAE(x)
+
+#define DMA_MP_ES_ECX_MASK                         EDMA3_MP_ES_ECX_MASK
+#define DMA_MP_ES_ECX_SHIFT                        EDMA3_MP_ES_ECX_SHIFT
+#define DMA_MP_ES_ECX_WIDTH                        EDMA3_MP_ES_ECX_WIDTH
+#define DMA_MP_ES_ECX(x)                           EDMA3_MP_ES_ECX(x)
+
+#define DMA_MP_ES_UCE_MASK                         EDMA3_MP_ES_UCE_MASK
+#define DMA_MP_ES_UCE_SHIFT                        EDMA3_MP_ES_UCE_SHIFT
+#define DMA_MP_ES_UCE_WIDTH                        EDMA3_MP_ES_UCE_WIDTH
+#define DMA_MP_ES_UCE(x)                           EDMA3_MP_ES_UCE(x)
+
+#define DMA_MP_ES_ERRCHN_MASK                      EDMA3_MP_ES_ERRCHN_MASK
+#define DMA_MP_ES_ERRCHN_SHIFT                     EDMA3_MP_ES_ERRCHN_SHIFT
+#define DMA_MP_ES_ERRCHN_WIDTH                     EDMA3_MP_ES_ERRCHN_WIDTH
+#define DMA_MP_ES_ERRCHN(x)                        EDMA3_MP_ES_ERRCHN(x)
+
+#define DMA_MP_ES_VLD_MASK                         EDMA3_MP_ES_VLD_MASK
+#define DMA_MP_ES_VLD_SHIFT                        EDMA3_MP_ES_VLD_SHIFT
+#define DMA_MP_ES_VLD_WIDTH                        EDMA3_MP_ES_VLD_WIDTH
+#define DMA_MP_ES_VLD(x)                           EDMA3_MP_ES_VLD(x)
+/*! @} */
+
+/*! @name INT - Management Page Interrupt Request Status */
+/*! @{ */
+
+#define DMA_MP_INT_INT_MASK                        EDMA3_MP_INT_INT_MASK
+#define DMA_MP_INT_INT_SHIFT                       EDMA3_MP_INT_INT_SHIFT
+#define DMA_MP_INT_INT_WIDTH                       EDMA3_MP_INT_INT_WIDTH
+#define DMA_MP_INT_INT(x)                          EDMA3_MP_INT_INT(x)
+/*! @} */
+
+/*! @name HRS - Management Page Hardware Request Status */
+/*! @{ */
+
+#define DMA_MP_HRS_HRS_MASK                        EDMA3_MP_HRS_HRS_MASK
+#define DMA_MP_HRS_HRS_SHIFT                       EDMA3_MP_HRS_HRS_SHIFT
+#define DMA_MP_HRS_HRS_WIDTH                       EDMA3_MP_HRS_HRS_WIDTH
+#define DMA_MP_HRS_HRS(x)                          EDMA3_MP_HRS_HRS(x)
+/*! @} */
+
+/*! @name CH_GRPRI - Channel Arbitration Group */
+/*! @{ */
+
+#define DMA_CH_GRPRI_GRPRI_MASK                 EDMA3_MP_CH_GRPRI_GRPRI_MASK
+#define DMA_CH_GRPRI_GRPRI_SHIFT                EDMA3_MP_CH_GRPRI_GRPRI_SHIFT
+#define DMA_CH_GRPRI_GRPRI_WIDTH                EDMA3_MP_CH_GRPRI_GRPRI_WIDTH
+#define DMA_CH_GRPRI_GRPRI(x)                   EDMA3_MP_CH_GRPRI_GRPRI(x)
+
+/*!
+ * @}
+ */ /* end of group EDMA3_MP_Register_Masks */
+
+/* ----------------------------------------------------------------------------
+   -- EDMA3_TCD Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup EDMA3_TCD_Register_Masks EDMA3_TCD Register Masks
+ * @{
+ */
+
+/*! @name CH_CSR - Channel Control and Status */
+/*! @{ */
+
+#define DMA_CH_CSR_ERQ_MASK                        EDMA3_TCD_CH_CSR_ERQ_MASK
+#define DMA_CH_CSR_ERQ_SHIFT                       EDMA3_TCD_CH_CSR_ERQ_SHIFT
+#define DMA_CH_CSR_ERQ_WIDTH                       EDMA3_TCD_CH_CSR_ERQ_WIDTH
+#define DMA_CH_CSR_ERQ(x)                          EDMA3_TCD_CH_CSR_ERQ(x)
+
+#define DMA_CH_CSR_EARQ_MASK                       EDMA3_TCD_CH_CSR_EARQ_MASK
+#define DMA_CH_CSR_EARQ_SHIFT                      EDMA3_TCD_CH_CSR_EARQ_SHIFT
+#define DMA_CH_CSR_EARQ_WIDTH                      EDMA3_TCD_CH_CSR_EARQ_WIDTH
+#define DMA_CH_CSR_EARQ(x)                         EDMA3_TCD_CH_CSR_EARQ(x)
+
+#define DMA_CH_CSR_EEI_MASK                        EDMA3_TCD_CH_CSR_EEI_MASK
+#define DMA_CH_CSR_EEI_SHIFT                       EDMA3_TCD_CH_CSR_EEI_SHIFT
+#define DMA_CH_CSR_EEI_WIDTH                       EDMA3_TCD_CH_CSR_EEI_WIDTH
+#define DMA_CH_CSR_EEI(x)                          EDMA3_TCD_CH_CSR_EEI(x)
+
+#define DMA_CH_CSR_EBW_MASK                        EDMA3_TCD_CH_CSR_EBW_MASK
+#define DMA_CH_CSR_EBW_SHIFT                       EDMA3_TCD_CH_CSR_EBW_SHIFT
+#define DMA_CH_CSR_EBW_WIDTH                       EDMA3_TCD_CH_CSR_EBW_WIDTH
+#define DMA_CH_CSR_EBW(x)                          EDMA3_TCD_CH_CSR_EBW(x)
+
+#define DMA_CH_CSR_DONE_MASK                       EDMA3_TCD_CH_CSR_DONE_MASK
+#define DMA_CH_CSR_DONE_SHIFT                      EDMA3_TCD_CH_CSR_DONE_SHIFT
+#define DMA_CH_CSR_DONE_WIDTH                      EDMA3_TCD_CH_CSR_DONE_WIDTH
+#define DMA_CH_CSR_DONE(x)                         EDMA3_TCD_CH_CSR_DONE(x)
+
+#define DMA_CH_CSR_ACTIVE_MASK                     EDMA3_TCD_CH_CSR_ACTIVE_MASK
+#define DMA_CH_CSR_ACTIVE_SHIFT                    EDMA3_TCD_CH_CSR_ACTIVE_SHIFT
+#define DMA_CH_CSR_ACTIVE_WIDTH                    EDMA3_TCD_CH_CSR_ACTIVE_WIDTH
+#define DMA_CH_CSR_ACTIVE(x)                       EDMA3_TCD_CH_CSR_ACTIVE(x)
+/*! @} */
+
+/*! @name CH_ES - Channel Error Status */
+/*! @{ */
+
+#define DMA_CH_ES_DBE_MASK                         EDMA3_TCD_CH_ES_DBE_MASK
+#define DMA_CH_ES_DBE_SHIFT                        EDMA3_TCD_CH_ES_DBE_SHIFT
+#define DMA_CH_ES_DBE_WIDTH                        EDMA3_TCD_CH_ES_DBE_WIDTH
+#define DMA_CH_ES_DBE(x)                           EDMA3_TCD_CH_ES_DBE(x)
+
+#define DMA_CH_ES_SBE_MASK                         EDMA3_TCD_CH_ES_SBE_MASK
+#define DMA_CH_ES_SBE_SHIFT                        EDMA3_TCD_CH_ES_SBE_SHIFT
+#define DMA_CH_ES_SBE_WIDTH                        EDMA3_TCD_CH_ES_SBE_WIDTH
+#define DMA_CH_ES_SBE(x)                           EDMA3_TCD_CH_ES_SBE(x)
+
+#define DMA_CH_ES_SGE_MASK                         EDMA3_TCD_CH_ES_SGE_MASK
+#define DMA_CH_ES_SGE_SHIFT                        EDMA3_TCD_CH_ES_SGE_SHIFT
+#define DMA_CH_ES_SGE_WIDTH                        EDMA3_TCD_CH_ES_SGE_WIDTH
+#define DMA_CH_ES_SGE(x)                           EDMA3_TCD_CH_ES_SGE(x)
+
+#define DMA_CH_ES_NCE_MASK                         EDMA3_TCD_CH_ES_NCE_MASK
+#define DMA_CH_ES_NCE_SHIFT                        EDMA3_TCD_CH_ES_NCE_SHIFT
+#define DMA_CH_ES_NCE_WIDTH                        EDMA3_TCD_CH_ES_NCE_WIDTH
+#define DMA_CH_ES_NCE(x)                           EDMA3_TCD_CH_ES_NCE(x)
+
+#define DMA_CH_ES_DOE_MASK                         EDMA3_TCD_CH_ES_DOE_MASK
+#define DMA_CH_ES_DOE_SHIFT                        EDMA3_TCD_CH_ES_DOE_SHIFT
+#define DMA_CH_ES_DOE_WIDTH                        EDMA3_TCD_CH_ES_DOE_WIDTH
+#define DMA_CH_ES_DOE(x)                           EDMA3_TCD_CH_ES_DOE(x)
+
+#define DMA_CH_ES_DAE_MASK                         EDMA3_TCD_CH_ES_DAE_MASK
+#define DMA_CH_ES_DAE_SHIFT                        EDMA3_TCD_CH_ES_DAE_SHIFT
+#define DMA_CH_ES_DAE_WIDTH                        EDMA3_TCD_CH_ES_DAE_WIDTH
+#define DMA_CH_ES_DAE(x)                           EDMA3_TCD_CH_ES_DAE(x)
+
+#define DMA_CH_ES_SOE_MASK                         EDMA3_TCD_CH_ES_SOE_MASK
+#define DMA_CH_ES_SOE_SHIFT                        EDMA3_TCD_CH_ES_SOE_SHIFT
+#define DMA_CH_ES_SOE_WIDTH                        EDMA3_TCD_CH_ES_SOE_WIDTH
+#define DMA_CH_ES_SOE(x)                           EDMA3_TCD_CH_ES_SOE(x)
+
+#define DMA_CH_ES_SAE_MASK                         EDMA3_TCD_CH_ES_SAE_MASK
+#define DMA_CH_ES_SAE_SHIFT                        EDMA3_TCD_CH_ES_SAE_SHIFT
+#define DMA_CH_ES_SAE_WIDTH                        EDMA3_TCD_CH_ES_SAE_WIDTH
+#define DMA_CH_ES_SAE(x)                           EDMA3_TCD_CH_ES_SAE(x)
+
+#define DMA_CH_ES_ERR_MASK                         EDMA3_TCD_CH_ES_ERR_MASK
+#define DMA_CH_ES_ERR_SHIFT                        EDMA3_TCD_CH_ES_ERR_SHIFT
+#define DMA_CH_ES_ERR_WIDTH                        EDMA3_TCD_CH_ES_ERR_WIDTH
+#define DMA_CH_ES_ERR(x)                           EDMA3_TCD_CH_ES_ERR(x)
+/*! @} */
+
+/*! @name CH_INT - Channel Interrupt Status */
+/*! @{ */
+
+#define DMA_CH_INT_INT_MASK                        EDMA3_TCD_CH_INT_INT_MASK
+#define DMA_CH_INT_INT_SHIFT                       EDMA3_TCD_CH_INT_INT_SHIFT
+#define DMA_CH_INT_INT_WIDTH                       EDMA3_TCD_CH_INT_INT_WIDTH
+#define DMA_CH_INT_INT(x)                          EDMA3_TCD_CH_INT_INT(x)
+/*! @} */
+
+/*! @name CH_SBR - Channel System Bus */
+/*! @{ */
+
+#define DMA_CH_SBR_MID_MASK                        EDMA3_TCD_CH_SBR_MID_MASK
+#define DMA_CH_SBR_MID_SHIFT                       EDMA3_TCD_CH_SBR_MID_SHIFT
+#define DMA_CH_SBR_MID_WIDTH                       EDMA3_TCD_CH_SBR_MID_WIDTH
+#define DMA_CH_SBR_MID(x)                          EDMA3_TCD_CH_SBR_MID(x)
+
+#define DMA_CH_SBR_PAL_MASK                        EDMA3_TCD_CH_SBR_PAL_MASK
+#define DMA_CH_SBR_PAL_SHIFT                       EDMA3_TCD_CH_SBR_PAL_SHIFT
+#define DMA_CH_SBR_PAL_WIDTH                       EDMA3_TCD_CH_SBR_PAL_WIDTH
+#define DMA_CH_SBR_PAL(x)                          EDMA3_TCD_CH_SBR_PAL(x)
+
+#define DMA_CH_SBR_EMI_MASK                        EDMA3_TCD_CH_SBR_EMI_MASK
+#define DMA_CH_SBR_EMI_SHIFT                       EDMA3_TCD_CH_SBR_EMI_SHIFT
+#define DMA_CH_SBR_EMI_WIDTH                       EDMA3_TCD_CH_SBR_EMI_WIDTH
+#define DMA_CH_SBR_EMI(x)                          EDMA3_TCD_CH_SBR_EMI(x)
+
+#define DMA_CH_SBR_ATTR_MASK                       EDMA3_TCD_CH_SBR_ATTR_MASK
+#define DMA_CH_SBR_ATTR_SHIFT                      EDMA3_TCD_CH_SBR_ATTR_SHIFT
+#define DMA_CH_SBR_ATTR_WIDTH                      EDMA3_TCD_CH_SBR_ATTR_WIDTH
+#define DMA_CH_SBR_ATTR(x)                         EDMA3_TCD_CH_SBR_ATTR(x)
+/*! @} */
+
+/*! @name CH_PRI - Channel Priority */
+/*! @{ */
+
+#define DMA_CH_PRI_APL_MASK                        EDMA3_TCD_CH_PRI_APL_MASK
+#define DMA_CH_PRI_APL_SHIFT                       EDMA3_TCD_CH_PRI_APL_SHIFT
+#define DMA_CH_PRI_APL_WIDTH                       EDMA3_TCD_CH_PRI_APL_WIDTH
+#define DMA_CH_PRI_APL(x)                          EDMA3_TCD_CH_PRI_APL(x)
+
+#define DMA_CH_PRI_DPA_MASK                        EDMA3_TCD_CH_PRI_DPA_MASK
+#define DMA_CH_PRI_DPA_SHIFT                       EDMA3_TCD_CH_PRI_DPA_SHIFT
+#define DMA_CH_PRI_DPA_WIDTH                       EDMA3_TCD_CH_PRI_DPA_WIDTH
+#define DMA_CH_PRI_DPA(x)                          EDMA3_TCD_CH_PRI_DPA(x)
+
+#define DMA_CH_PRI_ECP_MASK                        EDMA3_TCD_CH_PRI_ECP_MASK
+#define DMA_CH_PRI_ECP_SHIFT                       EDMA3_TCD_CH_PRI_ECP_SHIFT
+#define DMA_CH_PRI_ECP_WIDTH                       EDMA3_TCD_CH_PRI_ECP_WIDTH
+#define DMA_CH_PRI_ECP(x)                          EDMA3_TCD_CH_PRI_ECP(x)
+/*! @} */
+
+/*! @name SADDR - TCD Source Address */
+/*! @{ */
+
+#define DMA_TCD_SADDR_SADDR_MASK                   EDMA3_TCD_SADDR_SADDR_MASK
+#define DMA_TCD_SADDR_SADDR_SHIFT                  EDMA3_TCD_SADDR_SADDR_SHIFT
+#define DMA_TCD_SADDR_SADDR_WIDTH                  EDMA3_TCD_SADDR_SADDR_WIDTH
+#define DMA_TCD_SADDR_SADDR(x)                     EDMA3_TCD_SADDR_SADDR(x)
+/*! @} */
+
+/*! @name SOFF - TCD Signed Source Address Offset */
+/*! @{ */
+
+#define DMA_TCD_SOFF_SOFF_MASK                     EDMA3_TCD_SOFF_SOFF_MASK
+#define DMA_TCD_SOFF_SOFF_SHIFT                    EDMA3_TCD_SOFF_SOFF_SHIFT
+#define DMA_TCD_SOFF_SOFF_WIDTH                    EDMA3_TCD_SOFF_SOFF_WIDTH
+#define DMA_TCD_SOFF_SOFF(x)                       EDMA3_TCD_SOFF_SOFF(x)
+/*! @} */
+
+/*! @name ATTR - TCD Transfer Attributes */
+/*! @{ */
+
+#define DMA_TCD_ATTR_DSIZE_MASK                    EDMA3_TCD_ATTR_DSIZE_MASK
+#define DMA_TCD_ATTR_DSIZE_SHIFT                   EDMA3_TCD_ATTR_DSIZE_SHIFT
+#define DMA_TCD_ATTR_DSIZE_WIDTH                   EDMA3_TCD_ATTR_DSIZE_WIDTH
+#define DMA_TCD_ATTR_DSIZE(x)                      EDMA3_TCD_ATTR_DSIZE(x)
+
+#define DMA_TCD_ATTR_DMOD_MASK                     EDMA3_TCD_ATTR_DMOD_MASK
+#define DMA_TCD_ATTR_DMOD_SHIFT                    EDMA3_TCD_ATTR_DMOD_SHIFT
+#define DMA_TCD_ATTR_DMOD_WIDTH                    EDMA3_TCD_ATTR_DMOD_WIDTH
+#define DMA_TCD_ATTR_DMOD(x)                       EDMA3_TCD_ATTR_DMOD(x)
+
+#define DMA_TCD_ATTR_SSIZE_MASK                    EDMA3_TCD_ATTR_SSIZE_MASK
+#define DMA_TCD_ATTR_SSIZE_SHIFT                   EDMA3_TCD_ATTR_SSIZE_SHIFT
+#define DMA_TCD_ATTR_SSIZE_WIDTH                   EDMA3_TCD_ATTR_SSIZE_WIDTH
+#define DMA_TCD_ATTR_SSIZE(x)                      EDMA3_TCD_ATTR_SSIZE(x)
+
+#define DMA_TCD_ATTR_SMOD_MASK                     EDMA3_TCD_ATTR_SMOD_MASK
+#define DMA_TCD_ATTR_SMOD_SHIFT                    EDMA3_TCD_ATTR_SMOD_SHIFT
+#define DMA_TCD_ATTR_SMOD_WIDTH                    EDMA3_TCD_ATTR_SMOD_WIDTH
+#define DMA_TCD_ATTR_SMOD(x)                       EDMA3_TCD_ATTR_SMOD(x)
+/*! @} */
+
+/*! @name NBYTES_MLOFFNO - TCD Transfer Size Without Minor Loop Offsets */
+/*! @{ */
+
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES_MASK         EDMA3_TCD_NBYTES_MLOFFNO_NBYTES_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES_SHIFT        EDMA3_TCD_NBYTES_MLOFFNO_NBYTES_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES_WIDTH        EDMA3_TCD_NBYTES_MLOFFNO_NBYTES_WIDTH
+#define DMA_TCD_NBYTES_MLOFFNO_NBYTES(x)           EDMA3_TCD_NBYTES_MLOFFNO_NBYTES(x)
+
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE_MASK          EDMA3_TCD_NBYTES_MLOFFNO_DMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE_SHIFT         EDMA3_TCD_NBYTES_MLOFFNO_DMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE_WIDTH         EDMA3_TCD_NBYTES_MLOFFNO_DMLOE_WIDTH
+#define DMA_TCD_NBYTES_MLOFFNO_DMLOE(x)            EDMA3_TCD_NBYTES_MLOFFNO_DMLOE(x)
+
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE_MASK          EDMA3_TCD_NBYTES_MLOFFNO_SMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE_SHIFT         EDMA3_TCD_NBYTES_MLOFFNO_SMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE_WIDTH         EDMA3_TCD_NBYTES_MLOFFNO_SMLOE_WIDTH
+#define DMA_TCD_NBYTES_MLOFFNO_SMLOE(x)            EDMA3_TCD_NBYTES_MLOFFNO_SMLOE(x)
+/*! @} */
+
+/*! @name NBYTES_MLOFFYES - TCD Transfer Size with Minor Loop Offsets */
+/*! @{ */
+
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES_MASK        EDMA3_TCD_NBYTES_MLOFFYES_NBYTES_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES_SHIFT       EDMA3_TCD_NBYTES_MLOFFYES_NBYTES_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES_WIDTH       EDMA3_TCD_NBYTES_MLOFFYES_NBYTES_WIDTH
+#define DMA_TCD_NBYTES_MLOFFYES_NBYTES(x)          EDMA3_TCD_NBYTES_MLOFFYES_NBYTES(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF_MASK         EDMA3_TCD_NBYTES_MLOFFYES_MLOFF_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF_SHIFT        EDMA3_TCD_NBYTES_MLOFFYES_MLOFF_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF_WIDTH        EDMA3_TCD_NBYTES_MLOFFYES_MLOFF_WIDTH
+#define DMA_TCD_NBYTES_MLOFFYES_MLOFF(x)           EDMA3_TCD_NBYTES_MLOFFYES_MLOFF(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE_MASK         EDMA3_TCD_NBYTES_MLOFFYES_DMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE_SHIFT        EDMA3_TCD_NBYTES_MLOFFYES_DMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE_WIDTH        EDMA3_TCD_NBYTES_MLOFFYES_DMLOE_WIDTH
+#define DMA_TCD_NBYTES_MLOFFYES_DMLOE(x)           EDMA3_TCD_NBYTES_MLOFFYES_DMLOE(x)
+
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE_MASK         EDMA3_TCD_NBYTES_MLOFFYES_SMLOE_MASK
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE_SHIFT        EDMA3_TCD_NBYTES_MLOFFYES_SMLOE_SHIFT
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE_WIDTH        EDMA3_TCD_NBYTES_MLOFFYES_SMLOE_WIDTH
+#define DMA_TCD_NBYTES_MLOFFYES_SMLOE(x)           EDMA3_TCD_NBYTES_MLOFFYES_SMLOE(x)
+/*! @} */
+
+/*! @name SLAST_SDA - TCD Last Source Address Adjustment / Store DADDR Address */
+/*! @{ */
+
+#define DMA_TCD_SLAST_SDA_SLAST_SDA_MASK           EDMA3_TCD_SLAST_SDA_SLAST_SDA_MASK
+#define DMA_TCD_SLAST_SDA_SLAST_SDA_SHIFT          EDMA3_TCD_SLAST_SDA_SLAST_SDA_SHIFT
+#define DMA_TCD_SLAST_SDA_SLAST_SDA_WIDTH          EDMA3_TCD_SLAST_SDA_SLAST_SDA_WIDTH
+#define DMA_TCD_SLAST_SDA_SLAST_SDA(x)             EDMA3_TCD_SLAST_SDA_SLAST_SDA(x)
+/*! @} */
+
+/*! @name DADDR - TCD Destination Address */
+/*! @{ */
+
+#define DMA_TCD_DADDR_DADDR_MASK                   EDMA3_TCD_DADDR_DADDR_MASK
+#define DMA_TCD_DADDR_DADDR_SHIFT                  EDMA3_TCD_DADDR_DADDR_SHIFT
+#define DMA_TCD_DADDR_DADDR_WIDTH                  EDMA3_TCD_DADDR_DADDR_WIDTH
+#define DMA_TCD_DADDR_DADDR(x)                     EDMA3_TCD_DADDR_DADDR(x)
+/*! @} */
+
+/*! @name DOFF - TCD Signed Destination Address Offset */
+/*! @{ */
+
+#define DMA_TCD_DOFF_DOFF_MASK                     EDMA3_TCD_DOFF_DOFF_MASK
+#define DMA_TCD_DOFF_DOFF_SHIFT                    EDMA3_TCD_DOFF_DOFF_SHIFT
+#define DMA_TCD_DOFF_DOFF_WIDTH                    EDMA3_TCD_DOFF_DOFF_WIDTH
+#define DMA_TCD_DOFF_DOFF(x)                       EDMA3_TCD_DOFF_DOFF(x)
+/*! @} */
+
+/*! @name CITER_ELINKNO - TCD Current Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA_TCD_CITER_ELINKNO_CITER_MASK           EDMA3_TCD_CITER_ELINKNO_CITER_MASK
+#define DMA_TCD_CITER_ELINKNO_CITER_SHIFT          EDMA3_TCD_CITER_ELINKNO_CITER_SHIFT
+#define DMA_TCD_CITER_ELINKNO_CITER_WIDTH          EDMA3_TCD_CITER_ELINKNO_CITER_WIDTH
+#define DMA_TCD_CITER_ELINKNO_CITER(x)             EDMA3_TCD_CITER_ELINKNO_CITER(x)
+
+#define DMA_TCD_CITER_ELINKNO_ELINK_MASK           EDMA3_TCD_CITER_ELINKNO_ELINK_MASK
+#define DMA_TCD_CITER_ELINKNO_ELINK_SHIFT          EDMA3_TCD_CITER_ELINKNO_ELINK_SHIFT
+#define DMA_TCD_CITER_ELINKNO_ELINK_WIDTH          EDMA3_TCD_CITER_ELINKNO_ELINK_WIDTH
+#define DMA_TCD_CITER_ELINKNO_ELINK(x)             EDMA3_TCD_CITER_ELINKNO_ELINK(x)
+/*! @} */
+
+/*! @name CITER_ELINKYES - TCD Current Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA_TCD_CITER_ELINKYES_CITER_MASK          EDMA3_TCD_CITER_ELINKYES_CITER_MASK
+#define DMA_TCD_CITER_ELINKYES_CITER_SHIFT         EDMA3_TCD_CITER_ELINKYES_CITER_SHIFT
+#define DMA_TCD_CITER_ELINKYES_CITER_WIDTH         EDMA3_TCD_CITER_ELINKYES_CITER_WIDTH
+#define DMA_TCD_CITER_ELINKYES_CITER(x)            EDMA3_TCD_CITER_ELINKYES_CITER(x)
+
+#define DMA_TCD_CITER_ELINKYES_LINKCH_MASK         EDMA3_TCD_CITER_ELINKYES_LINKCH_MASK
+#define DMA_TCD_CITER_ELINKYES_LINKCH_SHIFT        EDMA3_TCD_CITER_ELINKYES_LINKCH_SHIFT
+#define DMA_TCD_CITER_ELINKYES_LINKCH_WIDTH        EDMA3_TCD_CITER_ELINKYES_LINKCH_WIDTH
+#define DMA_TCD_CITER_ELINKYES_LINKCH(x)           EDMA3_TCD_CITER_ELINKYES_LINKCH(x)
+
+#define DMA_TCD_CITER_ELINKYES_ELINK_MASK          EDMA3_TCD_CITER_ELINKYES_ELINK_MASK
+#define DMA_TCD_CITER_ELINKYES_ELINK_SHIFT         EDMA3_TCD_CITER_ELINKYES_ELINK_SHIFT
+#define DMA_TCD_CITER_ELINKYES_ELINK_WIDTH         EDMA3_TCD_CITER_ELINKYES_ELINK_WIDTH
+#define DMA_TCD_CITER_ELINKYES_ELINK(x)            EDMA3_TCD_CITER_ELINKYES_ELINK(x)
+/*! @} */
+
+/*! @name DLAST_SGA - TCD Last Destination Address Adjustment / Scatter Gather Address */
+/*! @{ */
+
+#define DMA_TCD_DLAST_SGA_DLAST_SGA_MASK           EDMA3_TCD_DLAST_SGA_DLAST_SGA_MASK
+#define DMA_TCD_DLAST_SGA_DLAST_SGA_SHIFT          EDMA3_TCD_DLAST_SGA_DLAST_SGA_SHIFT
+#define DMA_TCD_DLAST_SGA_DLAST_SGA_WIDTH          EDMA3_TCD_DLAST_SGA_DLAST_SGA_WIDTH
+#define DMA_TCD_DLAST_SGA_DLAST_SGA(x)             EDMA3_TCD_DLAST_SGA_DLAST_SGA(x)
+/*! @} */
+
+/*! @name CSR - TCD Control and Status */
+/*! @{ */
+
+#define DMA_TCD_CSR_START_MASK                     EDMA3_TCD_CSR_START_MASK
+#define DMA_TCD_CSR_START_SHIFT                    EDMA3_TCD_CSR_START_SHIFT
+#define DMA_TCD_CSR_START_WIDTH                    EDMA3_TCD_CSR_START_WIDTH
+#define DMA_TCD_CSR_START(x)                       EDMA3_TCD_CSR_START(x)
+
+#define DMA_TCD_CSR_INTMAJOR_MASK                  EDMA3_TCD_CSR_INTMAJOR_MASK
+#define DMA_TCD_CSR_INTMAJOR_SHIFT                 EDMA3_TCD_CSR_INTMAJOR_SHIFT
+#define DMA_TCD_CSR_INTMAJOR_WIDTH                 EDMA3_TCD_CSR_INTMAJOR_WIDTH
+#define DMA_TCD_CSR_INTMAJOR(x)                    EDMA3_TCD_CSR_INTMAJOR(x)
+
+#define DMA_TCD_CSR_INTHALF_MASK                   EDMA3_TCD_CSR_INTHALF_MASK
+#define DMA_TCD_CSR_INTHALF_SHIFT                  EDMA3_TCD_CSR_INTHALF_SHIFT
+#define DMA_TCD_CSR_INTHALF_WIDTH                  EDMA3_TCD_CSR_INTHALF_WIDTH
+#define DMA_TCD_CSR_INTHALF(x)                     EDMA3_TCD_CSR_INTHALF(x)
+
+#define DMA_TCD_CSR_DREQ_MASK                      EDMA3_TCD_CSR_DREQ_MASK
+#define DMA_TCD_CSR_DREQ_SHIFT                     EDMA3_TCD_CSR_DREQ_SHIFT
+#define DMA_TCD_CSR_DREQ_WIDTH                     EDMA3_TCD_CSR_DREQ_WIDTH
+#define DMA_TCD_CSR_DREQ(x)                        EDMA3_TCD_CSR_DREQ(x)
+
+#define DMA_TCD_CSR_ESG_MASK                       EDMA3_TCD_CSR_ESG_MASK
+#define DMA_TCD_CSR_ESG_SHIFT                      EDMA3_TCD_CSR_ESG_SHIFT
+#define DMA_TCD_CSR_ESG_WIDTH                      EDMA3_TCD_CSR_ESG_WIDTH
+#define DMA_TCD_CSR_ESG(x)                         EDMA3_TCD_CSR_ESG(x)
+
+#define DMA_TCD_CSR_MAJORELINK_MASK                EDMA3_TCD_CSR_MAJORELINK_MASK
+#define DMA_TCD_CSR_MAJORELINK_SHIFT               EDMA3_TCD_CSR_MAJORELINK_SHIFT
+#define DMA_TCD_CSR_MAJORELINK_WIDTH               EDMA3_TCD_CSR_MAJORELINK_WIDTH
+#define DMA_TCD_CSR_MAJORELINK(x)                  EDMA3_TCD_CSR_MAJORELINK(x)
+
+#define DMA_TCD_CSR_ESDA_MASK                      EDMA3_TCD_CSR_ESDA_MASK
+#define DMA_TCD_CSR_ESDA_SHIFT                     EDMA3_TCD_CSR_ESDA_SHIFT
+#define DMA_TCD_CSR_ESDA_WIDTH                     EDMA3_TCD_CSR_ESDA_WIDTH
+#define DMA_TCD_CSR_ESDA(x)                        EDMA3_TCD_CSR_ESDA(x)
+
+#define DMA_TCD_CSR_MAJORLINKCH_MASK               EDMA3_TCD_CSR_MAJORLINKCH_MASK
+#define DMA_TCD_CSR_MAJORLINKCH_SHIFT              EDMA3_TCD_CSR_MAJORLINKCH_SHIFT
+#define DMA_TCD_CSR_MAJORLINKCH_WIDTH              EDMA3_TCD_CSR_MAJORLINKCH_WIDTH
+#define DMA_TCD_CSR_MAJORLINKCH(x)                 EDMA3_TCD_CSR_MAJORLINKCH(x)
+
+#define DMA_TCD_CSR_BWC_MASK                       EDMA3_TCD_CSR_BWC_MASK
+#define DMA_TCD_CSR_BWC_SHIFT                      EDMA3_TCD_CSR_BWC_SHIFT
+#define DMA_TCD_CSR_BWC_WIDTH                      EDMA3_TCD_CSR_BWC_WIDTH
+#define DMA_TCD_CSR_BWC(x)                         EDMA3_TCD_CSR_BWC(x)
+/*! @} */
+
+/*! @name BITER_ELINKNO - TCD Beginning Major Loop Count (Minor Loop Channel Linking Disabled) */
+/*! @{ */
+
+#define DMA_TCD_BITER_ELINKNO_BITER_MASK           EDMA3_TCD_BITER_ELINKNO_BITER_MASK
+#define DMA_TCD_BITER_ELINKNO_BITER_SHIFT          EDMA3_TCD_BITER_ELINKNO_BITER_SHIFT
+#define DMA_TCD_BITER_ELINKNO_BITER_WIDTH          EDMA3_TCD_BITER_ELINKNO_BITER_WIDTH
+#define DMA_TCD_BITER_ELINKNO_BITER(x)             EDMA3_TCD_BITER_ELINKNO_BITER(x)
+
+#define DMA_TCD_BITER_ELINKNO_ELINK_MASK           EDMA3_TCD_BITER_ELINKNO_ELINK_MASK
+#define DMA_TCD_BITER_ELINKNO_ELINK_SHIFT          EDMA3_TCD_BITER_ELINKNO_ELINK_SHIFT
+#define DMA_TCD_BITER_ELINKNO_ELINK_WIDTH          EDMA3_TCD_BITER_ELINKNO_ELINK_WIDTH
+#define DMA_TCD_BITER_ELINKNO_ELINK(x)             EDMA3_TCD_BITER_ELINKNO_ELINK(x)
+/*! @} */
+
+/*! @name BITER_ELINKYES - TCD Beginning Major Loop Count (Minor Loop Channel Linking Enabled) */
+/*! @{ */
+
+#define DMA_TCD_BITER_ELINKYES_BITER_MASK          EDMA3_TCD_BITER_ELINKYES_BITER_MASK
+#define DMA_TCD_BITER_ELINKYES_BITER_SHIFT         EDMA3_TCD_BITER_ELINKYES_BITER_SHIFT
+#define DMA_TCD_BITER_ELINKYES_BITER_WIDTH         EDMA3_TCD_BITER_ELINKYES_BITER_WIDTH
+#define DMA_TCD_BITER_ELINKYES_BITER(x)            EDMA3_TCD_BITER_ELINKYES_BITER(x)
+
+#define DMA_TCD_BITER_ELINKYES_LINKCH_MASK         EDMA3_TCD_BITER_ELINKYES_LINKCH_MASK
+#define DMA_TCD_BITER_ELINKYES_LINKCH_SHIFT        EDMA3_TCD_BITER_ELINKYES_LINKCH_SHIFT
+#define DMA_TCD_BITER_ELINKYES_LINKCH_WIDTH        EDMA3_TCD_BITER_ELINKYES_LINKCH_WIDTH
+#define DMA_TCD_BITER_ELINKYES_LINKCH(x)           EDMA3_TCD_BITER_ELINKYES_LINKCH(x)
+
+#define DMA_TCD_BITER_ELINKYES_ELINK_MASK          EDMA3_TCD_BITER_ELINKYES_ELINK_MASK
+#define DMA_TCD_BITER_ELINKYES_ELINK_SHIFT         EDMA3_TCD_BITER_ELINKYES_ELINK_SHIFT
+#define DMA_TCD_BITER_ELINKYES_ELINK_WIDTH         EDMA3_TCD_BITER_ELINKYES_ELINK_WIDTH
+#define DMA_TCD_BITER_ELINKYES_ELINK(x)            EDMA3_TCD_BITER_ELINKYES_ELINK(x)
+/*! @} */
+
+/*!
+ * @addtogroup DMAMUX_Register_Masks DMAMUX Register Masks
+ * @{
+ */
+
+#define DMAMUX_CHCFG_SOURCE_MASK                   DMAMUX_CHCONF_SOURCE_MASK
+#define DMAMUX_CHCFG_SOURCE_SHIFT                  DMAMUX_CHCONF_SOURCE_SHIFT
+#define DMAMUX_CHCFG_SOURCE_WIDTH                  DMAMUX_CHCONF_SOURCE_WIDTH
+#define DMAMUX_CHCFG_SOURCE(x)                     DMAMUX_CHCONF_SOURCE(x)
+
+#define DMAMUX_CHCFG_TRIG_MASK                     DMAMUX_CHCONF_TRIG_MASK
+#define DMAMUX_CHCFG_TRIG_SHIFT                    DMAMUX_CHCONF_TRIG_SHIFT
+#define DMAMUX_CHCFG_TRIG_WIDTH                    DMAMUX_CHCONF_TRIG_WIDTH
+#define DMAMUX_CHCFG_TRIG(x)                       DMAMUX_CHCONF_TRIG(x)
+
+#define DMAMUX_CHCFG_ENBL_MASK                     DMAMUX_CHCONF_ENBL_MASK
+#define DMAMUX_CHCFG_ENBL_SHIFT                    DMAMUX_CHCONF_ENBL_SHIFT
+#define DMAMUX_CHCFG_ENBL_WIDTH                    DMAMUX_CHCONF_ENBL_WIDTH
+#define DMAMUX_CHCFG_ENBL(x)                       DMAMUX_CHCONF_ENBL(x)
+
+/* ----------------------------------------------------------------------------
+   -- DSPI Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DSPI_Peripheral_Access_Layer DSPI Peripheral Access Layer
+ * @{
+ */
+
+/** DSPI - Register Layout Typedef */
+
+typedef struct {
+        __IO uint32_t MCR;                               /**< Module Configuration Register, offset: 0x0 */
+        uint8_t RESERVED_0[4];
+        __IO uint32_t TCR;                               /**< Transfer Count Register, offset: 0x8 */
+        union {                                          /* offset: 0xC */
+            __IO uint32_t CTAR[6];                       /**< Clock and Transfer Attributes Register (In Master Mode), array offset: 0xC, array step: 0x4 */
+        };
+        uint8_t RESERVED_1[8];
+        __IO uint32_t SR;                                /**< Status Register, offset: 0x2C */
+        __IO uint32_t RSER;                              /**< DMA/Interrupt Request Select and Enable Register, offset: 0x30 */
+        union {                                          /* offset: 0x34 */
+            __IO uint32_t PUSHR;                             /**< PUSH TX FIFO Register In Master Mode, offset: 0x34 */
+        };
+        __I  uint32_t POPR;                              /**< POP RX FIFO Register, offset: 0x38 */
+        __I  uint32_t TXFR[16];                          /**< Transmit FIFO Registers, array offset: 0x3C, array step: 0x4 */
+        __I  uint32_t RXFR[16];                          /**< Receive FIFO Registers, array offset: 0x7C, array step: 0x4 */
+        __IO uint32_t DSICR0;                            /**< DSI Configuration Register 0, offset: 0xBC */
+        __I  uint32_t SDR0;                              /**< DSI Serialization Data Register 0, offset: 0xC0 */
+        __IO uint32_t ASDR0;                             /**< DSI Alternate Serialization Data Register 0, offset: 0xC4 */
+        __I  uint32_t COMPR0;                            /**< DSI Transmit Comparison Register 0, offset: 0xC8 */
+        __I  uint32_t DDR0;                              /**< DSI Deserialization Data Register 0, offset: 0xCC */
+        __IO uint32_t DSICR1;                            /**< DSI Configuration Register 1, offset: 0xD0 */
+        __IO uint32_t SSR0;                              /**< DSI Serialization Source Select Register 0, offset: 0xD4 */
+        uint8_t RESERVED_2[16];
+        __IO uint32_t DIMR0;                             /**< DSI Deserialized Data Interrupt Mask Register 0, offset: 0xE8 */
+        __IO uint32_t DPIR0;                             /**< DSI Deserialized Data Polarity Interrupt Register 0, offset: 0xEC */
+        __I  uint32_t SDR1;                              /**< DSI Serialization Data Register 1, offset: 0xF0 */
+        __IO uint32_t ASDR1;                             /**< DSI Alternate Serialization Data Register 1, offset: 0xF4 */
+        __I  uint32_t COMPR1;                            /**< DSI Transmit Comparison Register 1, offset: 0xF8 */
+        __I  uint32_t DDR1;                              /**< DSI Deserialization Data Register 1, offset: 0xFC */
+        __IO uint32_t SSR1;                              /**< DSI Serialization Source Select Register 1, offset: 0x100 */
+        uint8_t RESERVED_3[16];
+        __IO uint32_t DIMR1;                             /**< DSI Deserialized Data Interrupt Mask Register 1, offset: 0x114 */
+        __IO uint32_t DPIR1;                             /**< DSI Deserialized Data Polarity Interrupt Register 1, offset: 0x118 */
+        __IO uint32_t CTARE[6];                          /**< Clock and Transfer Attributes Register Extended, array offset: 0x11C, array step: 0x4 */
+        uint8_t RESERVED_4[8];
+        __I  uint32_t SREX;                              /**< Status Register Extended, offset: 0x13C */
+        uint8_t RESERVED_5[16];
+        __IO uint32_t TSL;                               /**< Time Slot Length Register, offset: 0x150 */
+        __IO uint32_t TS_CONF;                           /**< Time Slot Configuration Register, offset: 0x154 */
+} SPI_Type;
+
+
+/* ----------------------------------------------------------------------------
+   -- DSPI Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup DSPI_Register_Masks DSPI Register Masks
+ * @{
+ */
+
+/*! @name MCR - Module Configuration Register */
+/*! @{ */
+
+#define SPI_MCR_HALT_MASK                          DSPI_MCR_HALT_MASK
+#define SPI_MCR_HALT_SHIFT                         DSPI_MCR_HALT_SHIFT
+#define SPI_MCR_HALT_WIDTH                         DSPI_MCR_HALT_WIDTH
+#define SPI_MCR_HALT(x)                            DSPI_MCR_HALT(x)
+
+#define SPI_MCR_PES_MASK                           DSPI_MCR_PES_MASK
+#define SPI_MCR_PES_SHIFT                          DSPI_MCR_PES_SHIFT
+#define SPI_MCR_PES_WIDTH                          DSPI_MCR_PES_WIDTH
+#define SPI_MCR_PES(x)                             DSPI_MCR_PES(x)
+
+#define SPI_MCR_FCPCS_MASK                         DSPI_MCR_FCPCS_MASK
+#define SPI_MCR_FCPCS_SHIFT                        DSPI_MCR_FCPCS_SHIFT
+#define SPI_MCR_FCPCS_WIDTH                        DSPI_MCR_FCPCS_WIDTH
+#define SPI_MCR_FCPCS(x)                           DSPI_MCR_FCPCS(x)
+
+#define SPI_MCR_XSPI_MASK                          DSPI_MCR_XSPI_MASK
+#define SPI_MCR_XSPI_SHIFT                         DSPI_MCR_XSPI_SHIFT
+#define SPI_MCR_XSPI_WIDTH                         DSPI_MCR_XSPI_WIDTH
+#define SPI_MCR_XSPI(x)                            DSPI_MCR_XSPI(x)
+
+#define SPI_MCR_SMPL_PT_MASK                       DSPI_MCR_SMPL_PT_MASK
+#define SPI_MCR_SMPL_PT_SHIFT                      DSPI_MCR_SMPL_PT_SHIFT
+#define SPI_MCR_SMPL_PT_WIDTH                      DSPI_MCR_SMPL_PT_WIDTH
+#define SPI_MCR_SMPL_PT(x)                         DSPI_MCR_SMPL_PT(x)
+
+#define SPI_MCR_CLR_RXF_MASK                       DSPI_MCR_CLR_RXF_MASK
+#define SPI_MCR_CLR_RXF_SHIFT                      DSPI_MCR_CLR_RXF_SHIFT
+#define SPI_MCR_CLR_RXF_WIDTH                      DSPI_MCR_CLR_RXF_WIDTH
+#define SPI_MCR_CLR_RXF(x)                         DSPI_MCR_CLR_RXF(x)
+
+#define SPI_MCR_CLR_TXF_MASK                       DSPI_MCR_CLR_TXF_MASK
+#define SPI_MCR_CLR_TXF_SHIFT                      DSPI_MCR_CLR_TXF_SHIFT
+#define SPI_MCR_CLR_TXF_WIDTH                      DSPI_MCR_CLR_TXF_WIDTH
+#define SPI_MCR_CLR_TXF(x)                         DSPI_MCR_CLR_TXF(x)
+
+#define SPI_MCR_DIS_RXF_MASK                       DSPI_MCR_DIS_RXF_MASK
+#define SPI_MCR_DIS_RXF_SHIFT                      DSPI_MCR_DIS_RXF_SHIFT
+#define SPI_MCR_DIS_RXF_WIDTH                      DSPI_MCR_DIS_RXF_WIDTH
+#define SPI_MCR_DIS_RXF(x)                         DSPI_MCR_DIS_RXF(x)
+
+#define SPI_MCR_DIS_TXF_MASK                       DSPI_MCR_DIS_TXF_MASK
+#define SPI_MCR_DIS_TXF_SHIFT                      DSPI_MCR_DIS_TXF_SHIFT
+#define SPI_MCR_DIS_TXF_WIDTH                      DSPI_MCR_DIS_TXF_WIDTH
+#define SPI_MCR_DIS_TXF(x)                         DSPI_MCR_DIS_TXF(x)
+
+#define SPI_MCR_MDIS_MASK                          DSPI_MCR_MDIS_MASK
+#define SPI_MCR_MDIS_SHIFT                         DSPI_MCR_MDIS_SHIFT
+#define SPI_MCR_MDIS_WIDTH                         DSPI_MCR_MDIS_WIDTH
+#define SPI_MCR_MDIS(x)                            DSPI_MCR_MDIS(x)
+
+#define SPI_MCR_PCSIS_MASK                         DSPI_MCR_PCSIS_MASK
+#define SPI_MCR_PCSIS_SHIFT                        DSPI_MCR_PCSIS_SHIFT
+#define SPI_MCR_PCSIS_WIDTH                        DSPI_MCR_PCSIS_WIDTH
+#define SPI_MCR_PCSIS(x)                           DSPI_MCR_PCSIS(x)
+
+#define SPI_MCR_ROOE_MASK                          DSPI_MCR_ROOE_MASK
+#define SPI_MCR_ROOE_SHIFT                         DSPI_MCR_ROOE_SHIFT
+#define SPI_MCR_ROOE_WIDTH                         DSPI_MCR_ROOE_WIDTH
+#define SPI_MCR_ROOE(x)                            DSPI_MCR_ROOE(x)
+
+#define SPI_MCR_MTFE_MASK                          DSPI_MCR_MTFE_MASK
+#define SPI_MCR_MTFE_SHIFT                         DSPI_MCR_MTFE_SHIFT
+#define SPI_MCR_MTFE_WIDTH                         DSPI_MCR_MTFE_WIDTH
+#define SPI_MCR_MTFE(x)                            DSPI_MCR_MTFE(x)
+
+#define SPI_MCR_FRZ_MASK                           DSPI_MCR_FRZ_MASK
+#define SPI_MCR_FRZ_SHIFT                          DSPI_MCR_FRZ_SHIFT
+#define SPI_MCR_FRZ_WIDTH                          DSPI_MCR_FRZ_WIDTH
+#define SPI_MCR_FRZ(x)                             DSPI_MCR_FRZ(x)
+
+#define SPI_MCR_DCONF_MASK                         DSPI_MCR_DCONF_MASK
+#define SPI_MCR_DCONF_SHIFT                        DSPI_MCR_DCONF_SHIFT
+#define SPI_MCR_DCONF_WIDTH                        DSPI_MCR_DCONF_WIDTH
+#define SPI_MCR_DCONF(x)                           DSPI_MCR_DCONF(x)
+
+#define SPI_MCR_CONT_SCKE_MASK                     DSPI_MCR_CONT_SCKE_MASK
+#define SPI_MCR_CONT_SCKE_SHIFT                    DSPI_MCR_CONT_SCKE_SHIFT
+#define SPI_MCR_CONT_SCKE_WIDTH                    DSPI_MCR_CONT_SCKE_WIDTH
+#define SPI_MCR_CONT_SCKE(x)                       DSPI_MCR_CONT_SCKE(x)
+
+#define SPI_MCR_MSTR_MASK                          DSPI_MCR_MSTR_MASK
+#define SPI_MCR_MSTR_SHIFT                         DSPI_MCR_MSTR_SHIFT
+#define SPI_MCR_MSTR_WIDTH                         DSPI_MCR_MSTR_WIDTH
+#define SPI_MCR_MSTR(x)                            DSPI_MCR_MSTR(x)
+/*! @} */
+
+/*! @name TCR - Transfer Count Register */
+/*! @{ */
+
+#define SPI_TCR_SPI_TCNT_MASK                      DSPI_TCR_SPI_TCNT_MASK
+#define SPI_TCR_SPI_TCNT_SHIFT                     DSPI_TCR_SPI_TCNT_SHIFT
+#define SPI_TCR_SPI_TCNT_WIDTH                     DSPI_TCR_SPI_TCNT_WIDTH
+#define SPI_TCR_SPI_TCNT(x)                        DSPI_TCR_SPI_TCNT(x)
+/*! @} */
+
+/*! @name CTAR - Clock and Transfer Attributes Register (In Master Mode) */
+/*! @{ */
+
+#define SPI_CTAR_BR_MASK                           DSPI_CTAR_BR_MASK
+#define SPI_CTAR_BR_SHIFT                          DSPI_CTAR_BR_SHIFT
+#define SPI_CTAR_BR_WIDTH                          DSPI_CTAR_BR_WIDTH
+#define SPI_CTAR_BR(x)                             DSPI_CTAR_BR(x)
+
+#define SPI_CTAR_DT_MASK                           DSPI_CTAR_DT_MASK
+#define SPI_CTAR_DT_SHIFT                          DSPI_CTAR_DT_SHIFT
+#define SPI_CTAR_DT_WIDTH                          DSPI_CTAR_DT_WIDTH
+#define SPI_CTAR_DT(x)                             DSPI_CTAR_DT(x)
+
+#define SPI_CTAR_ASC_MASK                          DSPI_CTAR_ASC_MASK
+#define SPI_CTAR_ASC_SHIFT                         DSPI_CTAR_ASC_SHIFT
+#define SPI_CTAR_ASC_WIDTH                         DSPI_CTAR_ASC_WIDTH
+#define SPI_CTAR_ASC(x)                            DSPI_CTAR_ASC(x)
+
+#define SPI_CTAR_CSSCK_MASK                        DSPI_CTAR_CSSCK_MASK
+#define SPI_CTAR_CSSCK_SHIFT                       DSPI_CTAR_CSSCK_SHIFT
+#define SPI_CTAR_CSSCK_WIDTH                       DSPI_CTAR_CSSCK_WIDTH
+#define SPI_CTAR_CSSCK(x)                          DSPI_CTAR_CSSCK(x)
+
+#define SPI_CTAR_PBR_MASK                          DSPI_CTAR_PBR_MASK
+#define SPI_CTAR_PBR_SHIFT                         DSPI_CTAR_PBR_SHIFT
+#define SPI_CTAR_PBR_WIDTH                         DSPI_CTAR_PBR_WIDTH
+#define SPI_CTAR_PBR(x)                            DSPI_CTAR_PBR(x)
+
+#define SPI_CTAR_PDT_MASK                          DSPI_CTAR_PDT_MASK
+#define SPI_CTAR_PDT_SHIFT                         DSPI_CTAR_PDT_SHIFT
+#define SPI_CTAR_PDT_WIDTH                         DSPI_CTAR_PDT_WIDTH
+#define SPI_CTAR_PDT(x)                            DSPI_CTAR_PDT(x)
+
+#define SPI_CTAR_PASC_MASK                         DSPI_CTAR_PASC_MASK
+#define SPI_CTAR_PASC_SHIFT                        DSPI_CTAR_PASC_SHIFT
+#define SPI_CTAR_PASC_WIDTH                        DSPI_CTAR_PASC_WIDTH
+#define SPI_CTAR_PASC(x)                           DSPI_CTAR_PASC(x)
+
+#define SPI_CTAR_PCSSCK_MASK                       DSPI_CTAR_PCSSCK_MASK
+#define SPI_CTAR_PCSSCK_SHIFT                      DSPI_CTAR_PCSSCK_SHIFT
+#define SPI_CTAR_PCSSCK_WIDTH                      DSPI_CTAR_PCSSCK_WIDTH
+#define SPI_CTAR_PCSSCK(x)                         DSPI_CTAR_PCSSCK(x)
+
+#define SPI_CTAR_LSBFE_MASK                        DSPI_CTAR_LSBFE_MASK
+#define SPI_CTAR_LSBFE_SHIFT                       DSPI_CTAR_LSBFE_SHIFT
+#define SPI_CTAR_LSBFE_WIDTH                       DSPI_CTAR_LSBFE_WIDTH
+#define SPI_CTAR_LSBFE(x)                          DSPI_CTAR_LSBFE(x)
+
+#define SPI_CTAR_CPHA_MASK                         DSPI_CTAR_CPHA_MASK
+#define SPI_CTAR_CPHA_SHIFT                        DSPI_CTAR_CPHA_SHIFT
+#define SPI_CTAR_CPHA_WIDTH                        DSPI_CTAR_CPHA_WIDTH
+#define SPI_CTAR_CPHA(x)                           DSPI_CTAR_CPHA(x)
+
+#define SPI_CTAR_CPOL_MASK                         DSPI_CTAR_CPOL_MASK
+#define SPI_CTAR_CPOL_SHIFT                        DSPI_CTAR_CPOL_SHIFT
+#define SPI_CTAR_CPOL_WIDTH                        DSPI_CTAR_CPOL_WIDTH
+#define SPI_CTAR_CPOL(x)                           DSPI_CTAR_CPOL(x)
+
+#define SPI_CTAR_FMSZ_MASK                         DSPI_CTAR_FMSZ_MASK
+#define SPI_CTAR_FMSZ_SHIFT                        DSPI_CTAR_FMSZ_SHIFT
+#define SPI_CTAR_FMSZ_WIDTH                        DSPI_CTAR_FMSZ_WIDTH
+#define SPI_CTAR_FMSZ(x)                           DSPI_CTAR_FMSZ(x)
+
+#define SPI_CTAR_DBR_MASK                          DSPI_CTAR_DBR_MASK
+#define SPI_CTAR_DBR_SHIFT                         DSPI_CTAR_DBR_SHIFT
+#define SPI_CTAR_DBR_WIDTH                         DSPI_CTAR_DBR_WIDTH
+#define SPI_CTAR_DBR(x)                            DSPI_CTAR_DBR(x)
+/*! @} */
+
+/*! @name SR - Status Register */
+/*! @{ */
+
+#define SPI_SR_POPNXTPTR_MASK                      DSPI_SR_POPNXTPTR_MASK
+#define SPI_SR_POPNXTPTR_SHIFT                     DSPI_SR_POPNXTPTR_SHIFT
+#define SPI_SR_POPNXTPTR_WIDTH                     DSPI_SR_POPNXTPTR_WIDTH
+#define SPI_SR_POPNXTPTR(x)                        DSPI_SR_POPNXTPTR(x)
+
+#define SPI_SR_RXCTR_MASK                          DSPI_SR_RXCTR_MASK
+#define SPI_SR_RXCTR_SHIFT                         DSPI_SR_RXCTR_SHIFT
+#define SPI_SR_RXCTR_WIDTH                         DSPI_SR_RXCTR_WIDTH
+#define SPI_SR_RXCTR(x)                            DSPI_SR_RXCTR(x)
+
+#define SPI_SR_TXNXTPTR_MASK                       DSPI_SR_TXNXTPTR_MASK
+#define SPI_SR_TXNXTPTR_SHIFT                      DSPI_SR_TXNXTPTR_SHIFT
+#define SPI_SR_TXNXTPTR_WIDTH                      DSPI_SR_TXNXTPTR_WIDTH
+#define SPI_SR_TXNXTPTR(x)                         DSPI_SR_TXNXTPTR(x)
+
+#define SPI_SR_TXCTR_MASK                          DSPI_SR_TXCTR_MASK
+#define SPI_SR_TXCTR_SHIFT                         DSPI_SR_TXCTR_SHIFT
+#define SPI_SR_TXCTR_WIDTH                         DSPI_SR_TXCTR_WIDTH
+#define SPI_SR_TXCTR(x)                            DSPI_SR_TXCTR(x)
+
+#define SPI_SR_CMDFFF_MASK                         DSPI_SR_CMDFFF_MASK
+#define SPI_SR_CMDFFF_SHIFT                        DSPI_SR_CMDFFF_SHIFT
+#define SPI_SR_CMDFFF_WIDTH                        DSPI_SR_CMDFFF_WIDTH
+#define SPI_SR_CMDFFF(x)                           DSPI_SR_CMDFFF(x)
+
+#define SPI_SR_RFDF_MASK                           DSPI_SR_RFDF_MASK
+#define SPI_SR_RFDF_SHIFT                          DSPI_SR_RFDF_SHIFT
+#define SPI_SR_RFDF_WIDTH                          DSPI_SR_RFDF_WIDTH
+#define SPI_SR_RFDF(x)                             DSPI_SR_RFDF(x)
+
+#define SPI_SR_TFIWF_MASK                          DSPI_SR_TFIWF_MASK
+#define SPI_SR_TFIWF_SHIFT                         DSPI_SR_TFIWF_SHIFT
+#define SPI_SR_TFIWF_WIDTH                         DSPI_SR_TFIWF_WIDTH
+#define SPI_SR_TFIWF(x)                            DSPI_SR_TFIWF(x)
+
+#define SPI_SR_RFOF_MASK                           DSPI_SR_RFOF_MASK
+#define SPI_SR_RFOF_SHIFT                          DSPI_SR_RFOF_SHIFT
+#define SPI_SR_RFOF_WIDTH                          DSPI_SR_RFOF_WIDTH
+#define SPI_SR_RFOF(x)                             DSPI_SR_RFOF(x)
+
+#define SPI_SR_DDIF_MASK                           DSPI_SR_DDIF_MASK
+#define SPI_SR_DDIF_SHIFT                          DSPI_SR_DDIF_SHIFT
+#define SPI_SR_DDIF_WIDTH                          DSPI_SR_DDIF_WIDTH
+#define SPI_SR_DDIF(x)                             DSPI_SR_DDIF(x)
+
+#define SPI_SR_SPEF_MASK                           DSPI_SR_SPEF_MASK
+#define SPI_SR_SPEF_SHIFT                          DSPI_SR_SPEF_SHIFT
+#define SPI_SR_SPEF_WIDTH                          DSPI_SR_SPEF_WIDTH
+#define SPI_SR_SPEF(x)                             DSPI_SR_SPEF(x)
+
+#define SPI_SR_DPEF_MASK                           DSPI_SR_DPEF_MASK
+#define SPI_SR_DPEF_SHIFT                          DSPI_SR_DPEF_SHIFT
+#define SPI_SR_DPEF_WIDTH                          DSPI_SR_DPEF_WIDTH
+#define SPI_SR_DPEF(x)                             DSPI_SR_DPEF(x)
+
+#define SPI_SR_CMDTCF_MASK                         DSPI_SR_CMDTCF_MASK
+#define SPI_SR_CMDTCF_SHIFT                        DSPI_SR_CMDTCF_SHIFT
+#define SPI_SR_CMDTCF_WIDTH                        DSPI_SR_CMDTCF_WIDTH
+#define SPI_SR_CMDTCF(x)                           DSPI_SR_CMDTCF(x)
+
+#define SPI_SR_BSYF_MASK                           DSPI_SR_BSYF_MASK
+#define SPI_SR_BSYF_SHIFT                          DSPI_SR_BSYF_SHIFT
+#define SPI_SR_BSYF_WIDTH                          DSPI_SR_BSYF_WIDTH
+#define SPI_SR_BSYF(x)                             DSPI_SR_BSYF(x)
+
+#define SPI_SR_TFFF_MASK                           DSPI_SR_TFFF_MASK
+#define SPI_SR_TFFF_SHIFT                          DSPI_SR_TFFF_SHIFT
+#define SPI_SR_TFFF_WIDTH                          DSPI_SR_TFFF_WIDTH
+#define SPI_SR_TFFF(x)                             DSPI_SR_TFFF(x)
+
+#define SPI_SR_EOQF_MASK                           DSPI_SR_EOQF_MASK
+#define SPI_SR_EOQF_SHIFT                          DSPI_SR_EOQF_SHIFT
+#define SPI_SR_EOQF_WIDTH                          DSPI_SR_EOQF_WIDTH
+#define SPI_SR_EOQF(x)                             DSPI_SR_EOQF(x)
+
+#define SPI_SR_SPITCF_MASK                         DSPI_SR_SPITCF_MASK
+#define SPI_SR_SPITCF_SHIFT                        DSPI_SR_SPITCF_SHIFT
+#define SPI_SR_SPITCF_WIDTH                        DSPI_SR_SPITCF_WIDTH
+#define SPI_SR_SPITCF(x)                           DSPI_SR_SPITCF(x)
+
+#define SPI_SR_TXRXS_MASK                          DSPI_SR_TXRXS_MASK
+#define SPI_SR_TXRXS_SHIFT                         DSPI_SR_TXRXS_SHIFT
+#define SPI_SR_TXRXS_WIDTH                         DSPI_SR_TXRXS_WIDTH
+#define SPI_SR_TXRXS(x)                            DSPI_SR_TXRXS(x)
+
+#define SPI_SR_TCF_MASK                            DSPI_SR_TCF_MASK
+#define SPI_SR_TCF_SHIFT                           DSPI_SR_TCF_SHIFT
+#define SPI_SR_TCF_WIDTH                           DSPI_SR_TCF_WIDTH
+#define SPI_SR_TCF(x)                              DSPI_SR_TCF(x)
+/*! @} */
+
+/*! @name RSER - DMA/Interrupt Request Select and Enable Register */
+/*! @{ */
+
+#define SPI_RSER_DDIF_DIRS_MASK                    DSPI_RSER_DDIF_DIRS_MASK
+#define SPI_RSER_DDIF_DIRS_SHIFT                   DSPI_RSER_DDIF_DIRS_SHIFT
+#define SPI_RSER_DDIF_DIRS_WIDTH                   DSPI_RSER_DDIF_DIRS_WIDTH
+#define SPI_RSER_DDIF_DIRS(x)                      DSPI_RSER_DDIF_DIRS(x)
+
+#define SPI_RSER_CMDFFF_DIRS_MASK                  DSPI_RSER_CMDFFF_DIRS_MASK
+#define SPI_RSER_CMDFFF_DIRS_SHIFT                 DSPI_RSER_CMDFFF_DIRS_SHIFT
+#define SPI_RSER_CMDFFF_DIRS_WIDTH                 DSPI_RSER_CMDFFF_DIRS_WIDTH
+#define SPI_RSER_CMDFFF_DIRS(x)                    DSPI_RSER_CMDFFF_DIRS(x)
+
+#define SPI_RSER_RFDF_DIRS_MASK                    DSPI_RSER_RFDF_DIRS_MASK
+#define SPI_RSER_RFDF_DIRS_SHIFT                   DSPI_RSER_RFDF_DIRS_SHIFT
+#define SPI_RSER_RFDF_DIRS_WIDTH                   DSPI_RSER_RFDF_DIRS_WIDTH
+#define SPI_RSER_RFDF_DIRS(x)                      DSPI_RSER_RFDF_DIRS(x)
+
+#define SPI_RSER_RFDF_RE_MASK                      DSPI_RSER_RFDF_RE_MASK
+#define SPI_RSER_RFDF_RE_SHIFT                     DSPI_RSER_RFDF_RE_SHIFT
+#define SPI_RSER_RFDF_RE_WIDTH                     DSPI_RSER_RFDF_RE_WIDTH
+#define SPI_RSER_RFDF_RE(x)                        DSPI_RSER_RFDF_RE(x)
+
+#define SPI_RSER_TFIWF_RE_MASK                     DSPI_RSER_TFIWF_RE_MASK
+#define SPI_RSER_TFIWF_RE_SHIFT                    DSPI_RSER_TFIWF_RE_SHIFT
+#define SPI_RSER_TFIWF_RE_WIDTH                    DSPI_RSER_TFIWF_RE_WIDTH
+#define SPI_RSER_TFIWF_RE(x)                       DSPI_RSER_TFIWF_RE(x)
+
+#define SPI_RSER_RFOF_RE_MASK                      DSPI_RSER_RFOF_RE_MASK
+#define SPI_RSER_RFOF_RE_SHIFT                     DSPI_RSER_RFOF_RE_SHIFT
+#define SPI_RSER_RFOF_RE_WIDTH                     DSPI_RSER_RFOF_RE_WIDTH
+#define SPI_RSER_RFOF_RE(x)                        DSPI_RSER_RFOF_RE(x)
+
+#define SPI_RSER_DDIF_RE_MASK                      DSPI_RSER_DDIF_RE_MASK
+#define SPI_RSER_DDIF_RE_SHIFT                     DSPI_RSER_DDIF_RE_SHIFT
+#define SPI_RSER_DDIF_RE_WIDTH                     DSPI_RSER_DDIF_RE_WIDTH
+#define SPI_RSER_DDIF_RE(x)                        DSPI_RSER_DDIF_RE(x)
+
+#define SPI_RSER_SPEF_RE_MASK                      DSPI_RSER_SPEF_RE_MASK
+#define SPI_RSER_SPEF_RE_SHIFT                     DSPI_RSER_SPEF_RE_SHIFT
+#define SPI_RSER_SPEF_RE_WIDTH                     DSPI_RSER_SPEF_RE_WIDTH
+#define SPI_RSER_SPEF_RE(x)                        DSPI_RSER_SPEF_RE(x)
+
+#define SPI_RSER_DPEF_RE_MASK                      DSPI_RSER_DPEF_RE_MASK
+#define SPI_RSER_DPEF_RE_SHIFT                     DSPI_RSER_DPEF_RE_SHIFT
+#define SPI_RSER_DPEF_RE_WIDTH                     DSPI_RSER_DPEF_RE_WIDTH
+#define SPI_RSER_DPEF_RE(x)                        DSPI_RSER_DPEF_RE(x)
+
+#define SPI_RSER_CMDTCF_RE_MASK                    DSPI_RSER_CMDTCF_RE_MASK
+#define SPI_RSER_CMDTCF_RE_SHIFT                   DSPI_RSER_CMDTCF_RE_SHIFT
+#define SPI_RSER_CMDTCF_RE_WIDTH                   DSPI_RSER_CMDTCF_RE_WIDTH
+#define SPI_RSER_CMDTCF_RE(x)                      DSPI_RSER_CMDTCF_RE(x)
+
+#define SPI_RSER_TFFF_DIRS_MASK                    DSPI_RSER_TFFF_DIRS_MASK
+#define SPI_RSER_TFFF_DIRS_SHIFT                   DSPI_RSER_TFFF_DIRS_SHIFT
+#define SPI_RSER_TFFF_DIRS_WIDTH                   DSPI_RSER_TFFF_DIRS_WIDTH
+#define SPI_RSER_TFFF_DIRS(x)                      DSPI_RSER_TFFF_DIRS(x)
+
+#define SPI_RSER_TFFF_RE_MASK                      DSPI_RSER_TFFF_RE_MASK
+#define SPI_RSER_TFFF_RE_SHIFT                     DSPI_RSER_TFFF_RE_SHIFT
+#define SPI_RSER_TFFF_RE_WIDTH                     DSPI_RSER_TFFF_RE_WIDTH
+#define SPI_RSER_TFFF_RE(x)                        DSPI_RSER_TFFF_RE(x)
+
+#define SPI_RSER_EOQF_RE_MASK                      DSPI_RSER_EOQF_RE_MASK
+#define SPI_RSER_EOQF_RE_SHIFT                     DSPI_RSER_EOQF_RE_SHIFT
+#define SPI_RSER_EOQF_RE_WIDTH                     DSPI_RSER_EOQF_RE_WIDTH
+#define SPI_RSER_EOQF_RE(x)                        DSPI_RSER_EOQF_RE(x)
+
+#define SPI_RSER_CMDFFF_RE_MASK                    DSPI_RSER_CMDFFF_RE_MASK
+#define SPI_RSER_CMDFFF_RE_SHIFT                   DSPI_RSER_CMDFFF_RE_SHIFT
+#define SPI_RSER_CMDFFF_RE_WIDTH                   DSPI_RSER_CMDFFF_RE_WIDTH
+#define SPI_RSER_CMDFFF_RE(x)                      DSPI_RSER_CMDFFF_RE(x)
+
+#define SPI_RSER_TCF_RE_MASK                       DSPI_RSER_TCF_RE_MASK
+#define SPI_RSER_TCF_RE_SHIFT                      DSPI_RSER_TCF_RE_SHIFT
+#define SPI_RSER_TCF_RE_WIDTH                      DSPI_RSER_TCF_RE_WIDTH
+#define SPI_RSER_TCF_RE(x)                         DSPI_RSER_TCF_RE(x)
+/*! @} */
+
+/*! @name TX - DSPI_TX register */
+/*! @{ */
+
+#define SPI_TX_TX_MASK                             DSPI_TX_TX_MASK
+#define SPI_TX_TX_SHIFT                            DSPI_TX_TX_SHIFT
+#define SPI_TX_TX_WIDTH                            DSPI_TX_TX_WIDTH
+#define SPI_TX_TX(x)                               DSPI_TX_TX(x)
+/*! @} */
+
+/*! @name CMD - DSPI_CMD register */
+/*! @{ */
+
+#define SPI_CMD_CMD_MASK                           DSPI_CMD_CMD_MASK
+#define SPI_CMD_CMD_SHIFT                          DSPI_CMD_CMD_SHIFT
+#define SPI_CMD_CMD_WIDTH                          DSPI_CMD_CMD_WIDTH
+#define SPI_CMD_CMD(x)                             DSPI_CMD_CMD(x)
+/*! @} */
+
+/*! @name PUSHR - PUSH TX FIFO Register In Master Mode */
+/*! @{ */
+
+#define SPI_PUSHR_TXDATA_MASK                      DSPI_PUSHR_TXDATA_MASK
+#define SPI_PUSHR_TXDATA_SHIFT                     DSPI_PUSHR_TXDATA_SHIFT
+#define SPI_PUSHR_TXDATA_WIDTH                     DSPI_PUSHR_TXDATA_WIDTH
+#define SPI_PUSHR_TXDATA(x)                        DSPI_PUSHR_TXDATA(x)
+
+#define SPI_PUSHR_PCS_MASK                         DSPI_PUSHR_PCS_MASK
+#define SPI_PUSHR_PCS_SHIFT                        DSPI_PUSHR_PCS_SHIFT
+#define SPI_PUSHR_PCS_WIDTH                        DSPI_PUSHR_PCS_WIDTH
+#define SPI_PUSHR_PCS(x)                           DSPI_PUSHR_PCS(x)
+
+#define SPI_PUSHR_PP_MCSC_MASK                     DSPI_PUSHR_PP_MCSC_MASK
+#define SPI_PUSHR_PP_MCSC_SHIFT                    DSPI_PUSHR_PP_MCSC_SHIFT
+#define SPI_PUSHR_PP_MCSC_WIDTH                    DSPI_PUSHR_PP_MCSC_WIDTH
+#define SPI_PUSHR_PP_MCSC(x)                       DSPI_PUSHR_PP_MCSC(x)
+
+#define SPI_PUSHR_PE_MASC_MASK                     DSPI_PUSHR_PE_MASC_MASK
+#define SPI_PUSHR_PE_MASC_SHIFT                    DSPI_PUSHR_PE_MASC_SHIFT
+#define SPI_PUSHR_PE_MASC_WIDTH                    DSPI_PUSHR_PE_MASC_WIDTH
+#define SPI_PUSHR_PE_MASC(x)                       DSPI_PUSHR_PE_MASC(x)
+
+#define SPI_PUSHR_CTCNT_MASK                       DSPI_PUSHR_CTCNT_MASK
+#define SPI_PUSHR_CTCNT_SHIFT                      DSPI_PUSHR_CTCNT_SHIFT
+#define SPI_PUSHR_CTCNT_WIDTH                      DSPI_PUSHR_CTCNT_WIDTH
+#define SPI_PUSHR_CTCNT(x)                         DSPI_PUSHR_CTCNT(x)
+
+#define SPI_PUSHR_EOQ_MASK                         DSPI_PUSHR_EOQ_MASK
+#define SPI_PUSHR_EOQ_SHIFT                        DSPI_PUSHR_EOQ_SHIFT
+#define SPI_PUSHR_EOQ_WIDTH                        DSPI_PUSHR_EOQ_WIDTH
+#define SPI_PUSHR_EOQ(x)                           DSPI_PUSHR_EOQ(x)
+
+#define SPI_PUSHR_CTAS_MASK                        DSPI_PUSHR_CTAS_MASK
+#define SPI_PUSHR_CTAS_SHIFT                       DSPI_PUSHR_CTAS_SHIFT
+#define SPI_PUSHR_CTAS_WIDTH                       DSPI_PUSHR_CTAS_WIDTH
+#define SPI_PUSHR_CTAS(x)                          DSPI_PUSHR_CTAS(x)
+
+#define SPI_PUSHR_CONT_MASK                        DSPI_PUSHR_CONT_MASK
+#define SPI_PUSHR_CONT_SHIFT                       DSPI_PUSHR_CONT_SHIFT
+#define SPI_PUSHR_CONT_WIDTH                       DSPI_PUSHR_CONT_WIDTH
+#define SPI_PUSHR_CONT(x)                          DSPI_PUSHR_CONT(x)
+/*! @} */
+
+/*! @name POPR - POP RX FIFO Register */
+/*! @{ */
+
+#define SPI_POPR_RXDATA_MASK                       DSPI_POPR_RXDATA_MASK
+#define SPI_POPR_RXDATA_SHIFT                      DSPI_POPR_RXDATA_SHIFT
+#define SPI_POPR_RXDATA_WIDTH                      DSPI_POPR_RXDATA_WIDTH
+#define SPI_POPR_RXDATA(x)                         DSPI_POPR_RXDATA(x)
+/*! @} */
+
+/*! @name TXFR - Transmit FIFO Registers */
+/*! @{ */
+
+#define SPI_TXFR_TXDATA_MASK                       DSPI_TXFR_TXDATA_MASK
+#define SPI_TXFR_TXDATA_SHIFT                      DSPI_TXFR_TXDATA_SHIFT
+#define SPI_TXFR_TXDATA_WIDTH                      DSPI_TXFR_TXDATA_WIDTH
+#define SPI_TXFR_TXDATA(x)                         DSPI_TXFR_TXDATA(x)
+
+#define SPI_TXFR_TXCMD_TXDATA_MASK                 DSPI_TXFR_TXCMD_TXDATA_MASK
+#define SPI_TXFR_TXCMD_TXDATA_SHIFT                DSPI_TXFR_TXCMD_TXDATA_SHIFT
+#define SPI_TXFR_TXCMD_TXDATA_WIDTH                DSPI_TXFR_TXCMD_TXDATA_WIDTH
+#define SPI_TXFR_TXCMD_TXDATA(x)                   DSPI_TXFR_TXCMD_TXDATA(x)
+/*! @} */
+
+/*! @name RXFR - Receive FIFO Registers */
+/*! @{ */
+
+#define SPI_RXFR_RXDATA_MASK                       DSPI_RXFR_RXDATA_MASK
+#define SPI_RXFR_RXDATA_SHIFT                      DSPI_RXFR_RXDATA_SHIFT
+#define SPI_RXFR_RXDATA_WIDTH                      DSPI_RXFR_RXDATA_WIDTH
+#define SPI_RXFR_RXDATA(x)                         DSPI_RXFR_RXDATA(x)
+/*! @} */
+
+/*! @name DSICR0 - DSI Configuration Register 0 */
+/*! @{ */
+
+#define SPI_DSICR0_DPCSx_MASK                      DSPI_DSICR0_DPCSx_MASK
+#define SPI_DSICR0_DPCSx_SHIFT                     DSPI_DSICR0_DPCSx_SHIFT
+#define SPI_DSICR0_DPCSx_WIDTH                     DSPI_DSICR0_DPCSx_WIDTH
+#define SPI_DSICR0_DPCSx(x)                        DSPI_DSICR0_DPCSx(x)
+
+#define SPI_DSICR0_PP_MASK                         DSPI_DSICR0_PP_MASK
+#define SPI_DSICR0_PP_SHIFT                        DSPI_DSICR0_PP_SHIFT
+#define SPI_DSICR0_PP_WIDTH                        DSPI_DSICR0_PP_WIDTH
+#define SPI_DSICR0_PP(x)                           DSPI_DSICR0_PP(x)
+
+#define SPI_DSICR0_PE_MASK                         DSPI_DSICR0_PE_MASK
+#define SPI_DSICR0_PE_SHIFT                        DSPI_DSICR0_PE_SHIFT
+#define SPI_DSICR0_PE_WIDTH                        DSPI_DSICR0_PE_WIDTH
+#define SPI_DSICR0_PE(x)                           DSPI_DSICR0_PE(x)
+
+#define SPI_DSICR0_PES_MASK                        DSPI_DSICR0_PES_MASK
+#define SPI_DSICR0_PES_SHIFT                       DSPI_DSICR0_PES_SHIFT
+#define SPI_DSICR0_PES_WIDTH                       DSPI_DSICR0_PES_WIDTH
+#define SPI_DSICR0_PES(x)                          DSPI_DSICR0_PES(x)
+
+#define SPI_DSICR0_DMS_MASK                        DSPI_DSICR0_DMS_MASK
+#define SPI_DSICR0_DMS_SHIFT                       DSPI_DSICR0_DMS_SHIFT
+#define SPI_DSICR0_DMS_WIDTH                       DSPI_DSICR0_DMS_WIDTH
+#define SPI_DSICR0_DMS(x)                          DSPI_DSICR0_DMS(x)
+
+#define SPI_DSICR0_DSICTAS_MASK                    DSPI_DSICR0_DSICTAS_MASK
+#define SPI_DSICR0_DSICTAS_SHIFT                   DSPI_DSICR0_DSICTAS_SHIFT
+#define SPI_DSICR0_DSICTAS_WIDTH                   DSPI_DSICR0_DSICTAS_WIDTH
+#define SPI_DSICR0_DSICTAS(x)                      DSPI_DSICR0_DSICTAS(x)
+
+#define SPI_DSICR0_DCONT_MASK                      DSPI_DSICR0_DCONT_MASK
+#define SPI_DSICR0_DCONT_SHIFT                     DSPI_DSICR0_DCONT_SHIFT
+#define SPI_DSICR0_DCONT_WIDTH                     DSPI_DSICR0_DCONT_WIDTH
+#define SPI_DSICR0_DCONT(x)                        DSPI_DSICR0_DCONT(x)
+
+#define SPI_DSICR0_CID_MASK                        DSPI_DSICR0_CID_MASK
+#define SPI_DSICR0_CID_SHIFT                       DSPI_DSICR0_CID_SHIFT
+#define SPI_DSICR0_CID_WIDTH                       DSPI_DSICR0_CID_WIDTH
+#define SPI_DSICR0_CID(x)                          DSPI_DSICR0_CID(x)
+
+#define SPI_DSICR0_TXSS_MASK                       DSPI_DSICR0_TXSS_MASK
+#define SPI_DSICR0_TXSS_SHIFT                      DSPI_DSICR0_TXSS_SHIFT
+#define SPI_DSICR0_TXSS_WIDTH                      DSPI_DSICR0_TXSS_WIDTH
+#define SPI_DSICR0_TXSS(x)                         DSPI_DSICR0_TXSS(x)
+
+#define SPI_DSICR0_TSBC_MASK                       DSPI_DSICR0_TSBC_MASK
+#define SPI_DSICR0_TSBC_SHIFT                      DSPI_DSICR0_TSBC_SHIFT
+#define SPI_DSICR0_TSBC_WIDTH                      DSPI_DSICR0_TSBC_WIDTH
+#define SPI_DSICR0_TSBC(x)                         DSPI_DSICR0_TSBC(x)
+
+#define SPI_DSICR0_ITSB_MASK                       DSPI_DSICR0_ITSB_MASK
+#define SPI_DSICR0_ITSB_SHIFT                      DSPI_DSICR0_ITSB_SHIFT
+#define SPI_DSICR0_ITSB_WIDTH                      DSPI_DSICR0_ITSB_WIDTH
+#define SPI_DSICR0_ITSB(x)                         DSPI_DSICR0_ITSB(x)
+
+#define SPI_DSICR0_FMSZ5_MASK                      DSPI_DSICR0_FMSZ5_MASK
+#define SPI_DSICR0_FMSZ5_SHIFT                     DSPI_DSICR0_FMSZ5_SHIFT
+#define SPI_DSICR0_FMSZ5_WIDTH                     DSPI_DSICR0_FMSZ5_WIDTH
+#define SPI_DSICR0_FMSZ5(x)                        DSPI_DSICR0_FMSZ5(x)
+
+#define SPI_DSICR0_FMSZ4_MASK                      DSPI_DSICR0_FMSZ4_MASK
+#define SPI_DSICR0_FMSZ4_SHIFT                     DSPI_DSICR0_FMSZ4_SHIFT
+#define SPI_DSICR0_FMSZ4_WIDTH                     DSPI_DSICR0_FMSZ4_WIDTH
+#define SPI_DSICR0_FMSZ4(x)                        DSPI_DSICR0_FMSZ4(x)
+/*! @} */
+
+/*! @name SDR0 - DSI Serialization Data Register 0 */
+/*! @{ */
+
+#define SPI_SDR0_SER_DATA_MASK                     DSPI_SDR0_SER_DATA_MASK
+#define SPI_SDR0_SER_DATA_SHIFT                    DSPI_SDR0_SER_DATA_SHIFT
+#define SPI_SDR0_SER_DATA_WIDTH                    DSPI_SDR0_SER_DATA_WIDTH
+#define SPI_SDR0_SER_DATA(x)                       DSPI_SDR0_SER_DATA(x)
+/*! @} */
+
+/*! @name ASDR0 - DSI Alternate Serialization Data Register 0 */
+/*! @{ */
+
+#define SPI_ASDR0_ASER_DATA_MASK                   DSPI_ASDR0_ASER_DATA_MASK
+#define SPI_ASDR0_ASER_DATA_SHIFT                  DSPI_ASDR0_ASER_DATA_SHIFT
+#define SPI_ASDR0_ASER_DATA_WIDTH                  DSPI_ASDR0_ASER_DATA_WIDTH
+#define SPI_ASDR0_ASER_DATA(x)                     DSPI_ASDR0_ASER_DATA(x)
+/*! @} */
+
+/*! @name COMPR0 - DSI Transmit Comparison Register 0 */
+/*! @{ */
+
+#define SPI_COMPR0_COMP_DATA_MASK                  DSPI_COMPR0_COMP_DATA_MASK
+#define SPI_COMPR0_COMP_DATA_SHIFT                 DSPI_COMPR0_COMP_DATA_SHIFT
+#define SPI_COMPR0_COMP_DATA_WIDTH                 DSPI_COMPR0_COMP_DATA_WIDTH
+#define SPI_COMPR0_COMP_DATA(x)                    DSPI_COMPR0_COMP_DATA(x)
+/*! @} */
+
+/*! @name DDR0 - DSI Deserialization Data Register 0 */
+/*! @{ */
+
+#define SPI_DDR0_DESER_DATA_MASK                   DSPI_DDR0_DESER_DATA_MASK
+#define SPI_DDR0_DESER_DATA_SHIFT                  DSPI_DDR0_DESER_DATA_SHIFT
+#define SPI_DDR0_DESER_DATA_WIDTH                  DSPI_DDR0_DESER_DATA_WIDTH
+#define SPI_DDR0_DESER_DATA(x)                     DSPI_DDR0_DESER_DATA(x)
+/*! @} */
+
+/*! @name DSICR1 - DSI Configuration Register 1 */
+/*! @{ */
+
+#define SPI_DSICR1_DPCS1_x_MASK                    DSPI_DSICR1_DPCS1_x_MASK
+#define SPI_DSICR1_DPCS1_x_SHIFT                   DSPI_DSICR1_DPCS1_x_SHIFT
+#define SPI_DSICR1_DPCS1_x_WIDTH                   DSPI_DSICR1_DPCS1_x_WIDTH
+#define SPI_DSICR1_DPCS1_x(x)                      DSPI_DSICR1_DPCS1_x(x)
+
+#define SPI_DSICR1_DSE0_MASK                       DSPI_DSICR1_DSE0_MASK
+#define SPI_DSICR1_DSE0_SHIFT                      DSPI_DSICR1_DSE0_SHIFT
+#define SPI_DSICR1_DSE0_WIDTH                      DSPI_DSICR1_DSE0_WIDTH
+#define SPI_DSICR1_DSE0(x)                         DSPI_DSICR1_DSE0(x)
+
+#define SPI_DSICR1_DSE1_MASK                       DSPI_DSICR1_DSE1_MASK
+#define SPI_DSICR1_DSE1_SHIFT                      DSPI_DSICR1_DSE1_SHIFT
+#define SPI_DSICR1_DSE1_WIDTH                      DSPI_DSICR1_DSE1_WIDTH
+#define SPI_DSICR1_DSE1(x)                         DSPI_DSICR1_DSE1(x)
+
+#define SPI_DSICR1_DSI64E_MASK                     DSPI_DSICR1_DSI64E_MASK
+#define SPI_DSICR1_DSI64E_SHIFT                    DSPI_DSICR1_DSI64E_SHIFT
+#define SPI_DSICR1_DSI64E_WIDTH                    DSPI_DSICR1_DSI64E_WIDTH
+#define SPI_DSICR1_DSI64E(x)                       DSPI_DSICR1_DSI64E(x)
+
+#define SPI_DSICR1_CSE_MASK                        DSPI_DSICR1_CSE_MASK
+#define SPI_DSICR1_CSE_SHIFT                       DSPI_DSICR1_CSE_SHIFT
+#define SPI_DSICR1_CSE_WIDTH                       DSPI_DSICR1_CSE_WIDTH
+#define SPI_DSICR1_CSE(x)                          DSPI_DSICR1_CSE(x)
+
+#define SPI_DSICR1_TSBCNT_MASK                     DSPI_DSICR1_TSBCNT_MASK
+#define SPI_DSICR1_TSBCNT_SHIFT                    DSPI_DSICR1_TSBCNT_SHIFT
+#define SPI_DSICR1_TSBCNT_WIDTH                    DSPI_DSICR1_TSBCNT_WIDTH
+#define SPI_DSICR1_TSBCNT(x)                       DSPI_DSICR1_TSBCNT(x)
+/*! @} */
+
+/*! @name SSR0 - DSI Serialization Source Select Register 0 */
+/*! @{ */
+
+#define SPI_SSR0_SS_MASK                           DSPI_SSR0_SS_MASK
+#define SPI_SSR0_SS_SHIFT                          DSPI_SSR0_SS_SHIFT
+#define SPI_SSR0_SS_WIDTH                          DSPI_SSR0_SS_WIDTH
+#define SPI_SSR0_SS(x)                             DSPI_SSR0_SS(x)
+/*! @} */
+
+/*! @name DIMR0 - DSI Deserialized Data Interrupt Mask Register 0 */
+/*! @{ */
+
+#define SPI_DIMR0_MASK_MASK                        DSPI_DIMR0_MASK_MASK
+#define SPI_DIMR0_MASK_SHIFT                       DSPI_DIMR0_MASK_SHIFT
+#define SPI_DIMR0_MASK_WIDTH                       DSPI_DIMR0_MASK_WIDTH
+#define SPI_DIMR0_MASK(x)                          DSPI_DIMR0_MASK(x)
+/*! @} */
+
+/*! @name DPIR0 - DSI Deserialized Data Polarity Interrupt Register 0 */
+/*! @{ */
+
+#define SPI_DPIR0_DP_MASK                          DSPI_DPIR0_DP_MASK
+#define SPI_DPIR0_DP_SHIFT                         DSPI_DPIR0_DP_SHIFT
+#define SPI_DPIR0_DP_WIDTH                         DSPI_DPIR0_DP_WIDTH
+#define SPI_DPIR0_DP(x)                            DSPI_DPIR0_DP(x)
+/*! @} */
+
+/*! @name SDR1 - DSI Serialization Data Register 1 */
+/*! @{ */
+
+#define SPI_SDR1_SER_DATA_MASK                     DSPI_SDR1_SER_DATA_MASK
+#define SPI_SDR1_SER_DATA_SHIFT                    DSPI_SDR1_SER_DATA_SHIFT
+#define SPI_SDR1_SER_DATA_WIDTH                    DSPI_SDR1_SER_DATA_WIDTH
+#define SPI_SDR1_SER_DATA(x)                       DSPI_SDR1_SER_DATA(x)
+/*! @} */
+
+/*! @name ASDR1 - DSI Alternate Serialization Data Register 1 */
+/*! @{ */
+
+#define SPI_ASDR1_ASER_DATA_MASK                   DSPI_ASDR1_ASER_DATA_MASK
+#define SPI_ASDR1_ASER_DATA_SHIFT                  DSPI_ASDR1_ASER_DATA_SHIFT
+#define SPI_ASDR1_ASER_DATA_WIDTH                  DSPI_ASDR1_ASER_DATA_WIDTH
+#define SPI_ASDR1_ASER_DATA(x)                     DSPI_ASDR1_ASER_DATA(x)
+/*! @} */
+
+/*! @name COMPR1 - DSI Transmit Comparison Register 1 */
+/*! @{ */
+
+#define SPI_COMPR1_COMP_DATA_MASK                  DSPI_COMPR1_COMP_DATA_MASK
+#define SPI_COMPR1_COMP_DATA_SHIFT                 DSPI_COMPR1_COMP_DATA_SHIFT
+#define SPI_COMPR1_COMP_DATA_WIDTH                 DSPI_COMPR1_COMP_DATA_WIDTH
+#define SPI_COMPR1_COMP_DATA(x)                    DSPI_COMPR1_COMP_DATA(x)
+/*! @} */
+
+/*! @name DDR1 - DSI Deserialization Data Register 1 */
+/*! @{ */
+
+#define SPI_DDR1_DESER_DATA_MASK                   DSPI_DDR1_DESER_DATA_MASK
+#define SPI_DDR1_DESER_DATA_SHIFT                  DSPI_DDR1_DESER_DATA_SHIFT
+#define SPI_DDR1_DESER_DATA_WIDTH                  DSPI_DDR1_DESER_DATA_WIDTH
+#define SPI_DDR1_DESER_DATA(x)                     DSPI_DDR1_DESER_DATA(x)
+/*! @} */
+
+/*! @name SSR1 - DSI Serialization Source Select Register 1 */
+/*! @{ */
+
+#define SPI_SSR1_SS_MASK                           DSPI_SSR1_SS_MASK
+#define SPI_SSR1_SS_SHIFT                          DSPI_SSR1_SS_SHIFT
+#define SPI_SSR1_SS_WIDTH                          DSPI_SSR1_SS_WIDTH
+#define SPI_SSR1_SS(x)                             DSPI_SSR1_SS(x)
+/*! @} */
+
+/*! @name DIMR1 - DSI Deserialized Data Interrupt Mask Register 1 */
+/*! @{ */
+
+#define SPI_DIMR1_MASK_MASK                        DSPI_DIMR1_MASK_MASK
+#define SPI_DIMR1_MASK_SHIFT                       DSPI_DIMR1_MASK_SHIFT
+#define SPI_DIMR1_MASK_WIDTH                       DSPI_DIMR1_MASK_WIDTH
+#define SPI_DIMR1_MASK(x)                          DSPI_DIMR1_MASK(x)
+/*! @} */
+
+/*! @name DPIR1 - DSI Deserialized Data Polarity Interrupt Register 1 */
+/*! @{ */
+
+#define SPI_DPIR1_DP_MASK                          DSPI_DPIR1_DP_MASK
+#define SPI_DPIR1_DP_SHIFT                         DSPI_DPIR1_DP_SHIFT
+#define SPI_DPIR1_DP_WIDTH                         DSPI_DPIR1_DP_WIDTH
+#define SPI_DPIR1_DP(x)                            DSPI_DPIR1_DP(x)
+/*! @} */
+
+/*! @name CTARE - Clock and Transfer Attributes Register Extended */
+/*! @{ */
+
+#define SPI_CTARE_DTCP_MASK                        DSPI_CTARE_DTCP_MASK
+#define SPI_CTARE_DTCP_SHIFT                       DSPI_CTARE_DTCP_SHIFT
+#define SPI_CTARE_DTCP_WIDTH                       DSPI_CTARE_DTCP_WIDTH
+#define SPI_CTARE_DTCP(x)                          DSPI_CTARE_DTCP(x)
+
+#define SPI_CTARE_FMSZE_MASK                       DSPI_CTARE_FMSZE_MASK
+#define SPI_CTARE_FMSZE_SHIFT                      DSPI_CTARE_FMSZE_SHIFT
+#define SPI_CTARE_FMSZE_WIDTH                      DSPI_CTARE_FMSZE_WIDTH
+#define SPI_CTARE_FMSZE(x)                         DSPI_CTARE_FMSZE(x)
+/*! @} */
+
+/*! @name SREX - Status Register Extended */
+/*! @{ */
+
+#define SPI_SREX_CMDNXTPTR_MASK                    DSPI_SREX_CMDNXTPTR_MASK
+#define SPI_SREX_CMDNXTPTR_SHIFT                   DSPI_SREX_CMDNXTPTR_SHIFT
+#define SPI_SREX_CMDNXTPTR_WIDTH                   DSPI_SREX_CMDNXTPTR_WIDTH
+#define SPI_SREX_CMDNXTPTR(x)                      DSPI_SREX_CMDNXTPTR(x)
+
+#define SPI_SREX_CMDCTR_MASK                       DSPI_SREX_CMDCTR_MASK
+#define SPI_SREX_CMDCTR_SHIFT                      DSPI_SREX_CMDCTR_SHIFT
+#define SPI_SREX_CMDCTR_WIDTH                      DSPI_SREX_CMDCTR_WIDTH
+#define SPI_SREX_CMDCTR(x)                         DSPI_SREX_CMDCTR(x)
+
+#define SPI_SREX_RXCTR4_MASK                       DSPI_SREX_RXCTR4_MASK
+#define SPI_SREX_RXCTR4_SHIFT                      DSPI_SREX_RXCTR4_SHIFT
+#define SPI_SREX_RXCTR4_WIDTH                      DSPI_SREX_RXCTR4_WIDTH
+#define SPI_SREX_RXCTR4(x)                         DSPI_SREX_RXCTR4(x)
+
+#define SPI_SREX_TXCTR4_MASK                       DSPI_SREX_TXCTR4_MASK
+#define SPI_SREX_TXCTR4_SHIFT                      DSPI_SREX_TXCTR4_SHIFT
+#define SPI_SREX_TXCTR4_WIDTH                      DSPI_SREX_TXCTR4_WIDTH
+#define SPI_SREX_TXCTR4(x)                         DSPI_SREX_TXCTR4(x)
+/*! @} */
+
+/*! @name TSL - Time Slot Length Register */
+/*! @{ */
+
+#define SPI_TSL_TS0_LEN_MASK                       DSPI_TSL_TS0_LEN_MASK
+#define SPI_TSL_TS0_LEN_SHIFT                      DSPI_TSL_TS0_LEN_SHIFT
+#define SPI_TSL_TS0_LEN_WIDTH                      DSPI_TSL_TS0_LEN_WIDTH
+#define SPI_TSL_TS0_LEN(x)                         DSPI_TSL_TS0_LEN(x)
+
+#define SPI_TSL_TS1_LEN_MASK                       DSPI_TSL_TS1_LEN_MASK
+#define SPI_TSL_TS1_LEN_SHIFT                      DSPI_TSL_TS1_LEN_SHIFT
+#define SPI_TSL_TS1_LEN_WIDTH                      DSPI_TSL_TS1_LEN_WIDTH
+#define SPI_TSL_TS1_LEN(x)                         DSPI_TSL_TS1_LEN(x)
+
+#define SPI_TSL_TS2_LEN_MASK                       DSPI_TSL_TS2_LEN_MASK
+#define SPI_TSL_TS2_LEN_SHIFT                      DSPI_TSL_TS2_LEN_SHIFT
+#define SPI_TSL_TS2_LEN_WIDTH                      DSPI_TSL_TS2_LEN_WIDTH
+#define SPI_TSL_TS2_LEN(x)                         DSPI_TSL_TS2_LEN(x)
+
+#define SPI_TSL_TS3_LEN_MASK                       DSPI_TSL_TS3_LEN_MASK
+#define SPI_TSL_TS3_LEN_SHIFT                      DSPI_TSL_TS3_LEN_SHIFT
+#define SPI_TSL_TS3_LEN_WIDTH                      DSPI_TSL_TS3_LEN_WIDTH
+#define SPI_TSL_TS3_LEN(x)                         DSPI_TSL_TS3_LEN(x)
+/*! @} */
+
+/*! @name TS_CONF - Time Slot Configuration Register */
+/*! @{ */
+
+#define SPI_TS_CONF_TS0_MASK                       DSPI_TS_CONF_TS0_MASK
+#define SPI_TS_CONF_TS0_SHIFT                      DSPI_TS_CONF_TS0_SHIFT
+#define SPI_TS_CONF_TS0_WIDTH                      DSPI_TS_CONF_TS0_WIDTH
+#define SPI_TS_CONF_TS0(x)                         DSPI_TS_CONF_TS0(x)
+
+#define SPI_TS_CONF_TS1_MASK                       DSPI_TS_CONF_TS1_MASK
+#define SPI_TS_CONF_TS1_SHIFT                      DSPI_TS_CONF_TS1_SHIFT
+#define SPI_TS_CONF_TS1_WIDTH                      DSPI_TS_CONF_TS1_WIDTH
+#define SPI_TS_CONF_TS1(x)                         DSPI_TS_CONF_TS1(x)
+
+#define SPI_TS_CONF_TS2_MASK                       DSPI_TS_CONF_TS2_MASK
+#define SPI_TS_CONF_TS2_SHIFT                      DSPI_TS_CONF_TS2_SHIFT
+#define SPI_TS_CONF_TS2_WIDTH                      DSPI_TS_CONF_TS2_WIDTH
+#define SPI_TS_CONF_TS2(x)                         DSPI_TS_CONF_TS2(x)
+
+#define SPI_TS_CONF_TS3_MASK                       DSPI_TS_CONF_TS3_MASK
+#define SPI_TS_CONF_TS3_SHIFT                      DSPI_TS_CONF_TS3_SHIFT
+#define SPI_TS_CONF_TS3_WIDTH                      DSPI_TS_CONF_TS3_WIDTH
+#define SPI_TS_CONF_TS3(x)                         DSPI_TS_CONF_TS3(x)
+/*! @} */
+
+/* end of group DSPI_Register_Masks */
+
+/*!
+ * @}
+ */ /* end of group DSPI_Peripheral_Access_Layer */
+
 #endif /* _S32Z270_DEVICE_H_ */

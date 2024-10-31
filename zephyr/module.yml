@@ -19,22 +19,30 @@ blobs:
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://raw.githubusercontent.com/NXP/wifi_nb_fw/wifi_nb_fw_rel/rw61x_sb_ble_15d4_combo_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v3.7.0/rw61x_sb_ble_15d4_combo_a2.bin
     description: "BLE and 15.4 combo firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/wifi_nb_fw_rel/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v3.7.0/readme.txt
   - path: rw61x/rw61x_sb_ble_a2.bin
     sha256: 7db0dcfa76d69dae95296ab6aff84fa444a34876adccd7e83c2afb8faaeb5b1a
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://raw.githubusercontent.com/NXP/wifi_nb_fw/wifi_nb_fw_rel/rw61x_sb_ble_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v3.7.0/rw61x_sb_ble_a2.bin
     description: "BLE firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/wifi_nb_fw_rel/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v3.7.0/readme.txt
   - path: rw61x/rw61x_sb_wifi_a2.bin
     sha256: d7e1e650717c7e605319dc36fbce95b628e076b326b69b8ea5acd1c8cbee433e
     type: img
     version: '1.0'
     license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
-    url: https://raw.githubusercontent.com/NXP/wifi_nb_fw/wifi_nb_fw_rel/rw61x_sb_wifi_a2.bin
+    url: https://github.com/NXP/wifi_nb_fw/raw/nxp-v3.7.0/rw61x_sb_wifi_a2.bin
     description: "WiFi firmware for RW612 A2 boards"
-    doc-url: https://github.com/NXP/wifi_nb_fw/blob/wifi_nb_fw_rel/readme.txt
+    doc-url: https://github.com/NXP/wifi_nb_fw/blob/nxp-v3.7.0/readme.txt
+  - path: mcxw71/mcxw71_nbu_ble.sb3
+    sha256: 4da8eee6dbc14ef52ec3b1ed678d024a4df78151e350490aaa468ffd1b07f64c
+    type: img
+    version: '1.9.14.0'
+    license-path: zephyr/blobs/license/LA_OPT_NXP_Software_License.txt
+    url: https://github.com/nxp-mcuxpresso/mcux-sdk-middleware-bluetooth-controller/raw/refs/tags/MCUX_2.16.000/bin/mcxw71_nbu_ble_1_9_14_0.sb3
+    description: "BLE Controller for MCXW71 boards"
+
