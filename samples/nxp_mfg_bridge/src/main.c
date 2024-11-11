@@ -80,6 +80,9 @@ LOG_MODULE_REGISTER(mfg_bridge, LOG_LEVEL_ERR);
 #define WLAN_CAU_TEMPERATURE_ADDR    (0x4500400CU)
 #define WLAN_CAU_TEMPERATURE_FW_ADDR (0x41382490U)
 #define WLAN_FW_WAKE_STATUS_ADDR     (0x40031068U)
+#define WLAN_PMIP_TSEN_ADDR    (0x45004010U)
+#define WLAN_V33_VSEN_ADDR     (0x45004028U)
+#define WLAN_ADC_CTRL_ADDR     (0x45004000U)
 
 enum {
 	MLAN_CARD_NOT_DETECTED = 3,
@@ -564,6 +567,29 @@ void wifi_cau_temperature_enable(void)
 	WIFI_WRITE_REG32(WLAN_CAU_ENABLE_ADDR, val);
 }
 
+void wifi_pmip_v33_enable(void)
+{
+    uint32_t val;
+
+    val = WIFI_REG32(WLAN_PMIP_TSEN_ADDR);
+    val &= ~(0xE);
+    val |= (5 << 1);
+    WIFI_WRITE_REG32(WLAN_PMIP_TSEN_ADDR, val);
+
+    val = WIFI_REG32(WLAN_V33_VSEN_ADDR);
+    val &= ~(0xE);
+    val |= (5 << 1);
+    WIFI_WRITE_REG32(WLAN_V33_VSEN_ADDR, val);
+
+    val = WIFI_REG32(WLAN_ADC_CTRL_ADDR);
+    val |= 1 << 0;
+    WIFI_WRITE_REG32(WLAN_ADC_CTRL_ADDR, val);
+
+    val = WIFI_REG32(WLAN_ADC_CTRL_ADDR);
+    val &= ~(1 << 0);
+    WIFI_WRITE_REG32(WLAN_ADC_CTRL_ADDR, val);
+}
+
 static uint32_t wifi_get_board_type(void)
 {
 	status_t status;
@@ -685,6 +711,7 @@ static void task_main(void)
 #endif
 
 	wifi_cau_temperature_enable();
+	wifi_pmip_v33_enable();
 	wifi_cau_temperature_write_to_firmware();
 
 	/* 15d4 single and 15d4+ble combo */
