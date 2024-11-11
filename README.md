@@ -1,4 +1,4 @@
-This repository contains an example of NXP Zephyr Downstream framework.
+This repository contains NXP Zephyr Downstream Software Developement Kit.
 
 Prerequisites:
  - setup work environment per https://docs.zephyrproject.org/latest/develop/getting_started/index.html
