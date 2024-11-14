@@ -126,7 +126,7 @@ manifest:
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: 71e251b3ec31e66cd5bfb8dc75ecf43d83da7103
+      revision: e47b73e255182e09f61ce1f6a748577279d9b291
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
@@ -138,7 +138,7 @@ manifest:
       groups:
         - tee
     - name: tf-m-tests
-      revision: d552e4f18b92032bd335d5e3aa312f6acd82a83b
+      revision: 502ea90105ee18f20c78f710e2ba2ded0fc0756e
       path: modules/tee/tf-m/tf-m-tests
       remote: zephyrproject
       groups:
@@ -160,7 +160,7 @@ manifest:
     - name: nxp_iot_agent
       remote: nxp
       repo-path: el2go-agent
-      revision: a483d96364a8f888f3b176ad7e4662570e83b10b
+      revision: 960515756919d09a0fe884e458464c515e74a635
       path: modules/lib/nxp_iot_agent
 
     # Add any additional third-party repositories.
