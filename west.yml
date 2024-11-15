@@ -98,7 +98,7 @@ manifest:
     # added modules
     #
     - name: hal_nxp
-      revision: f66cc5242a7165004d0b8ebe9867bdb9aeb7d294
+      revision: 449abf1c10a1f041be982832e43083e8f9a7c492
       path: modules/hal/nxp
       groups:
         - hal
@@ -150,7 +150,7 @@ manifest:
     - name: wifi_nxp
       remote: nxp
       repo-path: wifi_nxp
-      revision: 0b03c65a9d0da5b3f1a346b1e2c6f754e1dde9ac
+      revision: 87f0e9796cc41ed79ee2d3196408b7cd155be3b6
       path: modules/hal/nxp/mcux/middleware/wifi_nxp
     - name: wifi_nb_fw
       remote: nxp
