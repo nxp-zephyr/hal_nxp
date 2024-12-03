@@ -52,19 +52,13 @@ BLE support
 Wi-Fi support
 =============
 
-STA mode with supplicant control interface support
-- Added STA Enterprise mode
-- Added STA DPP mode
-- Added STA WPS support
-- Added STA mode 11 k/v/r roaming support
-- Added STA mode MBO CERT support
-
-Soft-AP mode with hostap control interface support
-- Added Soft-AP Basic mode
-- Added Soft-AP Enterprise mode
-- Added Soft-AP DPP mode
-- Added Soft-AP WPS support
-- Added Soft-AP ECSA support
+- Added ITWT support for STA mode
+- Added legacy roaming support for STA mode
+- Added ECDHE_RSA cipher suite support for STA enterprise mode
+- Added RTS threshold configuration for Soft-AP mode
+- Added BTWT support for Soft-AP mode
+- Added WPS support for Soft-AP mode
+- Added enterprise support for Soft-AP mode
 
 OpenThread Support
 ==================
