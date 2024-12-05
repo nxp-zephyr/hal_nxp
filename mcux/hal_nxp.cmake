@@ -100,7 +100,8 @@ include(driver_common)
 #Include system_xxx file
 #This can be extended to other SoC series if needed
 if (DEFINED CONFIG_SOC_RESET_HOOK OR DEFINED CONFIG_SOC_SERIES_IMXRT6XX
-    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXN)
+    OR DEFINED CONFIG_SOC_SERIES_LPC55XXX OR DEFINED CONFIG_SOC_SERIES_MCXN
+    OR DEFINED CONFIG_SOC_MCXW727C)
 if (CONFIG_SOC_MIMXRT1166_CM4)
 include(device_system_MIMXRT1166_cm4)
 elseif (CONFIG_SOC_MIMXRT1166_CM7)
@@ -127,6 +128,8 @@ elseif (CONFIG_SOC_MCXN947_CPU1)
 include(device_system_MCXN947_cm33_core1)
 elseif (CONFIG_SOC_MCXN236)
 include(device_system_MCXN236)
+elseif (CONFIG_SOC_MCXW727C_CPU0)
+include(device_system_MCXW727C_cm33_core0)
 else()
 include(device_system)
 endif()
@@ -479,6 +482,15 @@ if(CONFIG_NXP_RF_IMU)
       include(component_lists)
       zephyr_compile_definitions(HAL_RPMSG_SELECT_ROLE=0U)
   endif()
+endif()
+
+if(${MCUX_DEVICE} MATCHES "MCXW")
+  list(APPEND CMAKE_MODULE_PATH
+      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k
+  )
+
+  include(driver_ccm32k)
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
 endif()
 
 if(${MCUX_DEVICE} MATCHES "MCXW")
