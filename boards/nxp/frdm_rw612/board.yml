@@ -1,7 +1,0 @@
-board:
-  name: frdm_rw612
-  vendor: nxp
-  socs:
-    - name: rw612
-      variants:
-        - name: ns
