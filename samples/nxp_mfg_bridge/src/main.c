@@ -175,18 +175,13 @@ extern const uint32_t fw_cpu1[];
 #define WIFI_FW_ADDRESS  0U
 #endif
 
-#if defined(CONFIG_NXP_MONOLITHIC_IEEE802154)
-extern const uint32_t fw_cpu2_combo[];
-#define COMBO_FW_ADDRESS (uint32_t)&fw_cpu2_combo[0]
+#if defined(CONFIG_NXP_MONOLITHIC_NBU)
+extern const uint32_t fw_cpu2[];
+#define COMBO_FW_ADDRESS (uint32_t)&fw_cpu2[0]
+#define BLE_FW_ADDRESS   (uint32_t)&fw_cpu2[0]
 #else
-#define COMBO_FW_ADDRESS   0U
-#endif
-
-#if defined(CONFIG_NXP_MONOLITHIC_BT) && !defined(CONFIG_NXP_MONOLITHIC_IEEE802154)
-extern const uint32_t fw_cpu2_ble[];
-#define BLE_FW_ADDRESS   (uint32_t)&fw_cpu2_ble[0]
-#else
-#define BLE_FW_ADDRESS   0U
+#define COMBO_FW_ADDRESS	0U
+#define BLE_FW_ADDRESS		0U
 #endif
 
 /*******************************************************************************

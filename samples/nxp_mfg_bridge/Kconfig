@@ -3,12 +3,12 @@
 
 config SUPPORT_IEEE802154
 	bool "Support IEEE 802154"
-	imply NXP_MONOLITHIC_IEEE802154
+	imply NXP_MONOLITHIC_NBU
 
 config SUPPORT_BLE
 	bool "Support bluetooth low energy"
 	default y
-	imply NXP_MONOLITHIC_BT
+	imply NXP_MONOLITHIC_NBU
 
 config SUPPORT_WIFI
 	bool "Support WiFi"
