@@ -267,7 +267,8 @@ include_driver_ifdef(CONFIG_MCUX_LPCMP		        lpcmp		driver_lpcmp)
 include_driver_ifdef(CONFIG_NXP_RF_IMU			imu		driver_imu)
 include_driver_ifdef(CONFIG_TRDC_MCUX_TRDC              trdc            driver_trdc)
 include_driver_ifdef(CONFIG_S3MU_MCUX_S3MU              s3mu            driver_s3mu)
-include_driver_ifdef(CONFIG_PINCTRL_NXP_KINETIS         port            driver_port)
+include_driver_ifdef(CONFIG_PINCTRL_NXP_PORT            port            driver_port)
+include_driver_ifdef(CONFIG_DAI_NXP_MICFIL		pdm		driver_pdm)
 if(CONFIG_BT_NXP)
 include_driver_ifdef(CONFIG_SOC_SERIES_MCXW		spc		driver_spc)
 endif()
@@ -482,15 +483,6 @@ if(CONFIG_NXP_RF_IMU)
       include(component_lists)
       zephyr_compile_definitions(HAL_RPMSG_SELECT_ROLE=0U)
   endif()
-endif()
-
-if(${MCUX_DEVICE} MATCHES "MCXW")
-  list(APPEND CMAKE_MODULE_PATH
-      ${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k
-  )
-
-  include(driver_ccm32k)
-  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/mcux-sdk/drivers/ccm32k)
 endif()
 
 if(${MCUX_DEVICE} MATCHES "MCXW")
