@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: bac2be9e5ee2e3d85647ccbcacea1e7316cc23d5
+      revision: 4404b12aba1620dfc1c334cb15a374f5b5a950d1
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
@@ -98,7 +98,7 @@ manifest:
     # added modules
     #
     - name: hal_nxp
-      revision: a7ec1432e20f258b29ed7b7d40a6797781d74052
+      revision: 8c442b82b821d2fc02a8a45bd7b01e33a47b58ff
       path: modules/hal/nxp
       groups:
         - hal
@@ -145,12 +145,12 @@ manifest:
         - tee
     - name: hostap
       repo-path: hostap
-      revision: e044b1680c8de5549240f4a3b725f6bda6126af1
+      revision: 3eee2c98bf1ead4c47a337f6d202bde027bbfbdc
       path: modules/lib/hostap
     - name: wifi_nxp
       remote: nxp
       repo-path: wifi_nxp
-      revision: 175d78aef4c0d32219efceeb2e3f29ead895fcbf
+      revision: ac3640955e494a279cefa6488078291998f55434
       path: modules/hal/nxp/mcux/middleware/wifi_nxp
     - name: wifi_nb_fw
       remote: nxp
