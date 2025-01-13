@@ -221,6 +221,7 @@
 		reg = <0x31000 0x88>;
 		interrupts = <37 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xc4>;
+		prescaler = <16>;
 		status = "disabled";
 		#pwm-cells = <3>;
 	};
@@ -230,6 +231,7 @@
 		reg = <0x32000 0x88>;
 		interrupts = <38 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xc8>;
+		prescaler = <16>;
 		status = "disabled";
 		#pwm-cells = <3>;
 	};
