@@ -101,7 +101,7 @@
 	};
 
 	pinctrl: pinctrl {
-		compatible = "nxp,kinetis-pinctrl";
+		compatible = "nxp,port-pinctrl";
 	};
 };
 
@@ -120,31 +120,31 @@
 	};
 
 	porta: pinctrl@42000 {
-		compatible = "nxp,kinetis-pinmux";
+		compatible = "nxp,port-pinmux";
 		reg = <0x42000 0x20>;
 		clocks = <&scg SCG_K4_SLOW_CLK 0x108>;
 	};
 
 	portb: pinctrl@43000 {
-		compatible = "nxp,kinetis-pinmux";
+		compatible = "nxp,port-pinmux";
 		reg = <0x43000 0x20>;
 		clocks = <&scg SCG_K4_SLOW_CLK 0x10c>;
 	};
 
 	portc: pinctrl@44000 {
-		compatible = "nxp,kinetis-pinmux";
+		compatible = "nxp,port-pinmux";
 		reg = <0x44000 0x20>;
 		clocks = <&scg SCG_K4_SLOW_CLK 0x110>;
 	};
 
 	portd: pinctrl@45000 {
-		compatible = "nxp,kinetis-pinmux";
+		compatible = "nxp,port-pinmux";
 		reg = <0x45000 0x20>;
 		clocks = <&scg SCG_K4_SLOW_CLK 0>;
 	};
 
 	lpuart0: serial@38000 {
-		compatible = "nxp,kinetis-lpuart";
+		compatible = "nxp,lpuart";
 		reg = <0x38000 0x34>;
 		interrupts = <44 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xe0>;
@@ -152,7 +152,7 @@
 	};
 
 	lpuart1: serial@39000 {
-		compatible = "nxp,kinetis-lpuart";
+		compatible = "nxp,lpuart";
 		reg = <0x39000 0x34>;
 		interrupts = <45 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xe4>;
@@ -160,7 +160,7 @@
 	};
 
 	lpi2c0: i2c@33000 {
-		compatible = "nxp,imx-lpi2c";
+		compatible = "nxp,lpi2c";
 		clock-frequency = <I2C_BITRATE_STANDARD>;
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -171,7 +171,7 @@
 	};
 
 	lpi2c1: i2c@34000 {
-		compatible = "nxp,imx-lpi2c";
+		compatible = "nxp,lpi2c";
 		clock-frequency = <I2C_BITRATE_STANDARD>;
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -182,7 +182,7 @@
 	};
 
 	lpspi0: spi@36000 {
-		compatible = "nxp,imx-lpspi";
+		compatible = "nxp,lpspi";
 		reg = <0x36000 0x800>;
 		interrupts = <42 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xd8>;
@@ -192,7 +192,7 @@
 	};
 
 	lpspi1: spi@37000 {
-		compatible = "nxp,imx-lpspi";
+		compatible = "nxp,lpspi";
 		reg = <0x37000 0x800>;
 		interrupts = <43 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xdc>;
@@ -235,7 +235,7 @@
 	};
 
 	wdog0: watchdog@1a000 {
-		compatible = "nxp,kinetis-wdog32";
+		compatible = "nxp,wdog32";
 		reg = <0x1a000 10>;
 		interrupts = <23 0>;
 		clocks = <&scg SCG_K4_SYSOSC_CLK 0x68>;
@@ -245,7 +245,7 @@
 	};
 
 	wdog1: watchdog@1b000 {
-		compatible = "nxp,kinetis-wdog32";
+		compatible = "nxp,wdog32";
 		reg = <0x1b000 10>;
 		interrupts = <24 0>;
 		clocks = <&scg SCG_K4_SYSOSC_CLK 0x6c>;
