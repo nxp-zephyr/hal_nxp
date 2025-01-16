@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2023, NXP
+# Copyright 2023,2024 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -63,6 +63,9 @@ def processor_to_controller(processor_name):
     if "IMXRT1" in processor_name:
         # Use IMX config tools
         return 'IOMUX'
+    if "IMXRT7" in processor_name:
+        # LPC config tools
+        return 'IOCON'
     if "IMXRT6" in processor_name:
         # LPC config tools
         return 'IOCON'
@@ -117,8 +120,8 @@ def main():
 
     data_version = get_pack_version(temp_dir.name)
     print(f"Found data pack version {data_version}")
-    if round(data_version) != 14:
-        print("Warning: This tool is only verified for data pack version 14, "
+    if round(data_version) != 16:
+        print("Warning: This tool is only verified for data pack version 16, "
             "other versions may not work")
 
     # Attempt to locate the signal XML files we will generate from
