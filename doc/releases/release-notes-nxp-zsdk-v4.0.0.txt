@@ -6,16 +6,15 @@ The nxp-zsdk provides a NXP Zephyr Downstream for NXP SOCs.
 How to get the code
 ===================
 
-Use the getting Zephyr started guide to setup your development environment. However,
-the west init command is as follows:
+The git tag for this release is "nxp-v4.0.0".  See the ZSDK Getting Started at
+https://github.com/nxp-zephyr/nxp-zsdk/tree/main/doc/Getting-Started.md.  The
+West init command is as follows:
 
  $ west init -m https://github.com/nxp-zephyr/nxp-zsdk.git --mr nxp-v4.0.0
 
 Then, run:
  $ west update
  $ west zephyr-export
-
-The Zephyr getting started guide can be found at: https://docs.zephyrproject.org/latest/develop/getting_started/index.html
 
 Release Highlights
 ==================

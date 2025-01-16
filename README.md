@@ -1,12 +1,3 @@
 This repository contains NXP Zephyr Downstream Software Developement Kit.
 
-Prerequisites:
- - setup work environment per https://docs.zephyrproject.org/latest/develop/getting_started/index.html
-
-To setup:
-
-```
- $ west init -m https://github.com/nxp-zephyr/nxp-zsdk.git nxp_zephyr
- $ cd nxp_zephyr
- $ west update
-```
+To learn more, see [Introduction to ZSDK Downstream](https://github.com/nxp-zephyr/nxp-zsdk/tree/main/doc/Introduction-to-ZSDK-Downstream.md) and [ZSDK Getting Started](https://github.com/nxp-zephyr/nxp-zsdk/tree/main/doc/Getting-Started.md).
