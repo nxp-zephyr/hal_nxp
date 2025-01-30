@@ -1,6 +1,6 @@
 /*
  * Copyright 2021-2022 NXP
- * All rights reserved.
+ *  
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -39,13 +39,17 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 1.0.0. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(1, 0, 0))
+/*! @brief CLOCK driver version 2.2.2. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 2))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
+#if defined(IS_RADIO_CORE) && (IS_RADIO_CORE == 1U)
+#define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (32000000UL)
+#else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (96000000UL)
+#endif
 #endif
 
 /*! @brief External XTAL0 (OSC0/SYSOSC) clock frequency.
@@ -130,9 +134,9 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock ip name array for PORT. */
-#define PORT_CLOCKS                              \
-    {                                            \
-        kCLOCK_PortA, kCLOCK_PortB, kCLOCK_PortC \
+#define PORT_CLOCKS                                             \
+    {                                                           \
+        kCLOCK_PortA, kCLOCK_PortB, kCLOCK_PortC, kCLOCK_NOGATE \
     }
 
 /*! @brief Clock ip name array for LPADC. */
@@ -154,9 +158,9 @@ extern volatile uint32_t g_xtal32Freq;
     }
 
 /*! @brief Clock ip name array for GPIO. */
-#define GPIO_CLOCKS                              \
-    {                                            \
-        kCLOCK_GpioA, kCLOCK_GpioB, kCLOCK_GpioC \
+#define GPIO_CLOCKS                                             \
+    {                                                           \
+        kCLOCK_GpioA, kCLOCK_GpioB, kCLOCK_GpioC, kCLOCK_NOGATE \
     }
 
 /*! @brief Clock ip name array for LPIT. */
