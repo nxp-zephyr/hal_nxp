@@ -191,6 +191,8 @@
 		reg = <0x36000 0x800>;
 		interrupts = <42 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xd8>;
+		tx-fifo-size = <8>;
+		rx-fifo-size = <8>;
 		#address-cells = <1>;
 		#size-cells = <0>;
 		status = "disabled";
@@ -201,6 +203,8 @@
 		reg = <0x37000 0x800>;
 		interrupts = <43 0>;
 		clocks = <&scg SCG_K4_FIRC_CLK 0xdc>;
+		tx-fifo-size = <8>;
+		rx-fifo-size = <8>;
 		#address-cells = <1>;
 		#size-cells = <0>;
 		status = "disabled";
