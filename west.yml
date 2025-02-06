@@ -43,7 +43,7 @@ manifest:
 
     - name: zephyr
       repo-path: nxp-zephyr
-      revision: 6db892f3b444af0d9c8b2839dc9c0272ed9e8558
+      revision: dec9d4160ce1b2ad2f1aab33f5664e2d9b5e2fed
       import:
         #
         # ZSDK imports the contents of nxp-zephyr/west.yml at the above
