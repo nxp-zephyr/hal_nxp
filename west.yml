@@ -118,14 +118,14 @@ manifest:
     - name: mbedtls
       remote: nxp
       repo-path: nxp_mbedtls
-      revision: f90cf7011cd5734d54dd0d77527e94165a3ad83b
+      revision: 668bf81181b3e3a611789e4ac0d7a4c1ae684d66
       path: modules/crypto/mbedtls
       groups:
         - crypto
     - name: trusted-firmware-m
       remote: nxp
       repo-path: nxp_tf-m
-      revision: e47b73e255182e09f61ce1f6a748577279d9b291
+      revision: 3a7c9c9fbfcf5ca170742fe65e5002f3b44a1903
       path: modules/tee/tf-m/trusted-firmware-m
       groups:
         - tee
@@ -159,7 +159,7 @@ manifest:
     - name: nxp_iot_agent
       remote: nxp
       repo-path: el2go-agent
-      revision: a976cb71f37647af6228ed830fe296b5a6a5a7bc
+      revision: ca18e9ec8dd18f91eb6bd2309b355b754f22a35d
       path: modules/lib/nxp_iot_agent
 
     # Add any additional third-party repositories.
