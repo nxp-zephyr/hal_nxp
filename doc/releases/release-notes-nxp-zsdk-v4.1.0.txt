@@ -1,0 +1,79 @@
+NXP Zephyr SDK v4.1.0.0 Release Notes
+=============================
+
+The nxp-zsdk provides a NXP Zephyr Downstream for NXP SOCs.
+
+How to get the code
+===================
+
+The git tag for this release is "nxp-v4.1.0".  See the ZSDK Getting Started at
+https://github.com/nxp-zephyr/nxp-zsdk/tree/main/doc/Getting-Started.md.  The
+West init command is as follows:
+
+ $ west init -m https://github.com/nxp-zephyr/nxp-zsdk.git --mr nxp-v4.1.0
+
+Then, run:
+ $ west update
+ $ west zephyr-export
+
+Release Highlights
+==================
+
+Aligned with Zephyr Project v4.0-branch
+
+Zephyr Project sync SHA : <<<TBD>>>
+
+nxp-zephyr Change Log
+=====================
+Following Changes have been applied on top of the Zephyr v4.0.0 release branch:
+
+Base Enablement
+===============
+
+- RW61x: Added standby (Power Mode 3 - PM3) support
+- Enabled standby (PM3) for RW612 and set IMU as wakeup source
+- rw6xx: Added support for XTAL32K clock
+- Added support to wakeup from a pin input
+- Added support to wakeup from an external pin
+- Set IMU as wakeup source for frdm_rw612
+- Added PM Action for MCUX LPC and NXP UART Flexcomm drivers
+- soc: rw6xx: Add code to fire the GPIO callback
+- drivers: gpio_mcux_lpc: Provide an API to fire callbacks
+
+
+BLE support
+============
+
+- Add config for coex applications
+- Added command cmd_unblock_send in Bluetooth shell to send data traffic in coex scenario.
+- Enabled standby (PM3) for coex, central_ht and peripheral_ht applications
+
+Wi-Fi support
+=============
+
+- Added ITWT support for STA mode
+- Added legacy roaming support for STA mode
+- Added ECDHE_RSA cipher suite support for STA enterprise mode
+- Added RTS threshold configuration for Soft-AP mode
+- Added BTWT support for Soft-AP mode
+- Added WPS support for Soft-AP mode
+- Added enterprise support for Soft-AP mode
+
+OpenThread Support
+==================
+
+- Added RCP Spinel interface support for OpenThread
+
+TF-M / mbedTLS / Crypto
+=======================
+
+- els_pkc crypto module updated to v1.9.0
+- psa_crypto_driver performance improvemetns
+- mbedTLS v3.6.2 with support for HW acceleration via PSA APIs for RW61x
+- TF-M v2.1.1 enablement for RW61x
+
+EdgeLock 2GO support
+====================
+
+- Added nxp_iot_agent v5.2.1 module
+  - Enabled el2go_agent, el2go_claimcode_encryption, el2go_import_blob and el2go_mqtt_demo samples for RW61x
