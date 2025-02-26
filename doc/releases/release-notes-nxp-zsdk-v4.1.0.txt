@@ -68,12 +68,11 @@ TF-M / mbedTLS / Crypto
 =======================
 
 - els_pkc crypto module updated to v1.9.0
-- psa_crypto_driver performance improvemetns
+- psa_crypto_driver performance improvements
 - mbedTLS v3.6.2 with support for HW acceleration via PSA APIs for RW61x
 - TF-M v2.1.1 enablement for RW61x
 
 EdgeLock 2GO support
 ====================
 
-- Added nxp_iot_agent v5.2.1 module
-  - Enabled el2go_agent, el2go_claimcode_encryption, el2go_import_blob and el2go_mqtt_demo samples for RW61x
+- Updated nxp_iot_agent module to v6.1.0
