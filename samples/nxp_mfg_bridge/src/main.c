@@ -672,29 +672,6 @@ static void task_main(void)
 	IRQ_CONNECT(90, 1, BLE_MCI_WAKEUP0_DriverIRQHandler, 0, 0);
 	irq_enable(90);
 
-	/* Initialize uart */
-	result = uart_rtos_init(&uart_handle);
-	if (result < 0) {
-		LOG_ERR("Failed to initialize uart");
-		return;
-	}
-
-	local_outbuf = pvPortMalloc(SDIO_OUTBUF_LEN);
-
-	if (local_outbuf == NULL) {
-		LOG_ERR("Failed to allocate buffer");
-		return;
-	}
-	rx_buf = pvPortMalloc(BUF_LEN);
-	if (rx_buf == NULL) {
-		LOG_ERR("Failed to allocate buffer");
-		return;
-	}
-
-	struct uart_cb *uart = &uartcb;
-
-	uart_init_crc32(uart);
-
 	/* Download firmware */
 #if !defined(CONFIG_SUPPORT_WIFI) && !defined(CONFIG_SUPPORT_BLE) &&                               \
 	!defined(CONFIG_SUPPORT_IEEE802154)
@@ -727,6 +704,29 @@ static void task_main(void)
 
 	k_timer_init(&g_wifi_cau_temperature_timer, wifi_cau_temperature_timer_cb, NULL);
 	k_timer_start(&g_wifi_cau_temperature_timer, K_MSEC(5000), K_MSEC(5000));
+
+	/* Initialize uart */
+	result = uart_rtos_init(&uart_handle);
+	if (result < 0) {
+		LOG_ERR("Failed to initialize uart");
+		return;
+	}
+
+	local_outbuf = pvPortMalloc(SDIO_OUTBUF_LEN);
+
+	if (local_outbuf == NULL) {
+		LOG_ERR("Failed to allocate buffer");
+		return;
+	}
+	rx_buf = pvPortMalloc(BUF_LEN);
+	if (rx_buf == NULL) {
+		LOG_ERR("Failed to allocate buffer");
+		return;
+	}
+
+	struct uart_cb *uart = &uartcb;
+
+	uart_init_crc32(uart);
 
 	size_t uart_rx_len = 0;
 	int len = 0;
