@@ -51,13 +51,12 @@ BLE support
 Wi-Fi support
 =============
 
-- Added ITWT support for STA mode
-- Added legacy roaming support for STA mode
-- Added ECDHE_RSA cipher suite support for STA enterprise mode
-- Added RTS threshold configuration for Soft-AP mode
-- Added BTWT support for Soft-AP mode
-- Added WPS support for Soft-AP mode
-- Added enterprise support for Soft-AP mode
+- Added intra-BSS forwarding for SAP mode
+- Added using or skipping CA certificate for EAP-TTLS-MSCHAPV2 and EAP-PEAP-MSCHAPV2
+- Added 'wifi ap config' command to configure SAP parameters
+- Added WPA3 enterprise only mode to replace EAP_TLS_SHA256
+- Added STA only mode support
+- Added RSN Override support for STA mode
 
 OpenThread Support
 ==================
