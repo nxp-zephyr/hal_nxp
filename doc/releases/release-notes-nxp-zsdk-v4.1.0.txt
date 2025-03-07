@@ -44,9 +44,9 @@ Base Enablement
 BLE support
 ============
 
-- Add config for coex applications
-- Added command cmd_unblock_send in Bluetooth shell to send data traffic in coex scenario.
-- Enabled standby (PM3) for coex, central_ht and peripheral_ht applications
+- [MCXW72]: BLE Support added
+- [MCXW71]: BLE NBU binary blob updated to MCUXPresso 24.12.00 release
+- [MCXW7x]: Various bugfixes and general stabilization
 
 Wi-Fi support
 =============
