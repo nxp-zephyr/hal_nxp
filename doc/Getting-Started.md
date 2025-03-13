@@ -44,6 +44,6 @@ The final command may take a long time to clone all the repos.  After the update
 # Further Help
 * [MCUXpresso for VS Code](https://www.nxp.com/design/design-center/software/embedded-software/mcuxpresso-for-visual-studio-code:MCUXPRESSO-VSC?tid=vanMCUXPRESSO-VSC), [wiki](https://github.com/nxp-mcuxpresso/vscode-for-mcux/wiki) documentation and [Zephyr lab guides](https://github.com/nxp-mcuxpresso/vscode-for-mcux/wiki/Training-Zephyr-Getting-Started).
 * Upstream Zephyr [Getting Started](https://docs.zephyrproject.org/latest/develop/getting_started/index.html) and [documentation](https://docs.zephyrproject.org/latest/)
-* NXP [Zephyr Support Resources](https://community.nxp.com/t5/Zephyr-Project-Knowledge-Base/Zephyr-Support-Resources/ta-p/2008548)
+* NXP [Zephyr Knowledge Hub](https://community.nxp.com/t5/Zephyr-Project-Knowledge-Base/Zephyr-Knowledge-Hub/ta-p/2008548)
 * [NXP and Zephyr™ OS Webinar Series](https://www.nxp.com/pages/nxp-and-zephyr-os-webinar-series:TS-NXP-AND-ZEPHYR-OS-WEBINAR-SERIES) to get an overview of Zephyr and key topics
 * [NXP Support Community forum for Zephyr](https://community.nxp.com/t5/Zephyr-Project/bd-p/Zephyr-Project)
