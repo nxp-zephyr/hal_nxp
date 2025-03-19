@@ -19,9 +19,9 @@ Then, run:
 Release Highlights
 ==================
 
-Aligned with Zephyr Project v4.0-branch
+Aligned with Zephyr Project v4.1-branch
 
-Zephyr Project sync SHA : <<<TBD>>>
+Zephyr Project sync SHA : 7823374e872145b5bd018bfe447839eb36042611
 
 nxp-zephyr Change Log
 =====================
