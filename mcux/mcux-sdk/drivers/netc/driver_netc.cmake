@@ -2,7 +2,7 @@
 include_guard(GLOBAL)
 message("driver_netc component is included.")
 
-if(${MCUX_DEVICE} MATCHES "MIMX9596")
+if((${MCUX_DEVICE} MATCHES "MIMX9596") OR (${MCUX_DEVICE} MATCHES "MIMX9596_ca55"))
     set(NETC_SWITCH_FILE "")
 else()
     set(NETC_SWITCH_FILE "${CMAKE_CURRENT_LIST_DIR}/fsl_netc_switch.c")
