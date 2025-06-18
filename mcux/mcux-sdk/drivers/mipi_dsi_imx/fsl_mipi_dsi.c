@@ -1137,7 +1137,7 @@ uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel) {
     };
 
     for (size_t i = 0; i < sizeof(vco_table) / sizeof(vco_table[0]); i++) {
-        if (vco_freq >= vco_table[i].vco_freq) {
+        if (pll_freq_sel >= vco_table[i].vco_freq) {
             return vco_table[i].param;
         }
     }
