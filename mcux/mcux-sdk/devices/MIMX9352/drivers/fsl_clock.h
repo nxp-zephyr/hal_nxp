@@ -1112,6 +1112,12 @@ typedef enum _clock_lpcg
         kCLOCK_IpInvalid, kCLOCK_Sema1, kCLOCK_Sema2 \
     }
 
+/*! @brief Clock ip name array for ISI. */
+#define ISI_CLOCKS  \
+    {               \
+        kCLOCK_Isi  \
+    }
+
 /*******************************************************************************
  * Clock Root APIs
  ******************************************************************************/
