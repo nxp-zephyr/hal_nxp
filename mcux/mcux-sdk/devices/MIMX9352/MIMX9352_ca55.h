@@ -39794,23 +39794,16 @@ typedef struct {
   __IO uint32_t CHNL_CSC_COEFF3;                   /**< Channel Color Space Conversion Coefficient 3, offset: 0x34 */
   __IO uint32_t CHNL_CSC_COEFF4;                   /**< Channel Color Space Conversion Coefficient 4, offset: 0x38 */
   __IO uint32_t CHNL_CSC_COEFF5;                   /**< Channel Color Space Conversion Coefficient 5, offset: 0x3C */
-  __IO uint32_t CHNL_ROI_0_ALPHA;                  /**< Channel Alpha Value for ROI 0, offset: 0x40 */
-  __IO uint32_t CHNL_ROI_0_ULC;                    /**< Channel Upper Left Coordinate for ROI 0, offset: 0x44 */
-  __IO uint32_t CHNL_ROI_0_LRC;                    /**< Channel Lower Right Coordinate for ROI 0, offset: 0x48 */
-  __IO uint32_t CHNL_ROI_1_ALPHA;                  /**< Channel Alpha Value for ROI 1, offset: 0x4C */
-  __IO uint32_t CHNL_ROI_1_ULC;                    /**< Channel Upper Left Coordinate for ROI 1, offset: 0x50 */
-  __IO uint32_t CHNL_ROI_1_LRC;                    /**< Channel Lower Right Coordinate for ROI 1, offset: 0x54 */
-  __IO uint32_t CHNL_ROI_2_ALPHA;                  /**< Channel Alpha Value for ROI 2, offset: 0x58 */
-  __IO uint32_t CHNL_ROI_2_ULC;                    /**< Channel Upper Left Coordinate for ROI 2, offset: 0x5C */
-  __IO uint32_t CHNL_ROI_2_LRC;                    /**< Channel Lower Right Coordinate for ROI 2, offset: 0x60 */
-  __IO uint32_t CHNL_ROI_3_ALPHA;                  /**< Channel Alpha Value for ROI 3, offset: 0x64 */
-  __IO uint32_t CHNL_ROI_3_ULC;                    /**< Channel Upper Left Coordinate for ROI 3, offset: 0x68 */
-  __IO uint32_t CHNL_ROI_3_LRC;                    /**< Channel Lower Right Coordinate for ROI 3, offset: 0x6C */
+  struct {                                         /* offset: 0x40, array step: 0xC */
+    __IO uint32_t CHNL_ROI_ALPHA;                  /**< Channel Alpha Value for ROI 0..Channel Alpha Value for ROI 3, array offset: 0x40, array step: 0xC */
+    __IO uint32_t CHNL_ROI_ULC;                    /**< Channel Upper Left Coordinate for ROI 0..Channel Upper Left Coordinate for ROI 3, array offset: 0x44, array step: 0xC */
+    __IO uint32_t CHNL_ROI_LRC;                    /**< Channel Lower Right Coordinate for ROI 0..Channel Lower Right Coordinate for ROI 3, array offset: 0x48, array step: 0xC */
+  } ROI[4];
   __IO uint32_t CHNL_OUT_BUF1_ADDR_Y;              /**< Channel RGB or Luma (Y) Output Buffer 1 Address, offset: 0x70 */
   __IO uint32_t CHNL_OUT_BUF1_ADDR_U;              /**< Channel Chroma (U/Cb/UV/CbCr) Output Buffer 1 Address, offset: 0x74 */
   __IO uint32_t CHNL_OUT_BUF1_ADDR_V;              /**< Channel Chroma (V/Cr) Output Buffer 1 Address, offset: 0x78 */
   __IO uint32_t CHNL_OUT_BUF_PITCH;                /**< Channel Output Buffer Pitch, offset: 0x7C */
-       uint8_t RESERVED_0[4];
+  __IO uint32_t CHNL_IN_BUF_ADDR;                  /**< Channel Input Buffer Address, offset: 0x80 */
   __IO uint32_t CHNL_IN_BUF_PITCH;                 /**< Channel Input Buffer Pitch, offset: 0x84 */
   __IO uint32_t CHNL_MEM_RD_CTRL;                  /**< Channel Memory Read Control, offset: 0x88 */
   __IO uint32_t CHNL_OUT_BUF2_ADDR_Y;              /**< Channel RGB or Luma (Y) Output Buffer 2 Address, offset: 0x8C */
@@ -39848,6 +39841,16 @@ typedef struct {
  */
 #define ISI_CHNL_CTRL_SRC_TYPE(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CTRL_SRC_TYPE_SHIFT)) & ISI_CHNL_CTRL_SRC_TYPE_MASK)
 
+#define ISI_CHNL_CTRL_MIPI_VC_ID_MASK               (0xC0U)
+#define ISI_CHNL_CTRL_MIPI_VC_ID_SHIFT              (6U)
+/*! MIPI_VC_ID - Virtual Channel ID
+ *  0b00..Virtual channel 0 selected or no virtual channel used
+ *  0b01..Virtual channel 1 selected
+ *  0b10..Virtual channel 2 selected
+ *  0b11..Virtual channel 3 selected
+ */
+#define ISI_CHNL_CTRL_MIPI_VC_ID(x)                 (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CTRL_MIPI_VC_ID_SHIFT)) & ISI_CHNL_CTRL_MIPI_VC_ID_MASK)
+
 #define ISI_CHNL_CTRL_VER_ID_MASK                (0x3C0000U)
 #define ISI_CHNL_CTRL_VER_ID_SHIFT               (18U)
 /*! VER_ID - Version ID */
@@ -39868,6 +39871,16 @@ typedef struct {
  *  0b1..Software reset
  */
 #define ISI_CHNL_CTRL_SW_RST(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CTRL_SW_RST_SHIFT)) & ISI_CHNL_CTRL_SW_RST_MASK)
+
+#define ISI_CHNL_CTRL_CHAIN_BUF_MASK             (0x6000000U)
+#define ISI_CHNL_CTRL_CHAIN_BUF_SHIFT            (25U)
+/*! CHAIN_BUF - Chain Line Buffer Control
+ *  0b00..No line buffers chained (supports 2048 or less horizontal resolution)
+ *  0b01..Two line buffers chained (supports 4096 horizontal resolution)
+ *  0b10..
+ *  0b11..
+ */
+#define ISI_CHNL_CTRL_CHAIN_BUF(x)               (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CTRL_CHAIN_BUF_SHIFT)) & ISI_CHNL_CTRL_CHAIN_BUF_MASK)
 
 #define ISI_CHNL_CTRL_CHNL_BYPASS_MASK           (0x20000000U)
 #define ISI_CHNL_CTRL_CHNL_BYPASS_SHIFT          (29U)
@@ -40477,185 +40490,59 @@ typedef struct {
 #define ISI_CHNL_CSC_COEFF5_D3(x)                (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_CSC_COEFF5_D3_SHIFT)) & ISI_CHNL_CSC_COEFF5_D3_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_ALPHA - Channel Alpha Value for ROI 0 */
+/*! @name CHNL_ROI_ALPHA - Channel Alpha Value for ROI 0..Channel Alpha Value for ROI 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_SHIFT      (16U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK         (0x10000U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN_SHIFT        (16U)
 /*! ALPHA_EN - Alpha Value Insertion Enable
  *  0b0..Disable
  *  0b1..Enable
  */
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_ALPHA_EN_MASK)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_EN(x)           (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_ALPHA_ALPHA_EN_MASK)
 
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA_SHIFT         (24U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_MASK            (0xFF000000U)
+#define ISI_CHNL_ROI_ALPHA_ALPHA_SHIFT           (24U)
 /*! ALPHA - Alpha Value */
-#define ISI_CHNL_ROI_0_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_0_ALPHA_ALPHA_MASK)
+#define ISI_CHNL_ROI_ALPHA_ALPHA(x)              (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_ALPHA_ALPHA_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_ULC - Channel Upper Left Coordinate for ROI 0 */
+/* The count of ISI_CHNL_ROI_ALPHA */
+#define ISI_CHNL_ROI_ALPHA_COUNT                 (4U)
+
+/*! @name CHNL_ROI_ULC - Channel Upper Left Coordinate for ROI 0..Channel Upper Left Coordinate for ROI 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_0_ULC_Y_SHIFT               (0U)
+#define ISI_CHNL_ROI_ULC_Y_MASK                  (0x1FFFU)
+#define ISI_CHNL_ROI_ULC_Y_SHIFT                 (0U)
 /*! Y - Upper Left Y-Coordinate */
-#define ISI_CHNL_ROI_0_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_Y_SHIFT)) & ISI_CHNL_ROI_0_ULC_Y_MASK)
+#define ISI_CHNL_ROI_ULC_Y(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_Y_SHIFT)) & ISI_CHNL_ROI_ULC_Y_MASK)
 
-#define ISI_CHNL_ROI_0_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_0_ULC_X_SHIFT               (16U)
+#define ISI_CHNL_ROI_ULC_X_MASK                  (0xFFF0000U)
+#define ISI_CHNL_ROI_ULC_X_SHIFT                 (16U)
 /*! X - Upper Left X-Coordinate */
-#define ISI_CHNL_ROI_0_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_ULC_X_SHIFT)) & ISI_CHNL_ROI_0_ULC_X_MASK)
+#define ISI_CHNL_ROI_ULC_X(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_ULC_X_SHIFT)) & ISI_CHNL_ROI_ULC_X_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_0_LRC - Channel Lower Right Coordinate for ROI 0 */
+/* The count of ISI_CHNL_ROI_ULC */
+#define ISI_CHNL_ROI_ULC_COUNT                   (4U)
+
+/*! @name CHNL_ROI_LRC - Channel Lower Right Coordinate for ROI 0..Channel Lower Right Coordinate for ROI 3 */
 /*! @{ */
 
-#define ISI_CHNL_ROI_0_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_0_LRC_Y_SHIFT               (0U)
+#define ISI_CHNL_ROI_LRC_Y_MASK                  (0x1FFFU)
+#define ISI_CHNL_ROI_LRC_Y_SHIFT                 (0U)
 /*! Y - Lower Right Y-Coordinate */
-#define ISI_CHNL_ROI_0_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_Y_SHIFT)) & ISI_CHNL_ROI_0_LRC_Y_MASK)
+#define ISI_CHNL_ROI_LRC_Y(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_Y_SHIFT)) & ISI_CHNL_ROI_LRC_Y_MASK)
 
-#define ISI_CHNL_ROI_0_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_0_LRC_X_SHIFT               (16U)
+#define ISI_CHNL_ROI_LRC_X_MASK                  (0xFFF0000U)
+#define ISI_CHNL_ROI_LRC_X_SHIFT                 (16U)
 /*! X - Lower Right X-Coordinate */
-#define ISI_CHNL_ROI_0_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_0_LRC_X_SHIFT)) & ISI_CHNL_ROI_0_LRC_X_MASK)
+#define ISI_CHNL_ROI_LRC_X(x)                    (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_LRC_X_SHIFT)) & ISI_CHNL_ROI_LRC_X_MASK)
 /*! @} */
 
-/*! @name CHNL_ROI_1_ALPHA - Channel Alpha Value for ROI 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha Value Insertion Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value */
-#define ISI_CHNL_ROI_1_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_1_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_1_ULC - Channel Upper Left Coordinate for ROI 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_1_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-Coordinate */
-#define ISI_CHNL_ROI_1_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_Y_SHIFT)) & ISI_CHNL_ROI_1_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_1_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_1_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-Coordinate */
-#define ISI_CHNL_ROI_1_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_ULC_X_SHIFT)) & ISI_CHNL_ROI_1_ULC_X_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_1_LRC - Channel Lower Right Coordinate for ROI 1 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_1_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_1_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-Coordinate */
-#define ISI_CHNL_ROI_1_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_Y_SHIFT)) & ISI_CHNL_ROI_1_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_1_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_1_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-Coordinate */
-#define ISI_CHNL_ROI_1_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_1_LRC_X_SHIFT)) & ISI_CHNL_ROI_1_LRC_X_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_ALPHA - Channel Alpha Value for ROI 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha Value Insertion Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value */
-#define ISI_CHNL_ROI_2_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_2_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_ULC - Channel Upper Left Coordinate for ROI 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_2_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-Coordinate */
-#define ISI_CHNL_ROI_2_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_Y_SHIFT)) & ISI_CHNL_ROI_2_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_2_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_2_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-Coordinate */
-#define ISI_CHNL_ROI_2_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_ULC_X_SHIFT)) & ISI_CHNL_ROI_2_ULC_X_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_2_LRC - Channel Lower Right Coordinate for ROI 2 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_2_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_2_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-Coordinate */
-#define ISI_CHNL_ROI_2_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_Y_SHIFT)) & ISI_CHNL_ROI_2_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_2_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_2_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-Coordinate */
-#define ISI_CHNL_ROI_2_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_2_LRC_X_SHIFT)) & ISI_CHNL_ROI_2_LRC_X_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_ALPHA - Channel Alpha Value for ROI 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_MASK       (0x10000U)
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_SHIFT      (16U)
-/*! ALPHA_EN - Alpha Value Insertion Enable
- *  0b0..Disable
- *  0b1..Enable
- */
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_EN(x)         (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_ALPHA_EN_MASK)
-
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_MASK          (0xFF000000U)
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA_SHIFT         (24U)
-/*! ALPHA - Alpha Value */
-#define ISI_CHNL_ROI_3_ALPHA_ALPHA(x)            (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ALPHA_ALPHA_SHIFT)) & ISI_CHNL_ROI_3_ALPHA_ALPHA_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_ULC - Channel Upper Left Coordinate for ROI 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_ULC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_3_ULC_Y_SHIFT               (0U)
-/*! Y - Upper Left Y-Coordinate */
-#define ISI_CHNL_ROI_3_ULC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_Y_SHIFT)) & ISI_CHNL_ROI_3_ULC_Y_MASK)
-
-#define ISI_CHNL_ROI_3_ULC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_3_ULC_X_SHIFT               (16U)
-/*! X - Upper Left X-Coordinate */
-#define ISI_CHNL_ROI_3_ULC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_ULC_X_SHIFT)) & ISI_CHNL_ROI_3_ULC_X_MASK)
-/*! @} */
-
-/*! @name CHNL_ROI_3_LRC - Channel Lower Right Coordinate for ROI 3 */
-/*! @{ */
-
-#define ISI_CHNL_ROI_3_LRC_Y_MASK                (0xFFFU)
-#define ISI_CHNL_ROI_3_LRC_Y_SHIFT               (0U)
-/*! Y - Lower Right Y-Coordinate */
-#define ISI_CHNL_ROI_3_LRC_Y(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_Y_SHIFT)) & ISI_CHNL_ROI_3_LRC_Y_MASK)
-
-#define ISI_CHNL_ROI_3_LRC_X_MASK                (0xFFF0000U)
-#define ISI_CHNL_ROI_3_LRC_X_SHIFT               (16U)
-/*! X - Lower Right X-Coordinate */
-#define ISI_CHNL_ROI_3_LRC_X(x)                  (((uint32_t)(((uint32_t)(x)) << ISI_CHNL_ROI_3_LRC_X_SHIFT)) & ISI_CHNL_ROI_3_LRC_X_MASK)
-/*! @} */
+/* The count of ISI_CHNL_ROI_LRC */
+#define ISI_CHNL_ROI_LRC_COUNT                   (4U)
 
 /*! @name CHNL_OUT_BUF1_ADDR_Y - Channel RGB or Luma (Y) Output Buffer 1 Address */
 /*! @{ */
@@ -40788,6 +40675,34 @@ typedef struct {
  * @}
  */ /* end of group ISI_Register_Masks */
 
+/* Backward compatibility */
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_Y_MASK     ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_Y_MASK
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_Y_SHIFT    ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_Y_SHIFT
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_Y(x)       ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_Y(x)
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_U_MASK     ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_U_MASK
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_U_SHIFT    ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_U_SHIFT
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_U(x)       ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_U(x)
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_V_MASK     ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_V_MASK
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_V_SHIFT    ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_V_SHIFT
+#define ISI_CHNL_OUT_BUF_CTRL_OFLW_PANIC_SET_THD_V(x)       ISI_CHNL_OUT_BUF_CTRL_PANIC_SET_THD_V(x)
+#define ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN_MASK                ISI_CHNL_IER_OFLW_Y_BUF_EN_MASK
+#define ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN_SHIFT               ISI_CHNL_IER_OFLW_Y_BUF_EN_SHIFT
+#define ISI_CHNL_IER_EXCS_OFLW_Y_BUF_EN(x)                  ISI_CHNL_IER_OFLW_Y_BUF_EN(x)
+#define ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN_MASK               ISI_CHNL_IER_PANIC_Y_BUF_EN_MASK
+#define ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN_SHIFT              ISI_CHNL_IER_PANIC_Y_BUF_EN_SHIFT
+#define ISI_CHNL_IER_OFLW_PANIC_Y_BUF_EN(x)                 ISI_CHNL_IER_PANIC_Y_BUF_EN(x)
+#define ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN_MASK                ISI_CHNL_IER_OFLW_U_BUF_EN_MASK
+#define ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN_SHIFT               ISI_CHNL_IER_OFLW_U_BUF_EN_SHIFT
+#define ISI_CHNL_IER_EXCS_OFLW_U_BUF_EN(x)                  ISI_CHNL_IER_OFLW_U_BUF_EN(x)
+#define ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN_MASK               ISI_CHNL_IER_PANIC_U_BUF_EN_MASK
+#define ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN_SHIFT              ISI_CHNL_IER_PANIC_U_BUF_EN_SHIFT
+#define ISI_CHNL_IER_OFLW_PANIC_U_BUF_EN(x)                 ISI_CHNL_IER_PANIC_U_BUF_EN(x)
+#define ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN_MASK                ISI_CHNL_IER_OFLW_V_BUF_EN_MASK
+#define ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN_SHIFT               ISI_CHNL_IER_OFLW_V_BUF_EN_SHIFT
+#define ISI_CHNL_IER_EXCS_OFLW_V_BUF_EN(x)                  ISI_CHNL_IER_OFLW_V_BUF_EN(x)
+#define ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN_MASK               ISI_CHNL_IER_PANIC_V_BUF_EN_MASK
+#define ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN_SHIFT              ISI_CHNL_IER_PANIC_V_BUF_EN_SHIFT
+#define ISI_CHNL_IER_OFLW_PANIC_V_BUF_EN(x)                 ISI_CHNL_IER_PANIC_V_BUF_EN(x)
 
 /* ISI - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
