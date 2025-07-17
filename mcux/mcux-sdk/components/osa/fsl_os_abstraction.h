@@ -459,9 +459,6 @@ extern const uint8_t gUseRtos_c;
  */
 #define OSA_TASK_HANDLE_DEFINE(name) uint32_t name[(OSA_TASK_HANDLE_SIZE + sizeof(uint32_t) - 1U) / sizeof(uint32_t)]
 
-#ifndef __DSB
-#define __DSB()
-#endif
 /*
  * alloc the temporary memory to store the status
  */
