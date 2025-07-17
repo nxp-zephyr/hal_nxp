@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020 NXP
+ * Copyright 2016-2017, 2020, 2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -262,6 +262,10 @@ void ISI_SetConfig(ISI_Type *base, const isi_config_t *config)
 
 #if defined(ISI_CHNL_CTRL_BLANK_PXL_MASK)
     reg &= ~(ISI_CHNL_CTRL_BLANK_PXL_MASK);
+#endif
+
+#if defined(ISI_CHNL_CTRL_RAW_MSB_ALIGN_MASK)
+    reg &= ~(ISI_CHNL_CTRL_RAW_MSB_ALIGN_MASK);
 #endif
 
     reg |= ISI_CHNL_CTRL_CHNL_BYPASS(config->isChannelBypassed) | ISI_CHNL_CTRL_CHAIN_BUF(config->chainMode) |
