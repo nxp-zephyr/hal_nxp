@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -126,6 +126,7 @@ static uint8_t DSI_GetBitsPerPixel(dsi_dpi_color_coding_t coding)
     {
         case kDSI_DpiYCbCr12Bit:
             bpp = 12U;
+            break;
         case kDSI_DpiRGB16Bit:
         case kDSI_DpiRGB16BitLoose0:
         case kDSI_DpiRGB16BitLoose1:
@@ -167,10 +168,11 @@ static uint16_t DSI_CheckAndUpdatePixCycle(uint16_t cycle, uint8_t bpp, uint8_t 
            that is no paddings for these parameters. */
         if ((((cycle + (uint16_t)i) * (uint16_t)bpp) % div) == 0U)
         {
-            updatedCycle = cycle + (uint16_t)i;
+            updatedCycle = (cycle + (uint16_t)i) * bpp / div;
             break;
         }
     }
+
     return updatedCycle;
 }
 
@@ -243,7 +245,7 @@ uint32_t DSI_GetInstance(MIPI_DSI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dsiBases); instance++)
     {
-        if (s_dsiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_dsiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -394,13 +396,13 @@ void DSI_SetDpiConfig(MIPI_DSI_Type *base, const dsi_dpi_config_t *config, uint8
 void DSI_SetCommandModeConfig(MIPI_DSI_Type *base, const dsi_command_config_t *config, uint32_t phyByteClkFreq_Hz)
 {
     /* Calculate the divider for BTA timeout. */
-    uint16_t btaToDiv = (config->btaTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U);
+    uint16_t btaToDiv = (uint16_t)(((uint32_t)config->btaTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U));
     /* Calculate the divider for hs tx timeout. */
-    uint16_t hsToDiv = (config->hsTxTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U);
+    uint16_t hsToDiv = (uint16_t)(((uint32_t)config->hsTxTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U));
     /* Calculate the divider for lp rx timeout. */
-    uint16_t lpToDiv = (config->lpRxTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U);
+    uint16_t lpToDiv = (uint16_t)(((uint32_t)config->lpRxTo_Ns / 1000U) * (phyByteClkFreq_Hz / 1000000U));
     /* Calculate escape clock division. */
-    uint8_t escClkDiv = (phyByteClkFreq_Hz >> 3U) / config->escClkFreq_Hz + 1U;
+    uint8_t escClkDiv = (uint8_t)((phyByteClkFreq_Hz >> 3U) / config->escClkFreq_Hz + 1U);
 
     base->BTA_TO_CNT = (uint32_t)btaToDiv;
     base->TO_CNT_CFG =
@@ -451,10 +453,10 @@ void DSI_GetDefaultDphyConfig(dsi_dphy_config_t *config, uint32_t phyByteClkFreq
         i--;
     }
 
-    config->tClkLp2Hs_ByteClk  = HsLpTimingTable[i][1U];
-    config->tClkHs2Lp_ByteClk  = HsLpTimingTable[i][2U];
-    config->tDataLp2Hs_ByteClk = HsLpTimingTable[i][3U];
-    config->tDataHs2Lp_ByteClk = HsLpTimingTable[i][4U];
+    config->tClkLp2Hs_ByteClk  = (uint16_t)HsLpTimingTable[i][1U];
+    config->tClkHs2Lp_ByteClk  = (uint16_t)HsLpTimingTable[i][2U];
+    config->tDataLp2Hs_ByteClk = (uint16_t)HsLpTimingTable[i][3U];
+    config->tDataHs2Lp_ByteClk = (uint16_t)HsLpTimingTable[i][4U];
 }
 
 /*!
@@ -478,8 +480,8 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
     base->PHY_TST_CTRL0 = 0U;
 
     /* Configure PHY parameters. */
-    base->PHY_IF_CFG = MIPI_DSI_PHY_IF_CFG_n_lanes(config->numLanes - 1U) |
-                       MIPI_DSI_PHY_IF_CFG_phy_stop_wait_time(config->tStopState_ByteClk);
+    base->PHY_IF_CFG = MIPI_DSI_PHY_IF_CFG_n_lanes((uint32_t)config->numLanes - 1U) |
+                       MIPI_DSI_PHY_IF_CFG_phy_stop_wait_time((uint32_t)config->tStopState_ByteClk);
     base->PHY_TMR_LPCLK_CFG = MIPI_DSI_PHY_TMR_LPCLK_CFG_phy_clklp2hs_time(config->tClkLp2Hs_ByteClk) |
                               MIPI_DSI_PHY_TMR_LPCLK_CFG_phy_clkhs2lp_time(config->tClkHs2Lp_ByteClk);
     base->PHY_TMR_CFG = MIPI_DSI_PHY_TMR_CFG_phy_lp2hs_time(config->tDataLp2Hs_ByteClk) |
@@ -498,7 +500,7 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
  * the formula is as follows, m & n is configured by mediamix control block.
  *
  * desiredOutFreq_Hz = refClkFreq_Hz * (M + 2) / (N + 1).
- * M: 40 ~ 625
+ * M: 62 ~ 625
  * N: 0 ~ 15
  *
  * param m Control of the feedback multiplication ratio.
@@ -510,53 +512,37 @@ void DSI_InitDphy(MIPI_DSI_Type *base, const dsi_dphy_config_t *config)
  */
 uint32_t DSI_DphyGetPllDivider(uint32_t *m, uint32_t *n, uint32_t refClkFreq_Hz, uint32_t desiredOutFreq_Hz)
 {
-    uint32_t mCur;
-    uint8_t nCur;
+    uint32_t mCur, nCur;
     uint32_t curOutFreq;
     uint32_t diffCur;
     uint32_t diff     = 0xFFFFFFFFU;
     uint32_t bestFreq = 0U;
 
-    for (nCur = 0U; nCur <= 0xFU; nCur++)
+    for (nCur = 0U; nCur < 16U; nCur++)
     {
         /* Calculate the m value */
-        mCur = desiredOutFreq_Hz * (nCur + 1U) / refClkFreq_Hz - 2U;
-
-        if (mCur > 625U)
+        for (mCur = 62U; mCur <= 623U; mCur++)
         {
-            continue;
-        }
+            curOutFreq = refClkFreq_Hz * (mCur + 2U) / (nCur + 1U);
+            diffCur = (curOutFreq > desiredOutFreq_Hz) ? (curOutFreq - desiredOutFreq_Hz) : (desiredOutFreq_Hz - curOutFreq);
 
-        curOutFreq = refClkFreq_Hz * (mCur + 2U) / (nCur + 1U);
-
-        if (curOutFreq > desiredOutFreq_Hz)
-        {
-            diffCur = (curOutFreq - desiredOutFreq_Hz);
-        }
-        else
-        {
-            diffCur = (desiredOutFreq_Hz - curOutFreq);
-        }
-
-        /* Save the better configuration. */
-        if (diffCur < diff)
-        {
-            diff     = diffCur;
-            *m       = mCur;
-            *n       = nCur;
-            bestFreq = curOutFreq;
-
-            /* If the output PLL frequency is exactly the disired value, return directly. */
-            if (0U == diff)
+            if (diffCur < diff)
             {
-                break;
+                diff     = diffCur;
+                *m       = mCur;
+                *n       = nCur;
+                bestFreq = curOutFreq;
+
+                if (diff == 0)
+                {
+                    return bestFreq;
+                }
             }
         }
     }
 
     return bestFreq;
 }
-
 /*!
  * brief Power up the DSI
  *
@@ -701,7 +687,7 @@ void DSI_WriteTxPayloadExt(
 {
     uint8_t i;
     uint32_t wordToWrite;
-    uint8_t byteEachWrite = sizeof(uint32_t);
+    uint8_t byteEachWrite = (uint8_t)sizeof(uint32_t);
 
     payloadSize = sendDcsCmd ? payloadSize + 1U : payloadSize;
 
@@ -712,7 +698,7 @@ void DSI_WriteTxPayloadExt(
     }
     else
     {
-        wordToWrite = *payload;
+        wordToWrite = (uint32_t)(*payload);
         payload++;
     }
 
@@ -749,13 +735,13 @@ void DSI_WriteTxPayloadExt(
 
         if (payloadSize < byteEachWrite)
         {
-            memcpy(&wordToWrite, payload, payloadSize);
+            memcpy((void *)&wordToWrite, (const void *)payload, payloadSize);
             base->GEN_PLD_DATA = wordToWrite;
             payloadSize        = 0U;
         }
         else
         {
-            memcpy(&wordToWrite, payload, byteEachWrite);
+            memcpy((void *)&wordToWrite, (const void *)payload, byteEachWrite);
             base->GEN_PLD_DATA = wordToWrite;
             payloadSize -= byteEachWrite;
             payload += byteEachWrite;
@@ -776,7 +762,7 @@ void DSI_WriteTxPayloadExt(
 void DSI_ReadRxData(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
 {
     uint32_t readWord;
-    uint8_t byteEachRead = sizeof(uint32_t);
+    uint8_t byteEachRead = (uint8_t)sizeof(uint32_t);
 
     while (payloadSize != 0U)
     {
@@ -788,12 +774,12 @@ void DSI_ReadRxData(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
         readWord = base->GEN_PLD_DATA;
         if (payloadSize < byteEachRead)
         {
-            memcpy(payload, &readWord, payloadSize);
+            memcpy((void *)payload, (const void *)&readWord, payloadSize);
             payloadSize = 0U;
         }
         else
         {
-            memcpy(payload, &readWord, byteEachRead);
+            memcpy((void *)payload, (const void *)&readWord, byteEachRead);
             payloadSize -= byteEachRead;
             payload += byteEachRead;
         }
@@ -803,7 +789,7 @@ void DSI_ReadRxData(MIPI_DSI_Type *base, uint8_t *payload, uint16_t payloadSize)
 static status_t DSI_PrepareApbTransfer(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 {
     uint16_t maxReadLength =
-        (base->PHY_TMR_RD_CFG & MIPI_DSI_PHY_TMR_RD_CFG_max_rd_time_MASK) >> MIPI_DSI_PHY_TMR_RD_CFG_max_rd_time_SHIFT;
+        (uint16_t)((base->PHY_TMR_RD_CFG & MIPI_DSI_PHY_TMR_RD_CFG_max_rd_time_MASK) >> MIPI_DSI_PHY_TMR_RD_CFG_max_rd_time_SHIFT);
     /* The receive data size should be smaller than the max rx byte count. */
     assert(xfer->rxDataSize <= maxReadLength);
 
@@ -916,7 +902,7 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 
         /* Hs forward tx time out. */
         DSI_GetAndClearInterruptStatus(base, &intFlags1, &intFlags2);
-        if ((intFlags2 & kDSI_TimeoutErrorHtx) != 0U)
+        if ((intFlags2 & (uint32_t)kDSI_TimeoutErrorHtx) != 0U)
         {
             return kStatus_Timeout;
         }
@@ -939,7 +925,7 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
 
         /* Low power rx time out. */
         DSI_GetAndClearInterruptStatus(base, &intFlags1, &intFlags2);
-        if ((intFlags2 & kDSI_TimeoutErrorLrx) != 0U)
+        if ((intFlags2 & (uint32_t)kDSI_TimeoutErrorLrx) != 0U)
         {
             return kStatus_Timeout;
         }
@@ -948,7 +934,7 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     /* Process the received frame. */
     uint32_t rxPktHeader;
     uint16_t actualRxByteCount;
-    uint8_t rxDataType;
+    uint32_t rxDataType;
     bool readRxDataFromPayload;
 
     /* If rx error detected in the received packet. */
@@ -982,7 +968,7 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     rxDataType  = rxPktHeader & 0x3FU;
 
     /* If received error report. */
-    if ((uint8_t)kDSI_RxDataAckAndErrorReport == rxDataType)
+    if ((uint32_t)kDSI_RxDataAckAndErrorReport == rxDataType)
     {
         /* The corresponding acknowledge and error report status should be set. */
         if (0U != ((uint32_t)kDSI_ErrorReportAll & intFlags1))
@@ -996,19 +982,19 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     }
     else
     {
-        if ((kDSI_RxDataGenShortRdResponseOneByte == rxDataType) ||
-            (kDSI_RxDataDcsShortRdResponseOneByte == rxDataType))
+        if (((uint32_t)kDSI_RxDataGenShortRdResponseOneByte == rxDataType) ||
+            ((uint32_t)kDSI_RxDataDcsShortRdResponseOneByte == rxDataType))
         {
             readRxDataFromPayload = false;
             actualRxByteCount     = 1U;
         }
-        else if ((kDSI_RxDataGenShortRdResponseTwoByte == rxDataType) ||
-                 (kDSI_RxDataDcsShortRdResponseTwoByte == rxDataType))
+        else if (((uint32_t)kDSI_RxDataGenShortRdResponseTwoByte == rxDataType) ||
+                 ((uint32_t)kDSI_RxDataDcsShortRdResponseTwoByte == rxDataType))
         {
             readRxDataFromPayload = false;
             actualRxByteCount     = 2U;
         }
-        else if ((kDSI_RxDataGenLongRdResponse == rxDataType) || (kDSI_RxDataDcsLongRdResponse == rxDataType))
+        else if (((uint32_t)kDSI_RxDataGenLongRdResponse == rxDataType) || ((uint32_t)kDSI_RxDataDcsLongRdResponse == rxDataType))
         {
             readRxDataFromPayload = true;
             actualRxByteCount     = (uint16_t)(rxPktHeader >> 8U);
@@ -1041,4 +1027,119 @@ status_t DSI_TransferBlocking(MIPI_DSI_Type *base, dsi_transfer_t *xfer)
     }
 
     return kStatus_Success;
+}
+
+/*!
+ * brief Lookup table method to obtain HS frequency range of operation selection override.
+ *
+ * param bnd_width band width frequncy in Hz
+ * return the hsfreqrange_ovr[6:0] value based on band width frequncy in hz.
+ */
+uint16_t Pll_Set_Hs_Freqrange(uint32_t bnd_width) {
+    uint16_t set_hs_freqrange = 0U;
+    float bnd_wdth = (float)bnd_width / 1000000.0f;
+    static const struct {
+        float upper_bound;
+        uint16_t value;
+    } freq_table[] = {
+        { 82.5, 0 }, { 92.5, 16 }, { 102.5, 32 }, { 112.5, 48 },
+        { 122.5, 1 }, { 132.5, 17 }, { 142.5, 33 }, { 152.5, 49 },
+        { 162.5, 2 }, { 172.5, 18 }, { 182.5, 34 }, { 192.5, 50 },
+        { 207.5, 3 }, { 222.5, 19 }, { 237.5, 35 }, { 262.5, 51 },
+        { 287.5, 4 }, { 312.5, 20 }, { 337.5, 37 }, { 375.0, 53 },
+        { 425.0, 5 }, { 475.0, 22 }, { 525.0, 38 }, { 575.0, 55 },
+        { 625.0, 7 }, { 675.0, 24 }, { 725.0, 40 }, { 775.0, 57 },
+        { 825.0, 9 }, { 875.0, 25 }, { 925.0, 41 }, { 975.0, 58 },
+        { 1025.0, 10 }, { 1075.0, 26 }, { 1125.0, 42 }, { 1175.0, 59 },
+        { 1225.0, 11 }, { 1275.0, 27 }, { 1325.0, 43 }, { 1375.0, 60 },
+        { 1425.0, 12 }, { 1475.0, 28 }, { 1525.0, 44 }, { 1575.0, 61 },
+        { 1625.0, 13 }, { 1675.0, 29 }, { 1725.0, 46 }, { 1775.0, 62 },
+        { 1825.0, 14 }, { 1875.0, 30 }, { 1925.0, 47 }, { 1975.0, 63 },
+        { 2025.0, 15 }, { 2075.0, 64 }, { 2125.0, 65 }, { 2175.0, 66 },
+        { 2225.0, 67 }, { 2275.0, 68 }, { 2325.0, 69 }, { 2375.0, 70 },
+        { 2425.0, 71 }, { 2475.0, 72 }, { 2525.0, 73 }
+    };
+
+    for (size_t i = 0; i < sizeof(freq_table) / sizeof(freq_table[0]); i++) {
+        if (bnd_wdth <= freq_table[i].upper_bound) {
+            set_hs_freqrange = freq_table[i].value;
+            break;
+        }
+    }
+
+    return set_hs_freqrange;
+}
+
+/*!
+ * brief Lookup table method to obtain PLL Proportional Charge Pump control.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_prop_cntrl_rw[5:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Pll_Prop_Param(uint32_t pll_freq_sel)
+{
+    uint16_t set_pll_prop_param = 13;
+
+    if (pll_freq_sel >= 1150 && pll_freq_sel <= 1250)
+    {
+        set_pll_prop_param = 14;
+    }
+
+    return set_pll_prop_param;
+}
+
+/*!
+ * brief Lookup table method to obtain DDL target oscillation frequency.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the sr_osc_freq_target[11:0] value based on video Pll frequency in Mhz.
+ */
+uint16_t Pll_Set_Sr_Osc_Freq_Target(uint32_t pll_freq_sel)
+{
+    uint32_t set_sr_osc_freq_target;
+    if (pll_freq_sel > 1000)
+        set_sr_osc_freq_target = 0x7D0U;
+    else if (pll_freq_sel > 500)
+        set_sr_osc_freq_target = 0x4E2U;
+    else if (pll_freq_sel <= 500)
+        set_sr_osc_freq_target = 0x384U;
+    else
+        set_sr_osc_freq_target = 0;
+
+    return set_sr_osc_freq_target;
+}
+
+/*!
+ * brief Lookup table method to obtain VCO parameter.
+ *
+ * param pll_freq_sel PLL frequency in Mhz
+ * return the pll_vco_cntrl_ovr_rw[5:0] value based on video Pll frequency in Mhz. If can not
+ * find suitable value, return default value 63.
+ */
+uint16_t Pll_Set_Pll_Vco_Param(uint32_t pll_freq_sel) {
+    uint16_t vco_freq;
+
+    if (pll_freq_sel >= 320)
+        vco_freq = pll_freq_sel;
+    else if (pll_freq_sel >= 160)
+        vco_freq = pll_freq_sel * 2;
+    else if (pll_freq_sel >= 80)
+        vco_freq = pll_freq_sel * 4;
+    else
+        vco_freq = pll_freq_sel * 8;
+
+    static const struct {
+        uint16_t vco_freq;
+        uint16_t param;
+    } vco_table[] = {
+        {1150, 1}, {1100, 1}, {630, 3}, {420, 9}, {320, 15},
+        {210, 25}, {160, 31}, {105, 41}, {80, 47}, {53, 57}, {40, 63}
+    };
+
+    for (size_t i = 0; i < sizeof(vco_table) / sizeof(vco_table[0]); i++) {
+        if (vco_freq >= vco_table[i].vco_freq) {
+            return vco_table[i].param;
+        }
+    }
+    return 63;
 }
