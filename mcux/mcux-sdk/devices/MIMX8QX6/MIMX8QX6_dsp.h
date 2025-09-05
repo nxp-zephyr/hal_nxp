@@ -131144,6 +131144,7 @@ typedef struct {
        uint8_t RESERVED_6[100];
   __IO uint32_t USBCMD;                            /**< USB Command, offset: 0x20080 */
   __IO uint32_t USBSTS;                            /**< USB Status, offset: 0x20084 */
+#undef PAGESIZE
   __I  uint32_t PAGESIZE;                          /**< Page Size, offset: 0x20088 */
        uint8_t RESERVED_7[8];
   __IO uint32_t DNCTRL;                            /**< Device Notification Control, offset: 0x20094 */
