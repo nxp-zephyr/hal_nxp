@@ -1,0 +1,120 @@
+# Copyright 2024-2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menuconfig MCUX_COMPONENT_component.i2c_mux
+        bool "I2C Multiplexer/Switch"
+
+config MCUX_COMPONENT_component.i2c_mux_pca954x
+        bool
+        depends on MCUX_COMPONENT_component.i2c_mux
+        default y
+        help
+          If you select this option you get support for NXP PCA954x/PCA984x
+          and Maxim MAX735x/MAX736x I2C mux/switch devices.
+
+if MCUX_COMPONENT_component.i2c_mux_pca954x
+        config MCUX_COMPONENT_component.enable_max7356
+            bool "MAX7356"
+            help
+                Enable MAX7356
+        config MCUX_COMPONENT_component.enable_max7357
+            bool "MAX7357"
+            help
+                Enable MAX7357
+        config MCUX_COMPONENT_component.enable_max7358
+            bool "MAX7358"
+            help
+                Enable MAX7358
+        config MCUX_COMPONENT_component.enable_max7367
+            bool "MAX7367"
+            help
+                Enable MAX7367
+        config MCUX_COMPONENT_component.enable_max7368
+            bool "MAX7368"
+            help
+                Enable MAX7368
+        config MCUX_COMPONENT_component.enable_max7369
+            bool "MAX7369"
+            help
+                Enable MAX7369
+        config MCUX_COMPONENT_component.enable_pca9540
+            bool "PCA9540"
+            help
+                Enable PCA9540
+        config MCUX_COMPONENT_component.enable_pca9542
+            bool "PCA9542"
+            help
+                Enable PCA9542
+        config MCUX_COMPONENT_component.enable_pca9543
+            bool "PCA9543"
+            help
+                Enable PCA9543
+        config MCUX_COMPONENT_component.enable_pca9544
+            bool "PCA9544"
+            help
+                Enable PCA9544
+        config MCUX_COMPONENT_component.enable_pca9545
+            bool "PCA9545"
+            help
+                Enable PCA9545
+        config MCUX_COMPONENT_component.enable_pca9546
+            bool "PCA9546"
+            help
+                Enable PCA9546
+        config MCUX_COMPONENT_component.enable_pca9547
+            bool "PCA9547"
+            help
+                Enable PCA9547
+        config MCUX_COMPONENT_component.enable_pca9548
+            bool "PCA9548"
+            help
+                Enable PCA9548
+        config MCUX_COMPONENT_component.enable_pca9646
+            bool "PCA9646"
+            help
+                Enable PCA9646
+        config MCUX_COMPONENT_component.enable_pca9846
+            bool "PCA9846"
+            help
+                Enable PCA9846
+        config MCUX_COMPONENT_component.enable_pca9847
+            bool "PCA9847"
+            help
+                Enable PCA9847
+        config MCUX_COMPONENT_component.enable_pca9848
+            bool "PCA9848"
+            help
+                Enable PCA9848
+        config MCUX_COMPONENT_component.enable_pca9849
+            bool "PCA9849"
+            help
+                Enable PCA9849
+        config MCUX_COMPONENT_component.at_least_one_i2c_mux_device_enabled
+            bool
+            default y if MCUX_COMPONENT_component.enable_max7356 || \
+                         MCUX_COMPONENT_component.enable_max7357 || \
+                         MCUX_COMPONENT_component.enable_max7358 || \
+                         MCUX_COMPONENT_component.enable_max7367 || \
+                         MCUX_COMPONENT_component.enable_max7368 || \
+                         MCUX_COMPONENT_component.enable_max7369 || \
+                         MCUX_COMPONENT_component.enable_pca9540 || \
+                         MCUX_COMPONENT_component.enable_pca9542 || \
+                         MCUX_COMPONENT_component.enable_pca9543 || \
+                         MCUX_COMPONENT_component.enable_pca9544 || \
+                         MCUX_COMPONENT_component.enable_pca9545 || \
+                         MCUX_COMPONENT_component.enable_pca9546 || \
+                         MCUX_COMPONENT_component.enable_pca9547 || \
+                         MCUX_COMPONENT_component.enable_pca9548 || \
+                         MCUX_COMPONENT_component.enable_pca9646 || \
+                         MCUX_COMPONENT_component.enable_pca9846 || \
+                         MCUX_COMPONENT_component.enable_pca9847 || \
+                         MCUX_COMPONENT_component.enable_pca9848 || \
+                         MCUX_COMPONENT_component.enable_pca9849
+
+        config MCUX_COMPONENT_component.i2c_mux_device_selection_err
+            bool
+            prompt "Error: At least one i2c mux device must be enabled"
+            depends on !MCUX_COMPONENT_component.at_least_one_i2c_mux_device_enabled
+            default y
+
+endif

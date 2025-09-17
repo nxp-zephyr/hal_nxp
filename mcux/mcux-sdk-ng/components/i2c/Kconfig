@@ -1,0 +1,72 @@
+# Copyright 2024-2025 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menuconfig  MCUX_COMPONENT_component.i2c_adapter_interface
+    bool "I2C"
+    help
+        Enable component i2c_adapter
+
+if MCUX_COMPONENT_component.i2c_adapter_interface
+
+    config MCUX_HAS_DEPENDENCY_component.lpi2c_adapter
+        bool
+        default y if MCUX_HAS_COMPONENT_driver.lpi2c || MCUX_HAS_COMPONENT_driver.lpflexcomm_lpi2c
+
+    choice
+        depends on MCUX_COMPONENT_component.i2c_adapter_interface
+        prompt "I2C adapter implementation"
+
+        config MCUX_COMPONENT_component.flexcomm_i2c_adapter
+            bool "flexcomm_i2c"
+            help
+                Enable component.flexcomm_i2c_adapter component
+            select MCUX_COMPONENT_driver.flexcomm_i2c
+            depends on MCUX_HAS_COMPONENT_driver.flexcomm_i2c
+
+        config MCUX_COMPONENT_component.i2c_adapter
+            bool "i2c"
+            help
+                Enable component.i2c_adapter component
+            select MCUX_COMPONENT_driver.i2c
+            depends on MCUX_HAS_COMPONENT_driver.i2c
+
+        config MCUX_COMPONENT_component.ii2c_adapter
+            bool "ii2c"
+            help
+                Enable component.ii2c_adapter component
+            select MCUX_COMPONENT_driver.ii2c
+            depends on MCUX_HAS_COMPONENT_driver.ii2c
+
+        config MCUX_COMPONENT_component.lpc_i2c_adapter
+            bool "lpc_i2c"
+            help
+                Enable component.lpc_i2c_adapter component
+            select MCUX_COMPONENT_driver.lpc_i2c
+            depends on MCUX_HAS_COMPONENT_driver.lpc_i2c
+
+        config MCUX_COMPONENT_component.lpi2c_adapter
+            bool "lpi2c"
+            help
+                Enable component.lpi2c_adapter component
+            select MCUX_COMPONENT_driver.lpi2c if MCUX_HAS_COMPONENT_driver.lpi2c
+            select MCUX_COMPONENT_driver.lpflexcomm_lpi2c if MCUX_HAS_COMPONENT_driver.lpflexcomm_lpi2c
+            depends on MCUX_HAS_DEPENDENCY_component.lpi2c_adapter
+
+        config MCUX_COMPONENT_component.i3c_adapter
+            bool "i3c"
+            help
+                Enable component.i3c_adapter component
+            select MCUX_COMPONENT_driver.i3c
+            depends on MCUX_HAS_COMPONENT_driver.i3c
+
+        config MCUX_COMPONENT_component.dsc_i2c_adapter
+            bool "dsc_i2c"
+            help
+                Enable component.dsc_i2c_adapter component
+            select MCUX_COMPONENT_driver.dsc_i2c
+            depends on MCUX_HAS_COMPONENT_driver.dsc_i2c
+
+    endchoice
+endif
+
+rsource "muxes/Kconfig"
