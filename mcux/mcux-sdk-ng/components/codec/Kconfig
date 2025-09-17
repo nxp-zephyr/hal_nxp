@@ -1,0 +1,149 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+config MCUX_COMPONENT_component.codec_i2c
+    bool
+    select MCUX_COMPONENT_component.i2c_adapter_interface
+
+config MCUX_COMPONENT_driver.codec
+    bool
+
+config MCUX_COMPONENT_component.codec_adapters
+    bool
+
+config MCUX_COMPONENT_component.wm8904_adapter
+    bool
+
+config MCUX_COMPONENT_component.wm8960_adapter
+    bool
+
+config MCUX_COMPONENT_component.wm8962_adapter
+    bool
+
+config MCUX_COMPONENT_component.wm8524_adapter
+    bool
+
+config MCUX_COMPONENT_component.sgtl_adapter
+    bool
+
+config MCUX_COMPONENT_component.da7212_adapter
+    bool
+
+config MCUX_COMPONENT_component.ak4497_adapter
+    bool
+
+config MCUX_COMPONENT_component.tfa9xxx_adapter
+    bool
+
+config MCUX_COMPONENT_component.tfa9896_adapter
+    bool
+
+config MCUX_COMPONENT_component.cs42888_adapter
+    bool
+
+config MCUX_COMPONENT_component.cs42448_adapter
+    bool
+
+config MCUX_COMPONENT_component.pcm186x_adapter
+    bool
+
+config MCUX_COMPONENT_component.pcm512x_adapter
+    bool
+
+config MCUX_COMPONENT_driver.ak4497
+    bool "ak4497"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.ak4497_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.cs42448
+    bool "cs42448"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.cs42448_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.cs42888
+    bool "cs42888"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.cs42888_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.dialog7212
+    bool "da7212"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.da7212_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.pcm186x
+    bool "pcm186x"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.pcm186x_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.pcm512x
+    bool "pcm512x"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.pcm512x_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.sgtl5000
+    bool "sgtl5000"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.sgtl_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.tfa9xxx
+    bool "tfa9xxx"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.tfa9xxx_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.tfa9xxx_hal
+    bool "tfa9xxx_hal"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.tfa9xxx
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.tfa9896
+    bool "tfa9896"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.tfa9896_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.wm8524
+    bool "wm8524"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.wm8524_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.wm8904
+    bool "wm8904"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.wm8904_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.wm8960
+    bool "wm8960"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.wm8960_adapter
+    select MCUX_COMPONENT_component.codec_adapters
+
+config MCUX_COMPONENT_driver.wm8962
+    bool "wm8962"
+    select MCUX_COMPONENT_component.codec_i2c
+    select MCUX_COMPONENT_driver.codec
+    select MCUX_COMPONENT_component.wm8962_adapter
+    select MCUX_COMPONENT_component.codec_adapters
