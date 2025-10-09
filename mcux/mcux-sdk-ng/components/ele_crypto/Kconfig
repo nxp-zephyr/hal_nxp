@@ -1,0 +1,32 @@
+# Copyright 2024 NXP
+# SPDX-License-Identifier: BSD-3-Clause
+
+menu "ELE Crypto"
+
+  config MCUX_COMPONENT_component.ele_crypto
+      bool "ele_crypto"
+      select MCUX_COMPONENT_driver.s3mu
+
+      if MCUX_COMPONENT_component.ele_crypto
+        choice MCUX_DEPENDENCY_COMPONENT_component.ele_crypto.cache_driver
+          prompt "ele_crypto cache dependency"
+          default MCUX_DEPENDENCY_COMPONENT_component.ele_crypto_CM7_CACHE
+          config MCUX_DEPENDENCY_COMPONENT_component.ele_crypto_CM7_CACHE
+              bool "MCUX_DEPENDENCY_COMPONENT_component.ele_crypto_CM7_CACHE"
+              select MCUX_COMPONENT_driver.memory
+              select MCUX_COMPONENT_driver.cache_armv7_m7
+              depends on MCUX_HW_CORE_CM7F
+
+          config MCUX_DEPENDENCY_COMPONENT_component.ele_crypto_CM33_XCACHE
+              bool "MCUX_DEPENDENCY_COMPONENT_component.ele_crypto_CM33_XCACHE"
+              select MCUX_COMPONENT_driver.cache_xcache
+              depends on MCUX_HW_CORE_CM33
+
+        endchoice
+      endif
+
+  config MCUX_COMPONENT_component.ele_nvm_manager
+      bool "ele_nvm_manager"
+      select MCUX_COMPONENT_component.ele_crypto
+
+endmenu
