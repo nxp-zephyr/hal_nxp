@@ -1,0 +1,5 @@
+/*!
+@defgroup ele_crypto ELE Crypto
+@details The EgdeLock Enclave Crypto SW.
+*/
+
