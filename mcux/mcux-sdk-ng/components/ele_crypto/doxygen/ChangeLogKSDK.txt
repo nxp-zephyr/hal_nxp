@@ -1,0 +1,57 @@
+/*!
+@page driver_log Driver Change Log
+
+@section ele_crypto The EdgeLock Enclave Crypto SW
+  The current ELE Crypto  version is 2.10.0.
+
+  - 2.10.0 Add support for updated Fast MAC
+           Add RNG reseed option to ELE_RngGetRandom()
+           Add BBSM and Get Event APIs
+
+  - 2.9.0  Add option for user to specify a key ID in ELE_GenerateKey()
+           Fix incompatible pointer type warning on ARMGCC
+           Add Enable OTFAD API
+           Add Clock Change API
+           Key Blob Generation, Key Blob Loading
+           Add Import Key API
+           Add CACHE handling in write-trough mode
+           Fix MISRA
+           Add TRNG Get State API
+           Fix missing salt size field in ELE_Sign() and ELE_Verify()
+
+  - 2.8.0  Fix incorrect value for kPermitted_All_Cipher
+           Fix missing call to ADD_OFFSET()
+
+  - 2.7.0  Add ELE_InitServices, support OFB/CFB cipher modes in HSM
+           Add Fast HMAC API
+           Support RSA in HSM
+           Update key/data storage APIs
+           Fix MISRA
+
+  - 2.6.0  Add CTR, OFB and CFB modes of operation to AES
+           Add baseline API: Attestation
+
+  - 2.5.0  Add signature size output parameter to ELE_Sign()
+           Add hash size output parameter to ELE_Hash(), ELE_Hash_Finish(), and ELE_GenericHmac()
+           Make the order of parameters more uniform across these functions
+           Add support for RSA sign / verify flag setting
+           Support for (-1) salt size
+           Add key size output parameter to key generation functions
+           Add MAC size output parameter to ELE_Mac()
+           Add support for starting the ELE RNG with ELE_StartRng()
+           Remove check for NULL input message in ELE_Hash() and ELE_GenericHmac()
+           Add ELE_DeleteKey() and add support to ELE_GenerateKey() for setting flags
+
+  - 2.4.0  Added support of NVM Manager Registration.
+           Added API's for key/chunk management from/to NVM.
+
+  - 2.3.0  Added Cipher commands.
+           Added NVM Keystore and key/chunk management.
+
+  - 2.2.0  Added base API commands.
+
+  - 2.1.0  ELE Crypto NVM.
+
+  - 2.0.0  Initial version of ELE Crypto.
+
+*/
