@@ -53738,6 +53738,9 @@ typedef struct {
  * @{
  */
 
+/** TPM - Size of Registers Arrays */
+#define TPM_CONTROLS_COUNT                        4u
+
 /** TPM - Register Layout Typedef */
 typedef struct {
   __I  uint32_t VERID;                             /**< Version ID, offset: 0x0 */
