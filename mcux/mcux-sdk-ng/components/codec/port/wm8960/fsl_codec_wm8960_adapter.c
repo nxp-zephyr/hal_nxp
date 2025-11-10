@@ -188,20 +188,24 @@ status_t HAL_CODEC_WM8960_SetVolume(void *handle, uint32_t playChannel, uint32_t
 
     if ((playChannel & (uint32_t)kCODEC_VolumeDAC) != 0U)
     {
+        /*
+         * 0 is mute
+         * 1 - 100 is mapped to 0x30 - 0x7F
+         */
+
+        /* Check that volumeRange * volume won't wrap */
         if (volume > (UINT32_MAX / WM8960_DAC_MAX_VOLUME_vALUE))
         {
-            /*
-            * 0 is mute
-            * 0 - 100 is mapped to 0x00 - 0xFF
-            */
+            /* If wrap would occur, use maximum volume value */
+            mappedVolume = WM8960_DAC_MAX_VOLUME_vALUE;
+        }
+        else
+        {
             mappedVolume = (volume * (WM8960_DAC_MAX_VOLUME_vALUE - 0U)) / 100U;
+        }
 
-            retVal = WM8960_SetVolume((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
-                                    kWM8960_ModuleDAC, mappedVolume);
-        }
-        else {
-            retVal = kStatus_Fail;
-        }
+        retVal = WM8960_SetVolume((wm8960_handle_t *)((uintptr_t)(((codec_handle_t *)handle)->codecDevHandle)),
+                                kWM8960_ModuleDAC, mappedVolume);
     }
 
     return retVal;
