@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -258,23 +258,26 @@ status_t PCM512x_SetFormat(pcm512x_handle_t *handle, uint32_t mclk, uint32_t sam
     /* Turn DAC on */
     ret = PCM512x_ModifyReg(handle, PCM512x_POWER, PCM512x_RQPD, 0);
 
-    /* Enable 44.1kHz or 48kHz oscillator depending on sampling rate */
-    if (sampleRate % 8000)
-    {
-        /* Enable 44.1kHz oscillator on Hifiberry card */
-        ret = dac_pcm512x_set_gpio(handle, handle->config->gpio_osc44);
-        /* Clear 48kHz oscillator on Hifiberry card */
-        ret = dac_pcm512x_clear_gpio(handle, handle->config->gpio_osc48);
+    if (handle->config->master_slave) {
+        /* Enable 44.1kHz or 48kHz oscillator depending on sampling rate */
+        if (sampleRate % 8000)
+        {
+            /* Enable 44.1kHz oscillator on Hifiberry card */
+            ret = dac_pcm512x_set_gpio(handle, handle->config->gpio_osc44);
+            /* Clear 48kHz oscillator on Hifiberry card */
+            ret = dac_pcm512x_clear_gpio(handle, handle->config->gpio_osc48);
+        }
+        else
+        {
+            /* Enable 48kHz oscillator on Hifiberry card */
+            ret = dac_pcm512x_set_gpio(handle, handle->config->gpio_osc48);
+            /* Clear 44.1kHz oscillator on Hifiberry card */
+            ret = dac_pcm512x_clear_gpio(handle, handle->config->gpio_osc44);
+        }
+
+        if (ret != kStatus_Success)
+            goto end;
     }
-    else
-    {
-        /* Enable 48kHz oscillator on Hifiberry card */
-        ret = dac_pcm512x_set_gpio(handle, handle->config->gpio_osc48);
-        /* Clear 44.1kHz oscillator on Hifiberry card */
-        ret = dac_pcm512x_clear_gpio(handle, handle->config->gpio_osc44);
-    }
-    if (ret != kStatus_Success)
-        goto end;
 
     switch (bitWidth)
     {
@@ -294,72 +297,123 @@ status_t PCM512x_SetFormat(pcm512x_handle_t *handle, uint32_t mclk, uint32_t sam
 
     ret = PCM512x_ModifyReg(handle, PCM512x_I2S_1, PCM512x_ALEN, alen);
 
-    ret = PCM512x_ModifyReg(
-        handle, PCM512x_ERROR_DETECT,
-        PCM512x_IDFS | PCM512x_IDBK | PCM512x_IDSK | PCM512x_IDCH | PCM512x_IDCM | PCM512x_DCAS | PCM512x_IPLK,
-        PCM512x_IDFS | PCM512x_IDBK | PCM512x_IDSK | PCM512x_IDCH | PCM512x_DCAS | PCM512x_IPLK);
+    if (handle->config->master_slave) {
+        ret = PCM512x_ModifyReg(
+            handle, PCM512x_ERROR_DETECT,
+            PCM512x_IDFS | PCM512x_IDBK | PCM512x_IDSK | PCM512x_IDCH | PCM512x_IDCM | PCM512x_DCAS | PCM512x_IPLK,
+            PCM512x_IDFS | PCM512x_IDBK | PCM512x_IDSK | PCM512x_IDCH | PCM512x_DCAS | PCM512x_IPLK);
+    }
+    else
+    {
+        /* Slave mode: Enable clock autoset mode and Ignore SCK Detection as
+         * it wont be provided as input.
+         */
+        ret = PCM512x_ModifyReg(
+            handle, PCM512x_ERROR_DETECT,
+            PCM512x_IDCH | PCM512x_DCAS,
+            PCM512x_IDCH);
+    }
+
     if (ret != kStatus_Success)
         goto end;
 
-    ret = PCM512x_ModifyReg(handle, PCM512x_PLL_EN, PCM512x_PLLE, 0);
+    if (handle->config->master_slave) {
+        ret = PCM512x_ModifyReg(handle, PCM512x_PLL_EN, PCM512x_PLLE, 0);
+    }
+    else
+    {
+        /* Slave mode: Enable PLL. */
+        ret = PCM512x_ModifyReg(handle, PCM512x_PLL_EN, PCM512x_PLLE, 1);
+    }
+
     if (ret != kStatus_Success)
         goto end;
 
-    ret = PCM512x_ModifyReg(handle, PCM512x_DAC_REF, PCM512x_SDAC, PCM512x_SDAC_SCK);
+
+    if (!handle->config->master_slave) {
+        /* Slave mode: Set PLL reference to BCLK. */
+        ret = PCM512x_ModifyReg(handle, PCM512x_PLL_REF, PCM512x_SREF, PCM512x_SREF_BCK);
+        if (ret != kStatus_Success)
+            goto end;
+    }
+
+    if (handle->config->master_slave) {
+        ret = PCM512x_ModifyReg(handle, PCM512x_DAC_REF, PCM512x_SDAC, PCM512x_SDAC_SCK);
+    }
+    else
+    {
+        /* Slave mode: DAC divider clock from PLL/SCK Mux */
+        ret = PCM512x_ModifyReg(handle, PCM512x_DAC_REF, PCM512x_SDAC, PCM512x_SDAC_MASTER);
+    }
     if (ret != kStatus_Success)
         goto end;
 
-    dsp_div = 1; /* mclk < 50Mhz, so no need to divide DSP clk */
-    ret     = PCM512x_WriteReg(handle, PCM512x_DSP_CLKDIV, dsp_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
+    if (handle->config->master_slave) {
+        dsp_div = 1; /* mclk < 50Mhz, so no need to divide DSP clk */
+        ret     = PCM512x_WriteReg(handle, PCM512x_DSP_CLKDIV, dsp_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
 
-    dac_rate = dac_pcm512x_get_dac_rate(sampleRate);
-    dac_div  = dac_pcm512x_get_dac_div(sampleRate);
-    ret      = PCM512x_WriteReg(handle, PCM512x_DAC_CLKDIV, dac_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
+        dac_rate = dac_pcm512x_get_dac_rate(sampleRate);
+        dac_div  = dac_pcm512x_get_dac_div(sampleRate);
+        ret      = PCM512x_WriteReg(handle, PCM512x_DAC_CLKDIV, dac_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
 
-    ncp_div = (uint8_t)((dac_rate + 768000) / 1536000);
-    ret     = PCM512x_WriteReg(handle, PCM512x_NCP_CLKDIV, ncp_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
+        ncp_div = (uint8_t)((dac_rate + 768000) / 1536000);
+        ret     = PCM512x_WriteReg(handle, PCM512x_NCP_CLKDIV, ncp_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
 
-    osr_div = (uint8_t)(dac_rate / (sampleRate * 16));
-    ret     = PCM512x_WriteReg(handle, PCM512x_OSR_CLKDIV, osr_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
+        osr_div = (uint8_t)(dac_rate / (sampleRate * 16));
+        ret     = PCM512x_WriteReg(handle, PCM512x_OSR_CLKDIV, osr_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
 
-    lrclk_div = bitWidth * 2;
-    bclk_div  = dac_pcm512x_get_bclk_div(sampleRate, lrclk_div);
-    ret       = PCM512x_WriteReg(handle, PCM512x_MASTER_CLKDIV_1, bclk_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
-    ret = PCM512x_WriteReg(handle, PCM512x_MASTER_CLKDIV_2, lrclk_div - 1);
-    if (ret != kStatus_Success)
-        goto end;
+        lrclk_div = bitWidth * 2;
+        bclk_div  = dac_pcm512x_get_bclk_div(sampleRate, lrclk_div);
+        ret       = PCM512x_WriteReg(handle, PCM512x_MASTER_CLKDIV_1, bclk_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
+        ret = PCM512x_WriteReg(handle, PCM512x_MASTER_CLKDIV_2, lrclk_div - 1);
+        if (ret != kStatus_Success)
+            goto end;
 
-    idac = dac_pcm512x_get_idac(sampleRate, dsp_div);
-    ret  = PCM512x_WriteReg(handle, PCM512x_IDAC_1, idac >> 8);
-    if (ret != kStatus_Success)
-        goto end;
-    ret = PCM512x_WriteReg(handle, PCM512x_IDAC_2, idac & 0xff);
-    if (ret != kStatus_Success)
-        goto end;
+        idac = dac_pcm512x_get_idac(sampleRate, dsp_div);
+        ret  = PCM512x_WriteReg(handle, PCM512x_IDAC_1, idac >> 8);
+        if (ret != kStatus_Success)
+            goto end;
+        ret = PCM512x_WriteReg(handle, PCM512x_IDAC_2, idac & 0xff);
+        if (ret != kStatus_Success)
+            goto end;
 
-    fssp = dac_pcm512x_get_fssp(sampleRate);
-    ret  = PCM512x_ModifyReg(handle, PCM512x_FS_SPEED_MODE, PCM512x_FSSP, fssp);
-    if (ret != kStatus_Success)
-        goto end;
+        fssp = dac_pcm512x_get_fssp(sampleRate);
+        ret  = PCM512x_ModifyReg(handle, PCM512x_FS_SPEED_MODE, PCM512x_FSSP, fssp);
+        if (ret != kStatus_Success)
+            goto end;
+    }
 
-    ret = PCM512x_ModifyReg(handle, PCM512x_BCLK_LRCLK_CFG, PCM512x_BCKP | PCM512x_BCKO | PCM512x_LRKO,
-                            PCM512x_BCKO | PCM512x_LRKO);
-    if (ret != kStatus_Success)
-        goto end;
+    if (handle->config->master_slave) {
+        ret = PCM512x_ModifyReg(handle, PCM512x_BCLK_LRCLK_CFG, PCM512x_BCKP | PCM512x_BCKO | PCM512x_LRKO,
+                                PCM512x_BCKO | PCM512x_LRKO);
+        if (ret != kStatus_Success)
+            goto end;
 
-    ret = PCM512x_ModifyReg(handle, PCM512x_MASTER_MODE, PCM512x_RLRK | PCM512x_RBCK, PCM512x_RLRK | PCM512x_RBCK);
-    if (ret != kStatus_Success)
-        goto end;
+        ret = PCM512x_ModifyReg(handle, PCM512x_MASTER_MODE, PCM512x_RLRK | PCM512x_RBCK, PCM512x_RLRK | PCM512x_RBCK);
+        if (ret != kStatus_Success)
+            goto end;
+    }
+    else
+    {
+        ret = PCM512x_ModifyReg(handle, PCM512x_BCLK_LRCLK_CFG, PCM512x_BCKP | PCM512x_BCKO | PCM512x_LRKO,
+                                0);
+        if (ret != kStatus_Success)
+            goto end;
+
+        ret = PCM512x_ModifyReg(handle, PCM512x_MASTER_MODE, PCM512x_RLRK | PCM512x_RBCK, 0);
+        if (ret != kStatus_Success)
+            goto end;
+    }
 
     ret = PCM512x_ModifyReg(handle, PCM512x_SYNCHRONIZE, PCM512x_RQSY, PCM512x_RQSY_HALT);
     if (ret != kStatus_Success)

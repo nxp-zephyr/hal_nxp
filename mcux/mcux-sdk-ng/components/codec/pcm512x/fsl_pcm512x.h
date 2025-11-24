@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,8 +21,8 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief PCM512X driver version 2.0.1 */
-#define FSL_PCM512X_DRIVER_VERSION (MAKE_VERSION(2, 0, 1))
+/*! @brief PCM512X driver version 2.1.0 */
+#define FSL_PCM512X_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*! @brief PCM512x handle size */
@@ -38,6 +38,7 @@
 #define PCM512x_GPIO_EN         (8)
 #define PCM512x_BCLK_LRCLK_CFG  (9)
 #define PCM512x_MASTER_MODE     (12)
+#define PCM512x_PLL_REF         (13)
 #define PCM512x_DAC_REF         (14)
 #define PCM512x_SYNCHRONIZE     (19)
 #define PCM512x_DSP_CLKDIV      (27)
@@ -82,9 +83,16 @@
 #define PCM512x_RLRK (1 << 0)
 #define PCM512x_RBCK (1 << 1)
 
+/*! @brief Page 0, Register 13 - PLL Reference */
+#define PCM512x_SREF        (7 << 4)
+#define PCM512x_SREF_SCK    (0 << 4)
+#define PCM512x_SREF_BCK    (1 << 4)
+#define PCM512x_SREF_GPIO   (3 << 4)
+
 /*! @brief Page 0, Register 14 - DAC reference */
-#define PCM512x_SDAC     (7 << 4)
-#define PCM512x_SDAC_SCK (3 << 4)
+#define PCM512x_SDAC        (7 << 4)
+#define PCM512x_SDAC_MASTER (0 << 4)
+#define PCM512x_SDAC_SCK    (3 << 4)
 
 /*! @brief Page 0, Register 19 - synchronize */
 #define PCM512x_RQSY        (1 << 0)
@@ -169,7 +177,7 @@ typedef struct _pcm512x_audio_format
 typedef struct pcm512x_config
 {
     pcm512x_audio_format_t format; /*!< Audio format */
-    bool master_slave;             /*!< Master or slave. */
+    bool master_slave;             /*!< Master or slave. True means master, false means slave. */
     uint8_t slaveAddress;          /*!< PCM512x device address */
     codec_i2c_config_t i2cConfig;  /*!< i2c configuration */
     uint8_t gpio_led;              /*!< led gpio number */
