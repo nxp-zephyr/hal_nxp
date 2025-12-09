@@ -121,14 +121,14 @@ void DisableDeepSleepIRQ(IRQn_Type interrupt)
 #endif /* FSL_FEATURE_POWERLIB_EXTEND */
 #endif /* FSL_FEATURE_SOC_SYSCON_COUNT */
 
-#if defined(DWT)
+#if MSDK_HAS_DWT_CYCCNT
 /* Use WDT. */
 void MSDK_EnableCpuCycleCounter(void)
 {
     /* Make sure the DWT trace fucntion is enabled. */
-    if (CoreDebug_DEMCR_TRCENA_Msk != (CoreDebug_DEMCR_TRCENA_Msk & CoreDebug->DEMCR))
+    if (DCB_DEMCR_TRCENA_Msk != (DCB_DEMCR_TRCENA_Msk & DCB->DEMCR))
     {
-        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+        DCB->DEMCR |= DCB_DEMCR_TRCENA_Msk;
     }
 
     /* CYCCNT not supported on this device. */
@@ -147,7 +147,7 @@ uint32_t MSDK_GetCpuCycleCount(void)
 }
 #endif /* defined(DWT) */
 
-#if !(defined(SDK_DELAY_USE_DWT) && defined(DWT))
+#if !(defined(SDK_DELAY_USE_DWT) && MSDK_HAS_DWT_CYCCNT)
 /* Use software loop. */
 #if defined(__CC_ARM) /* This macro is arm v5 specific */
 /* clang-format off */
@@ -217,7 +217,7 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz)
 
         assert(count <= UINT32_MAX);
 
-#if defined(SDK_DELAY_USE_DWT) && defined(DWT) /* Use DWT for better accuracy */
+#if (defined(SDK_DELAY_USE_DWT) && MSDK_HAS_DWT_CYCCNT) /* Use DWT for better accuracy */
 
         MSDK_EnableCpuCycleCounter();
         /* Calculate the count ticks. */
@@ -367,3 +367,17 @@ void EnableGlobalIRQEx(uint32_t primask)
     EnableGlobalIRQ(primask);
 }
 #endif /* FSL_FEATURE_MEASURE_CRITICAL_SECTION */
+
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+__attribute__((weak)) void IRQSTEER_EnableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt)
+{
+    (void)irqsteerInstIdx;
+    (void)interrupt;
+}
+
+__attribute__((weak)) void IRQSTEER_DisableInterrupt(int32_t irqsteerInstIdx, IRQn_Type interrupt)
+{
+    (void)irqsteerInstIdx;
+    (void)interrupt;
+}
+#endif
