@@ -34066,6 +34066,12 @@ typedef struct {
 #endif
 /** Interrupt vectors for the FLEXSPI peripheral type */
 #define FLEXSPI_IRQS                             { FlexSPI1_IRQn }
+/** FlexSPI AMBA memory base alias count */
+#define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
+/** FlexSPI AMBA base address array */
+#define FlexSPI_AMBA_BASE_ARRAY                  { {0x38000000u} }
+/** FlexSPI AMBA end address array */
+#define FlexSPI_AMBA_END_ARRAY                   { {0x3FFFFFFFu} }
 /* FlexSPI AMBA base address. */
 #define FlexSPI_AMBA_BASE                       (0x38000000U)
 /* FlexSPI AMBA end address. */
