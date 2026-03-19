@@ -1,5 +1,5 @@
 #
-# Copyright 2024-2025 NXP
+# Copyright 2024-2026 NXP
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -270,6 +270,20 @@ if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx95_m7)
     )
 endif()
 
+if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx952_m7)
+    mcux_add_include(
+        INCLUDES ../lib/include/platform/imx952_m7/
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/include/platform/imx952_m7/rpmsg_platform.h
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/rpmsg_lite/porting/platform/imx952_m7/rpmsg_platform.c
+    )
+endif()
+
 if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.imx95_m33)
     mcux_add_include(
         INCLUDES ../lib/include/platform/imx95_m33/
@@ -453,6 +467,20 @@ if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.kw43b43)
 
     mcux_add_source(
         SOURCES ../lib/rpmsg_lite/porting/platform/kw43b43/rpmsg_platform.c
+    )
+endif()
+
+if (CONFIG_MCUX_COMPONENT_middleware.multicore.rpmsg-lite.mcxw70)
+    mcux_add_include(
+        INCLUDES ../lib/include/platform/mcxw70/
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/include/platform/mcxw70/rpmsg_platform.h
+    )
+
+    mcux_add_source(
+        SOURCES ../lib/rpmsg_lite/porting/platform/mcxw70/rpmsg_platform.c
     )
 endif()
 

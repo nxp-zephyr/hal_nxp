@@ -247,8 +247,8 @@
 **                          MIMX95N6XVZXN_cm33
 **                          MIMX95N6XVZXN_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250904
+**     Version:             rev. 3.0, 2025-11-24
+**     Build:               b251124
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USB3_CORE
@@ -266,14 +266,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-24)
+**         Header RFP.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_USB3_CORE.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-24
  * @brief CMSIS Peripheral Access Layer for USB3_CORE
  *
  * CMSIS Peripheral Access Layer for USB3_CORE
@@ -2900,10 +2902,10 @@ typedef struct {
 #define USB3_CORE_GUSB3PIPECTL_HstPrtCmpl_SHIFT  (30U)
 #define USB3_CORE_GUSB3PIPECTL_HstPrtCmpl(x)     (((uint32_t)(((uint32_t)(x)) << USB3_CORE_GUSB3PIPECTL_HstPrtCmpl_SHIFT)) & USB3_CORE_GUSB3PIPECTL_HstPrtCmpl_MASK)
 
-#define USB3_CORE_GUSB3PIPECTL_PHYSoftRst_MASK   (0x80000000U)
-#define USB3_CORE_GUSB3PIPECTL_PHYSoftRst_SHIFT  (31U)
-/*! PHYSoftRst - USB3_PHY Soft Reset */
-#define USB3_CORE_GUSB3PIPECTL_PHYSoftRst(x)     (((uint32_t)(((uint32_t)(x)) << USB3_CORE_GUSB3PIPECTL_PHYSoftRst_SHIFT)) & USB3_CORE_GUSB3PIPECTL_PHYSoftRst_MASK)
+#define USB3_CORE_GUSB3PIPECTL_PHYSOFTRST_MASK   (0x80000000U)
+#define USB3_CORE_GUSB3PIPECTL_PHYSOFTRST_SHIFT  (31U)
+/*! PHYSOFTRST - USB3_PHY Soft Reset */
+#define USB3_CORE_GUSB3PIPECTL_PHYSOFTRST(x)     (((uint32_t)(((uint32_t)(x)) << USB3_CORE_GUSB3PIPECTL_PHYSOFTRST_SHIFT)) & USB3_CORE_GUSB3PIPECTL_PHYSOFTRST_MASK)
 /*! @} */
 
 /*! @name GTXFIFOSIZ - Global Transmit FIFO Size */

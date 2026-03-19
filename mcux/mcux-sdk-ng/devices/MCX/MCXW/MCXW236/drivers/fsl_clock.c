@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 NXP
+ * Copyright 2017-2026 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -926,7 +926,15 @@ uint32_t CLOCK_SetFlexCommClock(uint32_t id, uint32_t freq)
 {
     uint32_t input = CLOCK_GetFlexCommClkFreq(id);
     uint32_t mul;
-    uint64_t temp = ((uint64_t)(input - freq) * 256U) / ((uint64_t)freq);
+    uint64_t temp;
+
+    /* Check for division by zero */
+    if (0U == freq)
+    {
+        return 0;
+    }
+
+    temp = ((uint64_t)(input - freq) * 256U) / ((uint64_t)freq);
 
     if ((freq > kFreq_32MHz) || (freq > input) || (input / freq >= 2))
     {
@@ -1019,12 +1027,12 @@ uint32_t CLOCK_GetFreq(clock_name_t clockName)
     return freq;
 }
 
-/* Get Systick Clk */
+/* Get OSTimer Clk */
 uint32_t CLOCK_GetOSTimerClkFreq(void)
 {
     uint32_t freq = 0U;
 
-    switch ((PMC->OSTIMERr & PMC_OSTIMER_OSTIMERCLKSEL_MASK) << PMC_OSTIMER_CLOCKENABLE_SHIFT)
+    switch ((PMC->OSTIMERr & PMC_OSTIMER_OSTIMERCLKSEL_MASK) >> PMC_OSTIMER_OSTIMERCLKSEL_SHIFT)
     {
         case OSTIMERCLKSEL_32768:
             freq = 32768;

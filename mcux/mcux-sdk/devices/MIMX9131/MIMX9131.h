@@ -9104,11 +9104,39 @@ typedef struct {
   __IO uint32_t IMASK3;                            /**< Interrupt Masks 3, offset: 0x6C */
        uint8_t RESERVED_3[4];
   __IO uint32_t IFLAG3;                            /**< Interrupt Flags 3, offset: 0x74 */
-  __I  uint32_t ET;                                /**< External Timer, offset: 0x78, available only on: CAN_FD1/CAN1 (missing on CAN_FD2/CAN2) */
-  __IO uint32_t FLTCONF_IE;                        /**< Fault Confinement Interrupt Enable, offset: 0x7C, available only on: CAN_FD1/CAN1 (missing on CAN_FD2/CAN2) */
-       uint8_t RESERVED_4[2048];
+  __I  uint32_t ET;                                /**< External Timer, offset: 0x78 */
+       uint8_t RESERVED_4[4];
+  union {                                          /* offset: 0x80 */
+    struct {                                         /* offset: 0x80, array step: 0x10 */
+      __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 95 CS Register, array offset: 0x80, array step: 0x10 */
+      __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 95 ID Register, array offset: 0x84, array step: 0x10 */
+      __IO uint32_t WORD[2];                           /**< Message Buffer 0 WORD_8B Register..Message Buffer 95 WORD_8B Register, array offset: 0x88, array step: index*0x10, index2*0x4 */
+    } MB_8B[96];
+    struct {                                         /* offset: 0x80, array step: 0x18 */
+      __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 62 CS Register, array offset: 0x80, array step: 0x18 */
+      __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 62 ID Register, array offset: 0x84, array step: 0x18 */
+      __IO uint32_t WORD[4];                           /**< Message Buffer 0 WORD_16B Register..Message Buffer 62 WORD_16B Register, array offset: 0x88, array step: index*0x18, index2*0x4 */
+    } MB_16B[63];
+    struct {                                         /* offset: 0x80, array step: 0x28 */
+      __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 35 CS Register, array offset: 0x80, array step: 0x28 */
+      __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 35 ID Register, array offset: 0x84, array step: 0x28 */
+      __IO uint32_t WORD[8];                           /**< Message Buffer 0 WORD_32B Register..Message Buffer 35 WORD_32B Register, array offset: 0x88, array step: index*0x28, index2*0x4 */
+    } MB_32B[36];
+    struct {                                         /* offset: 0x80, array step: 0x48 */
+      __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 20 CS Register, array offset: 0x80, array step: 0x48 */
+      __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 20 ID Register, array offset: 0x84, array step: 0x48 */
+      __IO uint32_t WORD[16];                          /**< Message Buffer 0 WORD_64B Register..Message Buffer 20 WORD_64B Register, array offset: 0x88, array step: index*0x48, index2*0x4 */
+    } MB_64B[21];
+    struct {                                         /* offset: 0x80, array step: 0x10 */
+      __IO uint32_t CS;                                /**< Message Buffer 0 CS Register..Message Buffer 95 CS Register, array offset: 0x80, array step: 0x10 */
+      __IO uint32_t ID;                                /**< Message Buffer 0 ID Register..Message Buffer 95 ID Register, array offset: 0x84, array step: 0x10 */
+      __IO uint32_t WORD0;                             /**< Message Buffer 0 WORD0 Register..Message Buffer 95 WORD0 Register, array offset: 0x88, array step: 0x10 */
+      __IO uint32_t WORD1;                             /**< Message Buffer 0 WORD1 Register..Message Buffer 95 WORD1 Register, array offset: 0x8C, array step: 0x10 */
+    } MB[96];
+  };
+       uint8_t RESERVED_5[512];
   __IO uint32_t RXIMR[96];                         /**< Receive Individual Mask, array offset: 0x880, array step: 0x4 */
-       uint8_t RESERVED_5[224];
+       uint8_t RESERVED_6[224];
   __IO uint32_t MECR;                              /**< Memory Error Control, offset: 0xAE0 */
   __IO uint32_t ERRIAR;                            /**< Error Injection Address, offset: 0xAE4 */
   __IO uint32_t ERRIDPR;                           /**< Error Injection Data Pattern, offset: 0xAE8 */
@@ -9117,7 +9145,7 @@ typedef struct {
   __I  uint32_t RERRDR;                            /**< Error Report Data, offset: 0xAF4 */
   __I  uint32_t RERRSYNR;                          /**< Error Report Syndrome, offset: 0xAF8 */
   __IO uint32_t ERRSR;                             /**< Error Status, offset: 0xAFC */
-       uint8_t RESERVED_6[240];
+       uint8_t RESERVED_7[240];
   __IO uint32_t EPRS;                              /**< Enhanced CAN Bit Timing Prescalers, offset: 0xBF0 */
   __IO uint32_t ENCBT;                             /**< Enhanced Nominal CAN Bit Timing, offset: 0xBF4 */
   __IO uint32_t EDCBT;                             /**< Enhanced Data Phase CAN Bit Timing, offset: 0xBF8 */
@@ -9128,9 +9156,9 @@ typedef struct {
   __IO uint32_t ERFCR;                             /**< Enhanced RX FIFO Control, offset: 0xC0C */
   __IO uint32_t ERFIER;                            /**< Enhanced RX FIFO Interrupt Enable, offset: 0xC10 */
   __IO uint32_t ERFSR;                             /**< Enhanced RX FIFO Status, offset: 0xC14 */
-       uint8_t RESERVED_7[24];
+       uint8_t RESERVED_8[24];
   __IO uint32_t HR_TIME_STAMP[96];                 /**< High-Resolution Timestamp, array offset: 0xC30, array step: 0x4 */
-       uint8_t RESERVED_8[8784];
+       uint8_t RESERVED_9[8784];
   __IO uint32_t ERFFEL[128];                       /**< Enhanced RX FIFO Filter Element, array offset: 0x3000, array step: 0x4 */
 } CAN_Type;
 
@@ -10107,25 +10135,517 @@ typedef struct {
 #define CAN_ET_TIMER(x)                          (((uint32_t)(((uint32_t)(x)) << CAN_ET_TIMER_SHIFT)) & CAN_ET_TIMER_MASK)
 /*! @} */
 
-/*! @name FLTCONF_IE - Fault Confinement Interrupt Enable */
+/* The count of CAN_CS */
+#define CAN_CS_COUNT_MB8B                        (96U)
+
+/* The count of CAN_ID */
+#define CAN_ID_COUNT_MB8B                        (96U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB8B                      (96U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB8B2                     (2U)
+
+/* The count of CAN_CS */
+#define CAN_CS_COUNT_MB16B                       (63U)
+
+/* The count of CAN_ID */
+#define CAN_ID_COUNT_MB16B                       (63U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB16B                     (63U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB16B2                    (4U)
+
+/* The count of CAN_CS */
+#define CAN_CS_COUNT_MB32B                       (36U)
+
+/* The count of CAN_ID */
+#define CAN_ID_COUNT_MB32B                       (36U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB32B                     (36U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB32B2                    (8U)
+
+/*! @name CS - Message Buffer 0 CS Register..Message Buffer 20 CS Register */
 /*! @{ */
 
-#define CAN_FLTCONF_IE_ATP_IE_MASK               (0x1U)
-#define CAN_FLTCONF_IE_ATP_IE_SHIFT              (0U)
-/*! ATP_IE - Active to Passive Interrupt Enable
- *  0b0..Disable
- *  0b1..Enable
+#define CAN_CS_TIME_STAMP_MASK                   (0xFFFFU)
+#define CAN_CS_TIME_STAMP_SHIFT                  (0U)
+/*! TIME_STAMP - Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running
+ *    Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field
+ *    appears on the CAN bus.
  */
-#define CAN_FLTCONF_IE_ATP_IE(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_FLTCONF_IE_ATP_IE_SHIFT)) & CAN_FLTCONF_IE_ATP_IE_MASK)
+#define CAN_CS_TIME_STAMP(x)                     (((uint32_t)(((uint32_t)(x)) << CAN_CS_TIME_STAMP_SHIFT)) & CAN_CS_TIME_STAMP_MASK)
 
-#define CAN_FLTCONF_IE_PTA_IE_MASK               (0x2U)
-#define CAN_FLTCONF_IE_PTA_IE_SHIFT              (1U)
-/*! PTA_IE - Passive to Active Interrupt Enable
- *  0b0..Disable
- *  0b1..Enable
+#define CAN_CS_DLC_MASK                          (0xF0000U)
+#define CAN_CS_DLC_SHIFT                         (16U)
+/*! DLC - Length of the data to be stored/transmitted. */
+#define CAN_CS_DLC(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_DLC_SHIFT)) & CAN_CS_DLC_MASK)
+
+#define CAN_CS_RTR_MASK                          (0x100000U)
+#define CAN_CS_RTR_SHIFT                         (20U)
+/*! RTR - Remote Transmission Request. One/zero for remote/data frame. */
+#define CAN_CS_RTR(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_RTR_SHIFT)) & CAN_CS_RTR_MASK)
+
+#define CAN_CS_IDE_MASK                          (0x200000U)
+#define CAN_CS_IDE_SHIFT                         (21U)
+/*! IDE - ID Extended. One/zero for extended/standard format frame. */
+#define CAN_CS_IDE(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_IDE_SHIFT)) & CAN_CS_IDE_MASK)
+
+#define CAN_CS_SRR_MASK                          (0x400000U)
+#define CAN_CS_SRR_SHIFT                         (22U)
+/*! SRR - Substitute Remote Request. Contains a fixed recessive bit. */
+#define CAN_CS_SRR(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_SRR_SHIFT)) & CAN_CS_SRR_MASK)
+
+#define CAN_CS_CODE_MASK                         (0xF000000U)
+#define CAN_CS_CODE_SHIFT                        (24U)
+/*! CODE - Message Buffer Code. This 4-bit field can be accessed (read or write) by the CPU and by
+ *    the FlexCAN module itself, as part of the message buffer matching and arbitration process.
  */
-#define CAN_FLTCONF_IE_PTA_IE(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_FLTCONF_IE_PTA_IE_SHIFT)) & CAN_FLTCONF_IE_PTA_IE_MASK)
+#define CAN_CS_CODE(x)                           (((uint32_t)(((uint32_t)(x)) << CAN_CS_CODE_SHIFT)) & CAN_CS_CODE_MASK)
+
+#define CAN_CS_ESI_MASK                          (0x20000000U)
+#define CAN_CS_ESI_SHIFT                         (29U)
+/*! ESI - Error State Indicator. This bit indicates if the transmitting node is error active or error passive. */
+#define CAN_CS_ESI(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_ESI_SHIFT)) & CAN_CS_ESI_MASK)
+
+#define CAN_CS_BRS_MASK                          (0x40000000U)
+#define CAN_CS_BRS_SHIFT                         (30U)
+/*! BRS - Bit Rate Switch. This bit defines whether the bit rate is switched inside a CAN FD format frame. */
+#define CAN_CS_BRS(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_BRS_SHIFT)) & CAN_CS_BRS_MASK)
+
+#define CAN_CS_EDL_MASK                          (0x80000000U)
+#define CAN_CS_EDL_SHIFT                         (31U)
+/*! EDL - Extended Data Length. This bit distinguishes between CAN format and CAN FD format frames.
+ *    The EDL bit must not be set for Message Buffers configured to RANSWER with code field 0b1010.
+ */
+#define CAN_CS_EDL(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_CS_EDL_SHIFT)) & CAN_CS_EDL_MASK)
 /*! @} */
+
+/* The count of CAN_CS */
+#define CAN_CS_COUNT_MB64B                       (21U)
+
+/*! @name ID - Message Buffer 0 ID Register..Message Buffer 20 ID Register */
+/*! @{ */
+
+#define CAN_ID_EXT_MASK                          (0x3FFFFU)
+#define CAN_ID_EXT_SHIFT                         (0U)
+/*! EXT - Contains extended (LOW word) identifier of message buffer. */
+#define CAN_ID_EXT(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_ID_EXT_SHIFT)) & CAN_ID_EXT_MASK)
+
+#define CAN_ID_STD_MASK                          (0x1FFC0000U)
+#define CAN_ID_STD_SHIFT                         (18U)
+/*! STD - Contains standard/extended (HIGH word) identifier of message buffer. */
+#define CAN_ID_STD(x)                            (((uint32_t)(((uint32_t)(x)) << CAN_ID_STD_SHIFT)) & CAN_ID_STD_MASK)
+
+#define CAN_ID_PRIO_MASK                         (0xE0000000U)
+#define CAN_ID_PRIO_SHIFT                        (29U)
+/*! PRIO - Local priority. This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only
+ *    makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular
+ *    ID to define the transmission priority.
+ */
+#define CAN_ID_PRIO(x)                           (((uint32_t)(((uint32_t)(x)) << CAN_ID_PRIO_SHIFT)) & CAN_ID_PRIO_MASK)
+/*! @} */
+
+/* The count of CAN_ID */
+#define CAN_ID_COUNT_MB64B                       (21U)
+
+/*! @name WORD - Message Buffer 0 WORD_64B Register..Message Buffer 20 WORD_64B Register */
+/*! @{ */
+
+#define CAN_WORD_DATA_BYTE_3_MASK                (0xFFU)
+#define CAN_WORD_DATA_BYTE_3_SHIFT               (0U)
+/*! DATA_BYTE_3 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_3(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_3_SHIFT)) & CAN_WORD_DATA_BYTE_3_MASK)
+
+#define CAN_WORD_DATA_BYTE_7_MASK                (0xFFU)
+#define CAN_WORD_DATA_BYTE_7_SHIFT               (0U)
+/*! DATA_BYTE_7 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_7(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_7_SHIFT)) & CAN_WORD_DATA_BYTE_7_MASK)
+
+#define CAN_WORD_DATA_BYTE_11_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_11_SHIFT              (0U)
+/*! DATA_BYTE_11 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_11(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_11_SHIFT)) & CAN_WORD_DATA_BYTE_11_MASK)
+
+#define CAN_WORD_DATA_BYTE_15_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_15_SHIFT              (0U)
+/*! DATA_BYTE_15 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_15(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_15_SHIFT)) & CAN_WORD_DATA_BYTE_15_MASK)
+
+#define CAN_WORD_DATA_BYTE_19_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_19_SHIFT              (0U)
+/*! DATA_BYTE_19 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_19(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_19_SHIFT)) & CAN_WORD_DATA_BYTE_19_MASK)
+
+#define CAN_WORD_DATA_BYTE_23_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_23_SHIFT              (0U)
+/*! DATA_BYTE_23 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_23(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_23_SHIFT)) & CAN_WORD_DATA_BYTE_23_MASK)
+
+#define CAN_WORD_DATA_BYTE_27_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_27_SHIFT              (0U)
+/*! DATA_BYTE_27 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_27(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_27_SHIFT)) & CAN_WORD_DATA_BYTE_27_MASK)
+
+#define CAN_WORD_DATA_BYTE_31_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_31_SHIFT              (0U)
+/*! DATA_BYTE_31 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_31(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_31_SHIFT)) & CAN_WORD_DATA_BYTE_31_MASK)
+
+#define CAN_WORD_DATA_BYTE_35_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_35_SHIFT              (0U)
+/*! DATA_BYTE_35 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_35(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_35_SHIFT)) & CAN_WORD_DATA_BYTE_35_MASK)
+
+#define CAN_WORD_DATA_BYTE_39_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_39_SHIFT              (0U)
+/*! DATA_BYTE_39 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_39(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_39_SHIFT)) & CAN_WORD_DATA_BYTE_39_MASK)
+
+#define CAN_WORD_DATA_BYTE_43_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_43_SHIFT              (0U)
+/*! DATA_BYTE_43 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_43(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_43_SHIFT)) & CAN_WORD_DATA_BYTE_43_MASK)
+
+#define CAN_WORD_DATA_BYTE_47_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_47_SHIFT              (0U)
+/*! DATA_BYTE_47 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_47(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_47_SHIFT)) & CAN_WORD_DATA_BYTE_47_MASK)
+
+#define CAN_WORD_DATA_BYTE_51_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_51_SHIFT              (0U)
+/*! DATA_BYTE_51 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_51(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_51_SHIFT)) & CAN_WORD_DATA_BYTE_51_MASK)
+
+#define CAN_WORD_DATA_BYTE_55_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_55_SHIFT              (0U)
+/*! DATA_BYTE_55 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_55(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_55_SHIFT)) & CAN_WORD_DATA_BYTE_55_MASK)
+
+#define CAN_WORD_DATA_BYTE_59_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_59_SHIFT              (0U)
+/*! DATA_BYTE_59 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_59(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_59_SHIFT)) & CAN_WORD_DATA_BYTE_59_MASK)
+
+#define CAN_WORD_DATA_BYTE_63_MASK               (0xFFU)
+#define CAN_WORD_DATA_BYTE_63_SHIFT              (0U)
+/*! DATA_BYTE_63 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_63(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_63_SHIFT)) & CAN_WORD_DATA_BYTE_63_MASK)
+
+#define CAN_WORD_DATA_BYTE_2_MASK                (0xFF00U)
+#define CAN_WORD_DATA_BYTE_2_SHIFT               (8U)
+/*! DATA_BYTE_2 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_2(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_2_SHIFT)) & CAN_WORD_DATA_BYTE_2_MASK)
+
+#define CAN_WORD_DATA_BYTE_6_MASK                (0xFF00U)
+#define CAN_WORD_DATA_BYTE_6_SHIFT               (8U)
+/*! DATA_BYTE_6 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_6(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_6_SHIFT)) & CAN_WORD_DATA_BYTE_6_MASK)
+
+#define CAN_WORD_DATA_BYTE_10_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_10_SHIFT              (8U)
+/*! DATA_BYTE_10 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_10(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_10_SHIFT)) & CAN_WORD_DATA_BYTE_10_MASK)
+
+#define CAN_WORD_DATA_BYTE_14_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_14_SHIFT              (8U)
+/*! DATA_BYTE_14 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_14(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_14_SHIFT)) & CAN_WORD_DATA_BYTE_14_MASK)
+
+#define CAN_WORD_DATA_BYTE_18_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_18_SHIFT              (8U)
+/*! DATA_BYTE_18 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_18(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_18_SHIFT)) & CAN_WORD_DATA_BYTE_18_MASK)
+
+#define CAN_WORD_DATA_BYTE_22_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_22_SHIFT              (8U)
+/*! DATA_BYTE_22 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_22(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_22_SHIFT)) & CAN_WORD_DATA_BYTE_22_MASK)
+
+#define CAN_WORD_DATA_BYTE_26_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_26_SHIFT              (8U)
+/*! DATA_BYTE_26 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_26(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_26_SHIFT)) & CAN_WORD_DATA_BYTE_26_MASK)
+
+#define CAN_WORD_DATA_BYTE_30_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_30_SHIFT              (8U)
+/*! DATA_BYTE_30 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_30(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_30_SHIFT)) & CAN_WORD_DATA_BYTE_30_MASK)
+
+#define CAN_WORD_DATA_BYTE_34_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_34_SHIFT              (8U)
+/*! DATA_BYTE_34 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_34(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_34_SHIFT)) & CAN_WORD_DATA_BYTE_34_MASK)
+
+#define CAN_WORD_DATA_BYTE_38_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_38_SHIFT              (8U)
+/*! DATA_BYTE_38 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_38(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_38_SHIFT)) & CAN_WORD_DATA_BYTE_38_MASK)
+
+#define CAN_WORD_DATA_BYTE_42_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_42_SHIFT              (8U)
+/*! DATA_BYTE_42 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_42(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_42_SHIFT)) & CAN_WORD_DATA_BYTE_42_MASK)
+
+#define CAN_WORD_DATA_BYTE_46_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_46_SHIFT              (8U)
+/*! DATA_BYTE_46 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_46(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_46_SHIFT)) & CAN_WORD_DATA_BYTE_46_MASK)
+
+#define CAN_WORD_DATA_BYTE_50_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_50_SHIFT              (8U)
+/*! DATA_BYTE_50 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_50(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_50_SHIFT)) & CAN_WORD_DATA_BYTE_50_MASK)
+
+#define CAN_WORD_DATA_BYTE_54_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_54_SHIFT              (8U)
+/*! DATA_BYTE_54 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_54(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_54_SHIFT)) & CAN_WORD_DATA_BYTE_54_MASK)
+
+#define CAN_WORD_DATA_BYTE_58_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_58_SHIFT              (8U)
+/*! DATA_BYTE_58 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_58(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_58_SHIFT)) & CAN_WORD_DATA_BYTE_58_MASK)
+
+#define CAN_WORD_DATA_BYTE_62_MASK               (0xFF00U)
+#define CAN_WORD_DATA_BYTE_62_SHIFT              (8U)
+/*! DATA_BYTE_62 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_62(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_62_SHIFT)) & CAN_WORD_DATA_BYTE_62_MASK)
+
+#define CAN_WORD_DATA_BYTE_1_MASK                (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_1_SHIFT               (16U)
+/*! DATA_BYTE_1 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_1(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_1_SHIFT)) & CAN_WORD_DATA_BYTE_1_MASK)
+
+#define CAN_WORD_DATA_BYTE_5_MASK                (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_5_SHIFT               (16U)
+/*! DATA_BYTE_5 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_5(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_5_SHIFT)) & CAN_WORD_DATA_BYTE_5_MASK)
+
+#define CAN_WORD_DATA_BYTE_9_MASK                (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_9_SHIFT               (16U)
+/*! DATA_BYTE_9 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_9(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_9_SHIFT)) & CAN_WORD_DATA_BYTE_9_MASK)
+
+#define CAN_WORD_DATA_BYTE_13_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_13_SHIFT              (16U)
+/*! DATA_BYTE_13 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_13(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_13_SHIFT)) & CAN_WORD_DATA_BYTE_13_MASK)
+
+#define CAN_WORD_DATA_BYTE_17_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_17_SHIFT              (16U)
+/*! DATA_BYTE_17 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_17(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_17_SHIFT)) & CAN_WORD_DATA_BYTE_17_MASK)
+
+#define CAN_WORD_DATA_BYTE_21_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_21_SHIFT              (16U)
+/*! DATA_BYTE_21 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_21(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_21_SHIFT)) & CAN_WORD_DATA_BYTE_21_MASK)
+
+#define CAN_WORD_DATA_BYTE_25_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_25_SHIFT              (16U)
+/*! DATA_BYTE_25 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_25(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_25_SHIFT)) & CAN_WORD_DATA_BYTE_25_MASK)
+
+#define CAN_WORD_DATA_BYTE_29_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_29_SHIFT              (16U)
+/*! DATA_BYTE_29 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_29(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_29_SHIFT)) & CAN_WORD_DATA_BYTE_29_MASK)
+
+#define CAN_WORD_DATA_BYTE_33_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_33_SHIFT              (16U)
+/*! DATA_BYTE_33 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_33(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_33_SHIFT)) & CAN_WORD_DATA_BYTE_33_MASK)
+
+#define CAN_WORD_DATA_BYTE_37_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_37_SHIFT              (16U)
+/*! DATA_BYTE_37 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_37(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_37_SHIFT)) & CAN_WORD_DATA_BYTE_37_MASK)
+
+#define CAN_WORD_DATA_BYTE_41_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_41_SHIFT              (16U)
+/*! DATA_BYTE_41 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_41(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_41_SHIFT)) & CAN_WORD_DATA_BYTE_41_MASK)
+
+#define CAN_WORD_DATA_BYTE_45_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_45_SHIFT              (16U)
+/*! DATA_BYTE_45 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_45(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_45_SHIFT)) & CAN_WORD_DATA_BYTE_45_MASK)
+
+#define CAN_WORD_DATA_BYTE_49_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_49_SHIFT              (16U)
+/*! DATA_BYTE_49 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_49(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_49_SHIFT)) & CAN_WORD_DATA_BYTE_49_MASK)
+
+#define CAN_WORD_DATA_BYTE_53_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_53_SHIFT              (16U)
+/*! DATA_BYTE_53 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_53(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_53_SHIFT)) & CAN_WORD_DATA_BYTE_53_MASK)
+
+#define CAN_WORD_DATA_BYTE_57_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_57_SHIFT              (16U)
+/*! DATA_BYTE_57 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_57(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_57_SHIFT)) & CAN_WORD_DATA_BYTE_57_MASK)
+
+#define CAN_WORD_DATA_BYTE_61_MASK               (0xFF0000U)
+#define CAN_WORD_DATA_BYTE_61_SHIFT              (16U)
+/*! DATA_BYTE_61 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_61(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_61_SHIFT)) & CAN_WORD_DATA_BYTE_61_MASK)
+
+#define CAN_WORD_DATA_BYTE_0_MASK                (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_0_SHIFT               (24U)
+/*! DATA_BYTE_0 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_0(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_0_SHIFT)) & CAN_WORD_DATA_BYTE_0_MASK)
+
+#define CAN_WORD_DATA_BYTE_4_MASK                (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_4_SHIFT               (24U)
+/*! DATA_BYTE_4 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_4(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_4_SHIFT)) & CAN_WORD_DATA_BYTE_4_MASK)
+
+#define CAN_WORD_DATA_BYTE_8_MASK                (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_8_SHIFT               (24U)
+/*! DATA_BYTE_8 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_8(x)                  (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_8_SHIFT)) & CAN_WORD_DATA_BYTE_8_MASK)
+
+#define CAN_WORD_DATA_BYTE_12_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_12_SHIFT              (24U)
+/*! DATA_BYTE_12 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_12(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_12_SHIFT)) & CAN_WORD_DATA_BYTE_12_MASK)
+
+#define CAN_WORD_DATA_BYTE_16_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_16_SHIFT              (24U)
+/*! DATA_BYTE_16 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_16(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_16_SHIFT)) & CAN_WORD_DATA_BYTE_16_MASK)
+
+#define CAN_WORD_DATA_BYTE_20_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_20_SHIFT              (24U)
+/*! DATA_BYTE_20 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_20(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_20_SHIFT)) & CAN_WORD_DATA_BYTE_20_MASK)
+
+#define CAN_WORD_DATA_BYTE_24_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_24_SHIFT              (24U)
+/*! DATA_BYTE_24 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_24(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_24_SHIFT)) & CAN_WORD_DATA_BYTE_24_MASK)
+
+#define CAN_WORD_DATA_BYTE_28_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_28_SHIFT              (24U)
+/*! DATA_BYTE_28 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_28(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_28_SHIFT)) & CAN_WORD_DATA_BYTE_28_MASK)
+
+#define CAN_WORD_DATA_BYTE_32_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_32_SHIFT              (24U)
+/*! DATA_BYTE_32 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_32(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_32_SHIFT)) & CAN_WORD_DATA_BYTE_32_MASK)
+
+#define CAN_WORD_DATA_BYTE_36_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_36_SHIFT              (24U)
+/*! DATA_BYTE_36 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_36(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_36_SHIFT)) & CAN_WORD_DATA_BYTE_36_MASK)
+
+#define CAN_WORD_DATA_BYTE_40_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_40_SHIFT              (24U)
+/*! DATA_BYTE_40 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_40(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_40_SHIFT)) & CAN_WORD_DATA_BYTE_40_MASK)
+
+#define CAN_WORD_DATA_BYTE_44_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_44_SHIFT              (24U)
+/*! DATA_BYTE_44 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_44(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_44_SHIFT)) & CAN_WORD_DATA_BYTE_44_MASK)
+
+#define CAN_WORD_DATA_BYTE_48_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_48_SHIFT              (24U)
+/*! DATA_BYTE_48 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_48(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_48_SHIFT)) & CAN_WORD_DATA_BYTE_48_MASK)
+
+#define CAN_WORD_DATA_BYTE_52_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_52_SHIFT              (24U)
+/*! DATA_BYTE_52 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_52(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_52_SHIFT)) & CAN_WORD_DATA_BYTE_52_MASK)
+
+#define CAN_WORD_DATA_BYTE_56_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_56_SHIFT              (24U)
+/*! DATA_BYTE_56 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_56(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_56_SHIFT)) & CAN_WORD_DATA_BYTE_56_MASK)
+
+#define CAN_WORD_DATA_BYTE_60_MASK               (0xFF000000U)
+#define CAN_WORD_DATA_BYTE_60_SHIFT              (24U)
+/*! DATA_BYTE_60 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD_DATA_BYTE_60(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD_DATA_BYTE_60_SHIFT)) & CAN_WORD_DATA_BYTE_60_MASK)
+/*! @} */
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB64B                     (21U)
+
+/* The count of CAN_WORD */
+#define CAN_WORD_COUNT_MB64B2                    (16U)
+
+/* The count of CAN_CS */
+#define CAN_CS_COUNT                             (96U)
+
+/* The count of CAN_ID */
+#define CAN_ID_COUNT                             (96U)
+
+/*! @name WORD0 - Message Buffer 0 WORD0 Register..Message Buffer 95 WORD0 Register */
+/*! @{ */
+
+#define CAN_WORD0_DATA_BYTE_3_MASK               (0xFFU)
+#define CAN_WORD0_DATA_BYTE_3_SHIFT              (0U)
+/*! DATA_BYTE_3 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD0_DATA_BYTE_3(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD0_DATA_BYTE_3_SHIFT)) & CAN_WORD0_DATA_BYTE_3_MASK)
+
+#define CAN_WORD0_DATA_BYTE_2_MASK               (0xFF00U)
+#define CAN_WORD0_DATA_BYTE_2_SHIFT              (8U)
+/*! DATA_BYTE_2 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD0_DATA_BYTE_2(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD0_DATA_BYTE_2_SHIFT)) & CAN_WORD0_DATA_BYTE_2_MASK)
+
+#define CAN_WORD0_DATA_BYTE_1_MASK               (0xFF0000U)
+#define CAN_WORD0_DATA_BYTE_1_SHIFT              (16U)
+/*! DATA_BYTE_1 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD0_DATA_BYTE_1(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD0_DATA_BYTE_1_SHIFT)) & CAN_WORD0_DATA_BYTE_1_MASK)
+
+#define CAN_WORD0_DATA_BYTE_0_MASK               (0xFF000000U)
+#define CAN_WORD0_DATA_BYTE_0_SHIFT              (24U)
+/*! DATA_BYTE_0 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD0_DATA_BYTE_0(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD0_DATA_BYTE_0_SHIFT)) & CAN_WORD0_DATA_BYTE_0_MASK)
+/*! @} */
+
+/* The count of CAN_WORD0 */
+#define CAN_WORD0_COUNT                          (96U)
+
+/*! @name WORD1 - Message Buffer 0 WORD1 Register..Message Buffer 95 WORD1 Register */
+/*! @{ */
+
+#define CAN_WORD1_DATA_BYTE_7_MASK               (0xFFU)
+#define CAN_WORD1_DATA_BYTE_7_SHIFT              (0U)
+/*! DATA_BYTE_7 - Data byte 0 of Rx/Tx frame. */
+#define CAN_WORD1_DATA_BYTE_7(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD1_DATA_BYTE_7_SHIFT)) & CAN_WORD1_DATA_BYTE_7_MASK)
+
+#define CAN_WORD1_DATA_BYTE_6_MASK               (0xFF00U)
+#define CAN_WORD1_DATA_BYTE_6_SHIFT              (8U)
+/*! DATA_BYTE_6 - Data byte 1 of Rx/Tx frame. */
+#define CAN_WORD1_DATA_BYTE_6(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD1_DATA_BYTE_6_SHIFT)) & CAN_WORD1_DATA_BYTE_6_MASK)
+
+#define CAN_WORD1_DATA_BYTE_5_MASK               (0xFF0000U)
+#define CAN_WORD1_DATA_BYTE_5_SHIFT              (16U)
+/*! DATA_BYTE_5 - Data byte 2 of Rx/Tx frame. */
+#define CAN_WORD1_DATA_BYTE_5(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD1_DATA_BYTE_5_SHIFT)) & CAN_WORD1_DATA_BYTE_5_MASK)
+
+#define CAN_WORD1_DATA_BYTE_4_MASK               (0xFF000000U)
+#define CAN_WORD1_DATA_BYTE_4_SHIFT              (24U)
+/*! DATA_BYTE_4 - Data byte 3 of Rx/Tx frame. */
+#define CAN_WORD1_DATA_BYTE_4(x)                 (((uint32_t)(((uint32_t)(x)) << CAN_WORD1_DATA_BYTE_4_SHIFT)) & CAN_WORD1_DATA_BYTE_4_MASK)
+/*! @} */
+
+/* The count of CAN_WORD1 */
+#define CAN_WORD1_COUNT                          (96U)
+
+
 
 /*! @name RXIMR - Receive Individual Mask */
 /*! @{ */
