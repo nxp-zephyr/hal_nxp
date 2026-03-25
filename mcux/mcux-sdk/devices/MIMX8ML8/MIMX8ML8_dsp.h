@@ -83809,6 +83809,11 @@ typedef struct {
 #define PDM_BASE_ADDRS                           { PDM_BASE }
 /** Array initializer of PDM peripheral base pointers */
 #define PDM_BASE_PTRS                            { PDM }
+/** Interrupt vectors for the PDM peripheral type */
+#define PDM_HWVAD_Event_IRQS                     { PDM_HWVAD_EVENT_IRQn }
+#define PDM_HWVAD_Error_IRQS                     { PDM_HWVAD_ERROR_IRQn }
+#define PDM_Event_IRQS                           { PDM_EVENT_IRQn }
+#define PDM_Error_IRQS                           { PDM_ERROR_IRQn }
 
 /*!
  * @}

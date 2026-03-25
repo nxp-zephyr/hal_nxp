@@ -185,10 +185,10 @@ retry:
     /* We allocate a network buffer */
 #if CONFIG_WIFI_SOFTAP_SUPPORT
     if (interface == WLAN_BSS_TYPE_UAP)
-        pkt = net_pkt_rx_alloc_with_buffer(g_uap.netif, datalen, AF_INET, 0, K_NO_WAIT);
+        pkt = net_pkt_rx_alloc_with_buffer(g_uap.netif, datalen, AF_UNSPEC, 0, K_NO_WAIT);
     else
 #endif
-        pkt = net_pkt_rx_alloc_with_buffer(g_mlan.netif, datalen, AF_INET, 0, K_NO_WAIT);
+        pkt = net_pkt_rx_alloc_with_buffer(g_mlan.netif, datalen, AF_UNSPEC, 0, K_NO_WAIT);
 
     if (pkt == NULL)
     {
@@ -1003,7 +1003,7 @@ struct netif *net_get_uap_interface(void)
 
 int net_get_if_name_netif(char *pif_name, struct netif *iface)
 {
-    strncpy(pif_name, iface->if_dev->dev->name, NETIF_NAMESIZE);
+    strncpy(pif_name, net_if_get_device((struct net_if *)iface)->name, NETIF_NAMESIZE);
     return WM_SUCCESS;
 }
 
