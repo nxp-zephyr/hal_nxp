@@ -91,7 +91,7 @@ static uint8_t s_nullSha256[] = {0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-AT_NONCACHEABLE_SECTION_INIT(static dcp_context_t s_dcpContextSwitchingBuffer);
+static dcp_context_t s_dcpContextSwitchingBuffer;
 
 /*******************************************************************************
  * Code
